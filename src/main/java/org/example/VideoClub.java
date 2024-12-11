@@ -1,5 +1,6 @@
 package org.example;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class VideoClub {
@@ -27,20 +28,45 @@ public class VideoClub {
     }
 
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {
+        Pelicula pelicula = GestorPeliculas.buscarPeliSeleccionada(idPelicula);
 
         JSONObject peliculaJSON = new JSONObject();
-        return new JSONObject();
+        peliculaJSON.put("idPelicula", pelicula.getId());
+        peliculaJSON.put("puntuacion", pelicula.getValoracion());
+        peliculaJSON.put("descripcion", pelicula.getReseña());
+        return peliculaJSON;
     }
 
     public void puntuarPelicula(String username, int idPelicula, String reseña, int puntuacion){
         Usuario user = GestorUsuario.getUsuario(username);
-
+        Pelicula pelicula = GestorPeliculsa.buscarPeliSeleccionada(idPelicula);
+        pelicula.guardarValoracion(user, reseña, puntuacion);
+        pelicula.calcularPromedio();
     }
 
     public JSONObject mostrarReseñas(String username, int idPelicula) {
+        //TODO Como parametro tenemos username para que al mostrar las reseñas aparezca en primera posicion nuestra reseña y puntuacion.
+        //Usuario user = GestorUsuario.getUsuario(username);
+        Pelicula pelicula = GestorPeliculsa.buscarPeliSeleccionada(idPelicula);
+        Valoracion[] listaValoraciones = pelicula.verValoraciones();
 
-        return new JSONObject();
+        JSONArray valoracionesArray = new JSONArray();
+
+        for (Valoracion valoracion : listaValoraciones) {
+            JSONObject peliculaJSON = new JSONObject();
+            peliculaJSON.put("username", valoracion.getUser().getUsername());
+            peliculaJSON.put("reseña", valoracion.getReseña());
+            peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
+
+            valoracionesArray.put(peliculaJSON);
+        }
+
+        JSONObject resultadoJSON = new JSONObject();
+        resultadoJSON.put("valoraciones", valoracionesArray);
+
+        return resultadoJSON;
     }
+
 
     public JSONObject verificarRegistro(String nombre, String apellido, String username, String contraseña, String correo) {
         return new JSONObject();

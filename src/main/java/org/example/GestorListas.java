@@ -24,35 +24,39 @@ public class GestorListas {
 	
 	public List<String> getListasUsuario(String username) {
 		return listas.stream()
-				.filter(l -> l.getNombreUsuario() == username)
+				.filter(l -> l.getNombreUsuario().equals(username))
 				.map(l -> l.getNombre())
 				.collect(Collectors.toList());
 	}
 	
 	public List<String> getListaUsuario(String username, String nombreLista) {
 		List<Lista> lista = listas.stream()
-				.filter(l -> l.getNombreUsuario() == username)
-				.filter(l -> l.getNombre() == nombreLista)
+				.filter(l -> l.getNombreUsuario().equals(username))
+				.filter(l -> l.getNombre().equals(nombreLista))
 				.collect(Collectors.toList());
 		return lista.get(0).getPeliculas();
 	}
 	
 	public void añadirPeliculaALista(String username, String nombreLista, Pelicula pelicula) {
 		List<Lista> lista = listas.stream()
-				.filter(l -> l.getNombreUsuario() == username)
-				.filter(l -> l.getNombre() == nombreLista)
+				.filter(l -> l.getNombreUsuario().equals(username))
+				.filter(l -> l.getNombre().equals(nombreLista))
 				.collect(Collectors.toList());
-		lista.get(0).añadirPelícula(pelicula);
+		lista.get(0).añadirPelicula(pelicula);
 	}
 	
 	public List<String> buscarLista(String nombreLista) {
-		return null;
+		return listas.stream()
+				.filter(l -> l.esVisible())
+				.filter(l -> l.getNombre().toLowerCase().contains(nombreLista))
+				.map(l -> l.getNombre() + ":" + l.getNombreUsuario())
+				.collect(Collectors.toList());
 	}
 	
 	public void cambiarVisibilidadLista(String username, String nombreLista) {
 		List<Lista> lista = listas.stream()
-				.filter(l -> l.getNombreUsuario() == username)
-				.filter(l -> l.getNombre() == nombreLista)
+				.filter(l -> l.getNombreUsuario().equals(username))
+				.filter(l -> l.getNombre().equals(nombreLista))
 				.collect(Collectors.toList());
 		lista.get(0).cambiarVisibilidad();
 	}

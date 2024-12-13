@@ -29,7 +29,7 @@ public class Lista {
 		this.visible = !this.visible;
 	}
 	
-	public void añadirPelícula(Pelicula pelicula) {
+	public void añadirPelicula(Pelicula pelicula) {
 		this.listaPeliculas.add(pelicula);
 	}
 	

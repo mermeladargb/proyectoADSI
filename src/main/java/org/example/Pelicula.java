@@ -21,7 +21,11 @@ public class Pelicula {
 		solicitadaPor=pSolicitadaPor;
 		aceptadaPor=pAceptadaPor;
 	}
-	
+
+	public Pelicula() {
+
+	}
+
 	public String tieneNombreParecido(String nombrePeli){
 		String nombre="";
 		if (nombrePeli.contains(titulo)){

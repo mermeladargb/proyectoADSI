@@ -3,9 +3,11 @@ package org.example;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class VideoClub {
     private static final VideoClub unVideoClub = new VideoClub();
-
+    private GestorPeliculas gestorPeliculas = GestorPeliculas.getGestorPeliculas();
 
     public static VideoClub getUnVideoClub(){return unVideoClub;}
 
@@ -28,33 +30,35 @@ public class VideoClub {
     }
 
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {
-        Pelicula pelicula = GestorPeliculas.buscarPeliSeleccionada(idPelicula);
+        Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
+        Usuario user = GestorUsuario.getUsuario(username);
+        Valoracion valoracion = pelicula.getValoracion(user);
 
         JSONObject peliculaJSON = new JSONObject();
-        peliculaJSON.put("idPelicula", pelicula.getId());
-        peliculaJSON.put("puntuacion", pelicula.getValoracion());
-        peliculaJSON.put("descripcion", pelicula.getReseña());
+        peliculaJSON.put("idPelicula", pelicula.getID());
+        peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
+        peliculaJSON.put("descripcion", valoracion.getReseña());
         return peliculaJSON;
     }
 
     public void puntuarPelicula(String username, int idPelicula, String reseña, int puntuacion){
         Usuario user = GestorUsuario.getUsuario(username);
-        Pelicula pelicula = GestorPeliculsa.buscarPeliSeleccionada(idPelicula);
+        Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         pelicula.guardarValoracion(user, reseña, puntuacion);
-        pelicula.calcularPromedio();
+       // pelicula.calcularPromedio();
     }
 
     public JSONObject mostrarReseñas(String username, int idPelicula) {
         //TODO Como parametro tenemos username para que al mostrar las reseñas aparezca en primera posicion nuestra reseña y puntuacion.
         //Usuario user = GestorUsuario.getUsuario(username);
-        Pelicula pelicula = GestorPeliculsa.buscarPeliSeleccionada(idPelicula);
-        Valoracion[] listaValoraciones = pelicula.verValoraciones();
+        Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
+        ArrayList<Valoracion> listaValoraciones = pelicula.verValoraciones(username);
 
         JSONArray valoracionesArray = new JSONArray();
 
         for (Valoracion valoracion : listaValoraciones) {
             JSONObject peliculaJSON = new JSONObject();
-            peliculaJSON.put("username", valoracion.getUser().getUsername());
+            peliculaJSON.put("username", valoracion.getUser());
             peliculaJSON.put("reseña", valoracion.getReseña());
             peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
 

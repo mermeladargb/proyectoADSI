@@ -2,8 +2,13 @@ package org.example;
 
 public class GestorUsuario {
 
-	public static Usuario getUsuario(String username) {
-		// TODO Auto-generated method stub
+	private static GestorUsuario unGestorUsuario = new GestorUsuario();
+
+	public static GestorUsuario getGestorUsuario() {
+		return unGestorUsuario;
+	}
+
+	public Usuario getUsuario(String username) {
 		return null;
 	}
 

@@ -31,7 +31,7 @@ public class VideoClub {
 
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
-        Usuario user = GestorUsuario.getUsuario(username);
+        Usuario user = GestorUsuario.getGestorUsuario().getUsuario(username);
         Valoracion valoracion = pelicula.getValoracion(user);
 
         JSONObject peliculaJSON = new JSONObject();
@@ -42,7 +42,7 @@ public class VideoClub {
     }
 
     public void puntuarPelicula(String username, int idPelicula, String reseña, int puntuacion){
-        Usuario user = GestorUsuario.getUsuario(username);
+        Usuario user = GestorUsuario.getGestorUsuario().getUsuario(username);
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         pelicula.guardarValoracion(user, reseña, puntuacion);
        // pelicula.calcularPromedio();

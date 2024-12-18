@@ -18,7 +18,7 @@ public class Lista {
 	}
 	
 	public boolean esDeUsuario(String username) {
-		return this.user.getNombre() == username;
+		return this.user.getUsername().equals(username);
 	}
 	
 	public String getNombre() {
@@ -34,11 +34,11 @@ public class Lista {
 	}
 	
 	public List<String> getPeliculas() {
-		return this.listaPeliculas.stream().map(p -> p.getNombre()).collect(Collectors.toList());
+		return this.listaPeliculas.stream().map(p -> p.getTitulo()).collect(Collectors.toList());
 	}
 	
 	public String getNombreUsuario() {
-		return this.user.getNombre();
+		return this.user.getUsername();
 	}
 	
 	public boolean esVisible() {

@@ -9,9 +9,9 @@ public class Pelicula {
 	private boolean aceptada;
 	private ArrayList<Valoracion> listaValoraciones;
 	private Usuario solicitadaPor;
-	private Admin aceptadaPor;
+	private Usuario aceptadaPor;
 	
-	public Pelicula(int pID, String pTitulo, String pDescrip, Usuario pSolicitadaPor, Admin pAceptadaPor )
+	public Pelicula(int pID, String pTitulo, String pDescrip, Usuario pSolicitadaPor, Usuario pAceptadaPor )
 	{
 		ID=pID;
 		titulo=pTitulo;
@@ -43,11 +43,10 @@ public class Pelicula {
 	
 	public Valoracion getValoracion(Usuario pUsuario)
 	{
-		
+		return null;
 	}
 	public void guardarValoracion(Usuario user, String reseña, int nota) {
-		
-		
+
 	}
 	//TODO Creo que calcularPromedio debería de devolver un valor que fuera float
 	private void calcularPromedio() {
@@ -55,7 +54,38 @@ public class Pelicula {
 	}
 	
 	public ArrayList<Valoracion>verValoraciones(String username) {
-		
+		return null;
 	}
-	
+
+	public void setID(int id) {
+	}
+
+	public void setTitulo(String titulo) {
+	}
+
+	public void setDescripcion(String descripcion) {
+	}
+
+	public void setAceptada(boolean aceptada) {
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public boolean estaAceptada() {
+		return aceptada;
+	}
+
+	public Usuario getSolicitadaPor() {
+		return solicitadaPor;
+	}
+
+	public Usuario getAceptadaPor() {
+		return aceptadaPor;
+	}
 }

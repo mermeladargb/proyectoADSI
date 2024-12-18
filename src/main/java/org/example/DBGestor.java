@@ -58,9 +58,9 @@ public class DBGestor {
             ps.setInt(1, pelicula.getID());
             ps.setString(2, pelicula.getTitulo());
             ps.setString(3, pelicula.getDescripcion());
-            ps.setBoolean(4, pelicula.aceptada());
+            ps.setBoolean(4, pelicula.estaAceptada());
             ps.setString(5, pelicula.getSolicitadaPor().getUsername());
-            ps.setString(6, pelicula.getAceptadaPor().getNombre());
+            ps.setString(6, pelicula.getAceptadaPor().getUsername());
 
             ps.executeUpdate();
         } catch (SQLException e) {

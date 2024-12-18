@@ -18,8 +18,10 @@ public class GestorListas {
 	}
 	
 	public void crearLista(Usuario usuario, String nombreLista) {
-		Lista l = new Lista(usuario, nombreLista);
-		listas.add(l);
+		if (getListaUsuario(usuario.getUsername(), nombreLista) == null) {
+			Lista l = new Lista(usuario, nombreLista);
+			listas.add(l);
+		}
 	}
 	
 	public List<String> getListasUsuario(String username) {
@@ -34,7 +36,10 @@ public class GestorListas {
 				.filter(l -> l.getNombreUsuario().equals(username))
 				.filter(l -> l.getNombre().equals(nombreLista))
 				.collect(Collectors.toList());
-		return lista.get(0).getPeliculas();
+		if (!lista.isEmpty())
+			return lista.get(0).getPeliculas();
+		else
+			return null;
 	}
 	
 	public void añadirPeliculaALista(String username, String nombreLista, Pelicula pelicula) {
@@ -42,6 +47,8 @@ public class GestorListas {
 				.filter(l -> l.getNombreUsuario().equals(username))
 				.filter(l -> l.getNombre().equals(nombreLista))
 				.collect(Collectors.toList());
+		if (lista.isEmpty())
+			return;
 		lista.get(0).añadirPelicula(pelicula);
 	}
 	
@@ -58,6 +65,13 @@ public class GestorListas {
 				.filter(l -> l.getNombreUsuario().equals(username))
 				.filter(l -> l.getNombre().equals(nombreLista))
 				.collect(Collectors.toList());
+		if (lista.isEmpty())
+			return;
 		lista.get(0).cambiarVisibilidad();
+	}
+
+	// para las junits
+	public void reset() {
+		this.listas = new ArrayList<>();
 	}
 }

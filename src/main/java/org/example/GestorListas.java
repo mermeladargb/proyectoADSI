@@ -31,13 +31,13 @@ public class GestorListas {
 				.collect(Collectors.toList());
 	}
 	
-	public List<String> getListaUsuario(String username, String nombreLista) {
+	public Lista getListaUsuario(String username, String nombreLista) {
 		List<Lista> lista = listas.stream()
 				.filter(l -> l.getNombreUsuario().equals(username))
 				.filter(l -> l.getNombre().equals(nombreLista))
 				.collect(Collectors.toList());
 		if (!lista.isEmpty())
-			return lista.get(0).getPeliculas();
+			return lista.get(0);
 		else
 			return null;
 	}

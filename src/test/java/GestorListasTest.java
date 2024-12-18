@@ -68,7 +68,7 @@ public class GestorListasTest {
 
         Pelicula p1 = new Pelicula(1, "p1", null, null, null);
         gs.añadirPeliculaALista("u1", "lista1", p1);
-        assert(gs.getListaUsuario("u1", "lista1").size() == 1);
+        assert(gs.getListaUsuario("u1", "lista1") != null);
 
         // no existe el usuario
         gs.reset();

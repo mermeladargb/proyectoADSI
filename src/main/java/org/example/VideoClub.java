@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class VideoClub {
     private static final VideoClub unVideoClub = new VideoClub();
@@ -96,21 +97,45 @@ public class VideoClub {
         return new JSONObject();
     }
 
+
     public void crearLista(String username, String nombreLista) {
+        Usuario u = GestorUsuario.getGestorUsuario().getUsuario(username);
+        GestorListas.getGestorListas().crearLista(u, nombreLista);
     }
 
     public JSONObject getListasUsuario(String username) {
-        return new JSONObject();
+        List<String> listas = GestorListas.getGestorListas().getListasUsuario(username);
+        JSONObject json = new JSONObject();
+        JSONArray array = new JSONArray(listas);
+        json.append("listas", array);
+        return json;
     }
 
-    public void añadirALista(String username, String nombreLista, int idPelicula) {
+    public JSONObject getListaUsuario(String username, String nombreLista) {
+        Lista lista = GestorListas.getGestorListas().getListaUsuario(username, nombreLista);
+        JSONObject json = new JSONObject();
+        JSONArray array = new JSONArray(lista.getPeliculas());
+        json.append("nombreLista", lista.getNombre());
+        json.append("visible", lista.esVisible());
+        json.append("peliculas", array);
+        return json;
+    }
+
+    public void añadirPeliculaALista(String username, String nombreLista, int idPelicula) {
+        Pelicula p = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(idPelicula);
+        GestorListas.getGestorListas().añadirPeliculaALista(username, nombreLista, p);
     }
 
     public JSONObject buscarLista(String nombreLista) {
-        return new JSONObject();
+        List<String> listas = GestorListas.getGestorListas().buscarLista(nombreLista);
+        JSONObject json = new JSONObject();
+        JSONArray array = new JSONArray(listas);
+        json.append("listas", array);
+        return json;
     }
 
-    public void cambiarVisibilidadLista(String username, String nombreLista, boolean visibilidad) {
+    public void cambiarVisibilidadLista(String username, String nombreLista) {
+        GestorListas.getGestorListas().cambiarVisibilidadLista(username, nombreLista);
     }
     
     public void ñó() {

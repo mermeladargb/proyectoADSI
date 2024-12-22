@@ -30,9 +30,9 @@ public class GestorUsuarios {
         return usuarios.contains(user);
     }
 
-    public String registrarUsuario(String nombre, String contraseña, String apellido, String username, String correo) {
+    public String registrarUsuario(String nombre, String contraseña, String apellido, String username, String correo, boolean es_Admin) {
         ArrayList<Alquiler> lista = new ArrayList<>();
-        Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista);
+        Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista, es_Admin);
         if (cuentaValida(user)) {
             if (!cuentaExistente(user)) {
                 usuarios.add(user);
@@ -89,10 +89,10 @@ public class GestorUsuarios {
         }
     }
 
-    public String modificarCuenta(String nombre, String contraseña, String apellido, String username, String correo) {
+    public String modificarCuenta(String nombre, String contraseña, String apellido, String username, String correo, boolean es_Admin) {
         Usuario usuario = getUsuario(username);
         ArrayList<Alquiler> lista = usuario.getAlquileres();
-        Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista);
+        Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista, es_Admin);
         if (cuentaValida(user)) {
             usuarios.add(user);
             return "Cuenta añadida al GestorUsuarios correctamente";
@@ -100,4 +100,3 @@ public class GestorUsuarios {
         return "Cuenta no valida";
     }
 }
-

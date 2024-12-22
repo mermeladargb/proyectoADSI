@@ -1,20 +1,34 @@
 package org.example;
 
+import org.json.JSONObject;
+
+import java.util.Calendar;
+import java.util.Date;
+
 public class Alquiler {
-	private String fecha;
+	private Date fecha;
 	private Pelicula pelicula;
 	
 	
 	
 
-	public Alquiler(String fecha, Pelicula unPelicula) {
-		this.fecha=fecha;
-		this.pelicula=unPelicula;
+	public Alquiler(Pelicula pPelicula) {
+
+		fecha=new Date();
+		pelicula=pPelicula;
 	}
 
-	public String mostrarAlquiler() {
-		String mensaje="Titulo: "+ this.pelicula.getTitulo() + " Fecha: " + this.fecha + "\n";
-		return mensaje;
+	public JSONObject mostrarAlquiler(){
+		JSONObject unJSON= new JSONObject();
+		Calendar calendar= Calendar.getInstance();
+		calendar.setTime(fecha);
+		calendar.add(Calendar.DAY_OF_MONTH,15);
+		Date fechaFin = calendar.getTime();
+		unJSON.put("peliID",pelicula.getID());
+		unJSON.put("titulo",pelicula.getNombre());
+		unJSON.put("fechaInic",fecha.toString());
+		unJSON.put("fechaFin", fechaFin.toString());
+		return unJSON;
 	}
 
 	public Pelicula getPelicula() {

@@ -14,10 +14,11 @@ public class Usuario {
 	private String nombre;
 	private String apellido;
 	private String correo;
-	private Admin aceptado_Por;
+	private Usuario aceptado_Por;
 	private ArrayList<Alquiler> alquileres;
+	private boolean es_Admin;
 	
-	public Usuario(String username, String contraseña, String nombre, String apellido, String correo, Admin aceptado_Por, ArrayList<Alquiler> alquileres) {
+	public Usuario(String username, String contraseña, String nombre, String apellido, String correo, Usuario aceptado_Por, ArrayList<Alquiler> alquileres, boolean es_Admin) {
 		this.username=username;
 		this.contraseña=contraseña;
 		this.nombre=nombre;
@@ -25,6 +26,7 @@ public class Usuario {
 		this.correo=correo;
 		this.alquileres=alquileres;
 		this.aceptado_Por=aceptado_Por;
+		this.es_Admin=es_Admin;
 	}
 	
 	public String getUsername() {
@@ -49,7 +51,7 @@ public class Usuario {
 		
 	}
 	
-	public Admin setAceptadoPor(Admin admin){
+	public Usuario setAceptadoPor(Usuario admin){
 		this.aceptado_Por=admin;
 		return this.aceptado_Por;
 	}
@@ -73,7 +75,7 @@ public class Usuario {
 		return mensaje;
 	}
 
-	public Admin getAceptado_Por() {
+	public Usuario getAceptado_Por() {
 		return aceptado_Por;
 	}
 	
@@ -116,7 +118,20 @@ public class Usuario {
 		return correo;
 	}
 
-	
-	
+	public String aceptarCuenta(Usuario unUsuario) {
+        	if(this.es_Admin==true){	
+			if (unUsuario.getAceptado_Por() != null) {
+            			String mensaje="La cuenta ya ha sido aceptada por " + unUsuario.getAceptado_Por().getUsername();
+        		return mensaje;
+        		}
+        		unUsuario.setAceptadoPor(this);
+        		String mensaje="Ha sido aceptado por " + this.getUsername();
+        		return mensaje;
+    		}
+		else{
+			String mensaje="El usuario no es administrador, no puede aceptar la cuenta";
+			return mensaje;
+		}
+	}
 }
 

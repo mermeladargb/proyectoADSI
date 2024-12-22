@@ -32,7 +32,7 @@ public class VideoClub {
 
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
-        Usuario user = GestorUsuario.getGestorUsuario().getUsuario(username);
+        Usuario user = GestorUsuarios.getGestorUsuarios().getUsuario(username);
         Valoracion valoracion = pelicula.getValoracion(user);
 
         JSONObject peliculaJSON = new JSONObject();
@@ -43,7 +43,7 @@ public class VideoClub {
     }
 
     public void puntuarPelicula(String username, int idPelicula, String reseña, int puntuacion){
-        Usuario user = GestorUsuario.getGestorUsuario().getUsuario(username);
+        Usuario user = GestorUsuarios.getGestorUsuarios().getUsuario(username);
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         pelicula.guardarValoracion(user, reseña, puntuacion);
        // pelicula.calcularPromedio();
@@ -99,7 +99,7 @@ public class VideoClub {
 
 
     public void crearLista(String username, String nombreLista) {
-        Usuario u = GestorUsuario.getGestorUsuario().getUsuario(username);
+        Usuario u = GestorUsuarios.getGestorUsuarios().getUsuario(username);
         GestorListas.getGestorListas().crearLista(u, nombreLista);
     }
 

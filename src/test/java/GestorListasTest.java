@@ -23,8 +23,8 @@ public class GestorListasTest {
     @Test
     public void testCrearLista() {
         GestorListas gs = GestorListas.getGestorListas();
-        Usuario u1 = new Usuario("u1");
-        Usuario u2 = new Usuario("u2");
+        Usuario u1 = new Usuario("u1", "12345678", null, null, "a@a", null, null, false);
+        Usuario u2 = new Usuario("u2", "12345678", null, null, "a@a", null, null, false);
 
         // la lista no existe
         gs.crearLista(u1, "lista1");
@@ -44,7 +44,7 @@ public class GestorListasTest {
     @Test
     public void testGetListasUsuario() {
         GestorListas gs = GestorListas.getGestorListas();
-        Usuario u1 = new Usuario("u1");
+        Usuario u1 = new Usuario("u1", "12345678", null, null, "a@a", null, null, false);
 
         // el usuario no tiene listas
         assert(gs.getListasUsuario("u1").isEmpty());
@@ -63,7 +63,7 @@ public class GestorListasTest {
     @Test
     public void testAñadirPeliculaALista() {
         GestorListas gs = GestorListas.getGestorListas();
-        Usuario u1 = new Usuario("u1");
+        Usuario u1 = new Usuario("u1", "12345678", null, null, "a@a", null, null, false);
         gs.crearLista(u1, "lista1");
 
         Pelicula p1 = new Pelicula(1, "p1", null, null, null);

@@ -4,10 +4,7 @@ package org.example;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,13 +19,13 @@ public class Usuario {
 	private ArrayList<Alquiler> lAlquileres;
 	private boolean es_Admin;
 	
-	public Usuario(String username, String contraseña, String nombre, String apellido, String correo, Usuario aceptado_Por, boolean es_Admin) {
+	public Usuario(String username, String contraseña, String nombre, String apellido, String correo, Usuario aceptado_Por, ArrayList<Alquiler> lista, boolean es_Admin) {
 		this.username=username;
 		this.contraseña=contraseña;
 		this.nombre=nombre;
 		this.apellido=apellido;
 		this.correo=correo;
-		this.lAlquileres= new ArrayList<Alquiler>();
+		this.lAlquileres= lista;
 		this.aceptado_Por=aceptado_Por;
 		this.es_Admin=es_Admin;
 	}

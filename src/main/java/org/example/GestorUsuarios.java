@@ -9,7 +9,7 @@ public class GestorUsuarios {
 
     private GestorUsuarios() {}
 
-    public static GestorUsuarios getmGestorUsuario() {
+    public static GestorUsuarios getGestorUsuarios() {
         return mGestorUsuario;
     }
 

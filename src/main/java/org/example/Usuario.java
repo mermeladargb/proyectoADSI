@@ -1,10 +1,14 @@
 package org.example;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,16 +19,16 @@ public class Usuario {
 	private String apellido;
 	private String correo;
 	private Usuario aceptado_Por;
-	private ArrayList<Alquiler> alquileres;
+	private ArrayList<Alquiler> lAlquileres;
 	private boolean es_Admin;
 	
-	public Usuario(String username, String contraseña, String nombre, String apellido, String correo, Usuario aceptado_Por, ArrayList<Alquiler> alquileres, boolean es_Admin) {
+	public Usuario(String username, String contraseña, String nombre, String apellido, String correo, Usuario aceptado_Por, boolean es_Admin) {
 		this.username=username;
 		this.contraseña=contraseña;
 		this.nombre=nombre;
 		this.apellido=apellido;
 		this.correo=correo;
-		this.alquileres=alquileres;
+		this.lAlquileres= new ArrayList<Alquiler>();
 		this.aceptado_Por=aceptado_Por;
 		this.es_Admin=es_Admin;
 	}
@@ -34,17 +38,17 @@ public class Usuario {
 	}
 	
 	public String añadirAlquiler(Pelicula unPelicula) {
-		String fecha= new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		Alquiler alquiler= new Alquiler(fecha, unPelicula);
-		this.alquileres.add(alquiler);
+		//String fecha= new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+		Alquiler alquiler= new Alquiler(unPelicula);
+		this.lAlquileres.add(alquiler);
 		String mensaje = "Alquiler añadido correctamente";
 		return mensaje;
 	}
 	
 	public String mostrarAlquileres() {
 		String mensaje="";
-		for(int i = 0; i<alquileres.size(); i++) {
-			String aux=alquileres.get(i).getPelicula().getTitulo();
+		for(int i = 0; i<lAlquileres.size(); i++) {
+			String aux=lAlquileres.get(i).getPelicula().getTitulo();
 			mensaje= mensaje  + aux + "\n";
 		}
 		return mensaje;
@@ -111,7 +115,7 @@ public class Usuario {
 
 
 	public ArrayList<Alquiler> getAlquileres() {
-		return alquileres;
+		return lAlquileres;
 	}
 
 	public String getCorreo() {
@@ -133,5 +137,14 @@ public class Usuario {
 			return mensaje;
 		}
 	}
+	public JSONArray verAlquileres(String username) {
+		List<JSONObject> lJSONS= new ArrayList<JSONObject>();
+		for(Alquiler unAlquiler:lAlquileres)
+		{
+			lJSONS.add(unAlquiler.mostrarAlquiler());
+		}
+		return new JSONArray(lJSONS);
+	}
+
 }
 

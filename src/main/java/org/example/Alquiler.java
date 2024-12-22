@@ -2,6 +2,7 @@ package org.example;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,8 +27,8 @@ public class Alquiler {
 		Date fechaFin = calendar.getTime();
 		unJSON.put("peliID",pelicula.getID());
 		unJSON.put("titulo",pelicula.getNombre());
-		unJSON.put("fechaInic",fecha.toString());
-		unJSON.put("fechaFin", fechaFin.toString());
+		unJSON.put("fechaInic", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fecha));
+		unJSON.put("fechaFin",  new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(fechaFin));
 		return unJSON;
 	}
 

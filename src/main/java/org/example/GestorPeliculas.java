@@ -10,10 +10,11 @@ public class GestorPeliculas {
 	private static GestorPeliculas unGestorpelis=new GestorPeliculas();
 	private ArrayList<Pelicula> pelis;
 	private DBGestor dbGestor;
+
 	private GestorPeliculas() {
 		pelis=new ArrayList<Pelicula>();
 		dbGestor = new DBGestor();
-		//cargarPeliculasDesdeBD();
+		cargarPeliculasDesdeBD();
 	}
 
 	private void cargarPeliculasDesdeBD() {
@@ -33,22 +34,40 @@ public class GestorPeliculas {
 	{
 		return pelis.iterator();
 	}
-	public JSONArray mostrarPeliculas(String nombrePeli) {
-			Iterator<Pelicula>itr=iterator();
-			JSONArray JSON1= new JSONArray();
-			if (itr.hasNext())
-			{
-				if(itr.next().tieneNombreParecido(nombrePeli)!="") {
-				
-				}
-			}
-			return JSON1;
-	}
 	
 	public Pelicula buscarPeliSeleccionada(int idPeli) {
-		return null;
+		int i=0;
+		boolean enc= false;
+		Pelicula unaPeli= new Pelicula();
+		while (i<pelis.size() && ! enc)
+		{
+			if (pelis.get(i).getID()==idPeli)
+			{
+				enc=true;
+				unaPeli= pelis.get(i);
+			}
+			i++;
+		}
+		if (!enc){
+			unaPeli=null;
+		}
+		return unaPeli;
 	}
 
 
-	
+	public JSONObject mostrarPeliculas(String nombrePeli) {
+		JSONArray lJSON= new JSONArray();
+		JSONObject resultado= new JSONObject();
+		for (Pelicula unaPeli:pelis)
+		{
+			resultado= unaPeli.tieneNombreParecido(nombrePeli);
+			if (resultado!=null)
+			{
+				lJSON.put(resultado);
+			}
+
+		}
+		resultado= new JSONObject();
+		return  resultado.put("peliculas",lJSON);
+	}
 }

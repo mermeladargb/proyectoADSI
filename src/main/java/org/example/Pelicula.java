@@ -26,19 +26,20 @@ public class Pelicula {
 
 	}
 
-	public String tieneNombreParecido(String nombrePeli){
-		String nombre="";
-		if (nombrePeli.contains(titulo)){
-			nombre=nombrePeli;
+	public JSONObject tieneNombreParecido(String nombrePeli){
+		JSONObject unJSON= new JSONObject();
+		if (nombrePeli.toLowerCase().contains(titulo.toLowerCase()) && aceptada){
+			unJSON.put("id",ID);
+			unJSON.put("titulo",titulo);
 		}
-		return nombre;
+		else{
+			unJSON=null;
+		}
+		return unJSON;
 		
 	}
 	public int getID() {
 		return ID;
-	}
-	public String getNombre() {
-		return titulo;
 	}
 	
 	public Valoracion getValoracion(Usuario pUsuario)
@@ -87,5 +88,8 @@ public class Pelicula {
 
 	public Usuario getAceptadaPor() {
 		return aceptadaPor;
+	}
+	public double getMediaValoracion(){
+		return  this.listaValoraciones.stream().mapToDouble(Valoracion::getPuntuacion).sum() / this.listaValoraciones.size();
 	}
 }

@@ -18,11 +18,21 @@ public class VideoClub {
 
 
     public JSONObject mostrarPeliculasSimilares(String nombrePeli) {
-        return new JSONObject();
+        return gestorPeliculas.mostrarPeliculas(nombrePeli);
     }
 
     public JSONObject seleccionarPelicula(int idPeli) {
-        return new JSONObject();
+        Pelicula unaPelicula= GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(idPeli);
+        JSONObject JSON = new JSONObject();
+        if (unaPelicula!=null){
+            JSON.put("ID",unaPelicula.getID());
+            JSON.put("titulo",unaPelicula.getTitulo());
+            JSON.put("descrip",unaPelicula.getDescripcion());
+            JSON.put("media",unaPelicula.getMediaValoracion());
+        }
+
+        return  JSON;
+
     }
 
     public void alquilarPeli(String username) {

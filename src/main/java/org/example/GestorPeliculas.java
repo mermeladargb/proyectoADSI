@@ -13,7 +13,7 @@ public class GestorPeliculas {
 	private GestorPeliculas() {
 		pelis=new ArrayList<Pelicula>();
 		dbGestor = new DBGestor();
-		cargarPeliculasDesdeBD();
+		//cargarPeliculasDesdeBD();
 	}
 
 	private void cargarPeliculasDesdeBD() {

@@ -42,7 +42,7 @@ public class Usuario {
 		return mensaje;
 	}
 	
-	public String mostrarAlquileres() {
+	/*public String mostrarAlquileres() {
 		String mensaje="";
 		for(int i = 0; i<lAlquileres.size(); i++) {
 			String aux=lAlquileres.get(i).getPelicula().getTitulo();
@@ -50,7 +50,7 @@ public class Usuario {
 		}
 		return mensaje;
 		
-	}
+	}*/
 	
 	public Usuario setAceptadoPor(Usuario admin){
 		this.aceptado_Por=admin;
@@ -134,13 +134,15 @@ public class Usuario {
 			return mensaje;
 		}
 	}
-	public JSONArray verAlquileres(String username) {
+	public JSONObject verAlquileres() {
 		List<JSONObject> lJSONS= new ArrayList<JSONObject>();
 		for(Alquiler unAlquiler:lAlquileres)
 		{
 			lJSONS.add(unAlquiler.mostrarAlquiler());
 		}
-		return new JSONArray(lJSONS);
+		JSONObject json= new JSONObject();
+
+		return json.put("alquileres", new JSONArray(lJSONS));
 	}
 
 }

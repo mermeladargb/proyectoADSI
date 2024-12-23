@@ -22,10 +22,10 @@ public class GestorUsuarios {
         return null;
     }
 
-    public String verAlquileres(Usuario user) {
+    /*public String verAlquileres(Usuario user) {
         return user.mostrarAlquileres();
     }
-
+    */
     public boolean cuentaExistente(Usuario user) {
         return usuarios.contains(user);
     }
@@ -98,5 +98,9 @@ public class GestorUsuarios {
             return "Cuenta añadida al GestorUsuarios correctamente";
         }
         return "Cuenta no valida";
+    }
+    public void addUsuario(Usuario unUsuario)
+    {
+        usuarios.add(unUsuario);
     }
 }

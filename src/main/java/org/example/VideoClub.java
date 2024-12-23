@@ -8,7 +8,10 @@ import java.util.List;
 
 public class VideoClub {
     private static final VideoClub unVideoClub = new VideoClub();
-    private GestorPeliculas gestorPeliculas = GestorPeliculas.getGestorPeliculas();
+   private GestorPeliculas gestorPeliculas = GestorPeliculas.getGestorPeliculas();
+
+    private VideoClub()
+    {}
 
     public static VideoClub getUnVideoClub(){return unVideoClub;}
 
@@ -27,7 +30,8 @@ public class VideoClub {
     }
 
     public JSONObject verAlquileres(String username) {
-        return new JSONObject();
+
+        return GestorUsuarios.getGestorUsuarios().getUsuario(username).verAlquileres();
     }
 
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {

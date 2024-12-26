@@ -35,8 +35,10 @@ public class VideoClub {
 
     }
 
-    public void alquilarPeli(String username) {
-
+    public void alquilarPeli(String username, int idPeli) {
+            Pelicula unaPelicula=gestorPeliculas.buscarPeliSeleccionada(idPeli);
+            Usuario unUsuario= GestorUsuarios.getGestorUsuarios().getUsuario(username);
+            unUsuario.añadirAlquiler(unaPelicula);
     }
 
     public JSONObject verAlquileres(String username) {

@@ -4,7 +4,9 @@ package org.example;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +38,7 @@ public class Usuario {
 	
 	public String añadirAlquiler(Pelicula unPelicula) {
 		//String fecha= new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-		Alquiler alquiler= new Alquiler(unPelicula);
+		Alquiler alquiler= new Alquiler( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),unPelicula);
 		this.lAlquileres.add(alquiler);
 		String mensaje = "Alquiler añadido correctamente";
 		return mensaje;

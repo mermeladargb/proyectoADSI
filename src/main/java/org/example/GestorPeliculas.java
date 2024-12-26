@@ -13,12 +13,12 @@ public class GestorPeliculas {
 
 	private GestorPeliculas() {
 		pelis=new ArrayList<Pelicula>();
-		dbGestor = new DBGestor();
-		cargarPeliculasDesdeBD();
+		//dbGestor = new DBGestor();
+		//cargarPeliculasDesdeBD();
 	}
 
 	private void cargarPeliculasDesdeBD() {
-		pelis = dbGestor.cargarPeliculas();
+		//pelis = dbGestor.cargarPeliculas();
 		System.out.println("Peliculas cargadas");
 	}
 /*

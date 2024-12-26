@@ -37,7 +37,7 @@ public class GestorUsuariosTest extends TestCase {
                 usuario1,
                 usuario2
         );
-        a1= new Alquiler(p1);
+        a1= new Alquiler("2024-12-26 15:56:23",p1);
         ArrayList<Alquiler>lista=new ArrayList<Alquiler>();
         lista.add(a1);
         u1= new Usuario("pancho","12345678","Pancho","Colate","pepe@gmail.com",u1,lista,true);

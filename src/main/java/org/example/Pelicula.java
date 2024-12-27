@@ -28,7 +28,8 @@ public class Pelicula {
 
 	public JSONObject tieneNombreParecido(String nombrePeli){
 		JSONObject unJSON= new JSONObject();
-		if (nombrePeli.toLowerCase().contains(titulo.toLowerCase()) && aceptada){
+
+		if (titulo.toLowerCase().contains(nombrePeli.toLowerCase())){
 			unJSON.put("id",ID);
 			unJSON.put("titulo",titulo);
 		}

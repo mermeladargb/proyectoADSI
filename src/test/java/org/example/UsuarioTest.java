@@ -4,10 +4,11 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 
-public class GestorUsuariosTest extends TestCase {
-    Usuario u1,u2,u3,u4,usuario1,usuario2;
-    Alquiler a1,a2,a3,a4;
-    Pelicula p1,p2,p3,p4;
+public class UsuarioTest extends TestCase {
+
+    Usuario u1,usuario1,usuario2;
+    Pelicula p1;
+    Alquiler a1;
     public void setUp() throws Exception {
         super.setUp();
         usuario1 = new Usuario(
@@ -17,11 +18,11 @@ public class GestorUsuariosTest extends TestCase {
                 "Pérez",
                 "juan.perez@example.com",
                 u1, // Aceptado por el administrador
-                null,
+                new ArrayList<Alquiler>(),
                 false  // No es administrador
         );
 
-         usuario2 = new Usuario(
+        usuario2 = new Usuario(
                 "mlopez",
                 "securePass",
                 "María",
@@ -38,43 +39,51 @@ public class GestorUsuariosTest extends TestCase {
                 usuario2
         );
         a1= new Alquiler("2024-12-26 15:56:23",p1);
-        ArrayList<Alquiler>lista=new ArrayList<Alquiler>();
+        ArrayList<Alquiler> lista=new ArrayList<Alquiler>();
         lista.add(a1);
         u1= new Usuario("pancho","12345678","Pancho","Colate","pepe@gmail.com",u1,lista,true);
-        GestorUsuarios.getGestorUsuarios().addUsuario(usuario1);
-        GestorUsuarios.getGestorUsuarios().addUsuario(usuario2);
-        GestorUsuarios.getGestorUsuarios().addUsuario(u1);
     }
 
     public void tearDown() throws Exception {
         super.tearDown();
     }
 
-    public void testGetGestorUsuarios() {
-
+    public void testGetUsername() {
     }
 
-    public void testGetUsuario() {
-        //System.out.println(u1.verAlquileres().getJSONObject(0).get("titulo"));
-        //System.out.println(VideoClub.getUnVideoClub().verAlquileres("pancho"));
-
-        assertEquals(GestorUsuarios.getGestorUsuarios().getUsuario("pancho"),u1);
-        assertNull(GestorUsuarios.getGestorUsuarios().getUsuario(""));
-
+    public void testAñadirAlquiler() {
     }
 
-    public void testCuentaExistente() {
+    public void testSetAceptadoPor() {
     }
 
-    public void testRegistrarUsuario() {
+    public void testGetContraseña() {
     }
 
-    public void testCuentaValida() {
+    public void testActualizarCuenta() {
     }
 
-    public void testEliminarCuenta() {
+    public void testEnviarSolicitud() {
     }
 
-    public void testModificarCuenta() {
+    public void testGetAceptado_Por() {
+    }
+
+    public void testValidarDatos() {
+    }
+
+    public void testGetAlquileres() {
+    }
+
+    public void testGetCorreo() {
+    }
+
+    public void testAceptarCuenta() {
+    }
+
+    public void testMostrarAlquileres() {
+        String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2025-01-10 15:56:23\"}]}";
+        assertEquals(u1.mostrarAlquileres().toString(),esperado) ;
+        assertEquals(usuario1.mostrarAlquileres().getJSONArray("alquileres").length(),0);
     }
 }

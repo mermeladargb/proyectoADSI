@@ -136,7 +136,7 @@ public class Usuario {
 			return mensaje;
 		}
 	}
-	public JSONObject verAlquileres() {
+	public JSONObject mostrarAlquileres() {
 		List<JSONObject> lJSONS= new ArrayList<JSONObject>();
 		for(Alquiler unAlquiler:lAlquileres)
 		{

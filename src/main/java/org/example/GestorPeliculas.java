@@ -70,4 +70,7 @@ public class GestorPeliculas {
 		resultado= new JSONObject();
 		return  resultado.put("peliculas",lJSON);
 	}
+	public void addPelicula (Pelicula pPelicula){
+		pelis.add(pPelicula);
+	}
 }

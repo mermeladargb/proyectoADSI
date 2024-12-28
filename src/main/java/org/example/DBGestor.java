@@ -14,7 +14,7 @@ public class DBGestor {
         try {
             conn = DriverManager.getConnection(DB_URL);
         } catch (SQLException e) {
-            System.out.println("Error de conexion: " + e.getMessage());
+            System.out.println("Error de conexion:" + e.getMessage());
         }
         return conn;
     }
@@ -45,8 +45,98 @@ public class DBGestor {
                 peliculas.add(pelicula);
             }
         } catch (SQLException e) {
+            System.out.println("Error al cargar peliculas:" + e.getMessage());
         }
         return peliculas;
+    }
+
+    public ArrayList<Usuario> cargarUsuarios() {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT * FROM usuarios";
+
+        try (Connection conn = conectar();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Usuario usuario = new Usuario(
+                        rs.getString("username"),
+                        rs.getString("contraseña"),
+                        rs.getString("nombre"),
+                        rs.getString("apellido"),
+                        rs.getString("correo"),
+                        null,
+                        new ArrayList<>(),
+                        rs.getBoolean("esAdmin")
+                );
+
+                //Si el usuario fue aceptado por otro administrador
+                String aceptadoPorUsername = rs.getString("aceptadoPor");
+                if (aceptadoPorUsername != null) {
+                    Usuario aceptadoPor = GestorUsuarios.getGestorUsuarios().getUsuario(aceptadoPorUsername);
+                    usuario.setAceptadoPor(aceptadoPor);
+                }
+                usuarios.add(usuario);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar usuarios: " + e.getMessage());
+        }
+        return usuarios;
+    }
+
+    public ArrayList<Lista> cargarListas() {
+        ArrayList<Lista> listas = new ArrayList<>();
+        String sql = "SELECT * FROM listas";
+
+        try (Connection conn = conectar();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                Usuario usuario = GestorUsuarios.getGestorUsuarios().getUsuario(rs.getString("username"));
+                Lista lista = new Lista(usuario, rs.getString("nombre"));
+                lista.cambiarVisibilidad(); // Cambiar visibilidad según la BD
+
+                //Cargar peliculas de la lista
+                String sqlPeliculas = "SELECT peliculaID FROM lista_peliculas WHERE listaNombre = ?";
+                try (PreparedStatement ps = conn.prepareStatement(sqlPeliculas)) {
+                    ps.setString(1, lista.getNombre());
+                    ResultSet rsPeliculas = ps.executeQuery();
+                    while (rsPeliculas.next()) {
+                        Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(rsPeliculas.getInt("peliculaID"));
+                        if (pelicula != null) {
+                            lista.añadirPelicula(pelicula);
+                        }
+                    }
+                }
+                listas.add(lista);
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar listas:" + e.getMessage());
+        }
+        return listas;
+    }
+
+    public void cargarAlquileres() {
+        String sql = "SELECT * FROM alquileres";
+
+        try (Connection conn = conectar();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String username = rs.getString("username");
+                Usuario usuario = GestorUsuarios.getGestorUsuarios().getUsuario(username);
+                if (usuario != null) {
+                    Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(rs.getInt("peliculaID"));
+                    if (pelicula != null) {
+                        usuario.añadirAlquiler(pelicula);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error al cargar alquileres:" + e.getMessage());
+        }
     }
 
     public void guardarPelicula(Pelicula pelicula) {

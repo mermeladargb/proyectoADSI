@@ -27,4 +27,11 @@ public class Valoracion{
         return reseña;
     }
 
+    public void setNota(int nota) {
+        this.nota = nota;
+    }
+
+    public void setReseña(String reseña) {
+        this.reseña = reseña;
+    }
 }

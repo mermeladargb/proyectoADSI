@@ -76,7 +76,7 @@ public class VideoClub {
     }
 
     public JSONObject mostrarReseñas(String username, int idPelicula) {
-        //TODO Como parametro tenemos username para que al mostrar las reseñas aparezca en primera posicion nuestra reseña y puntuacion.
+        //Como parametro tenemos username para que al mostrar las reseñas aparezca en primera posicion nuestra reseña y puntuacion.
         //Usuario user = GestorUsuario.getUsuario(username);
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         ArrayList<Valoracion> listaValoraciones = pelicula.verValoraciones(username);

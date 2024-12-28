@@ -1,6 +1,8 @@
 package org.example;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 public class Pelicula {
 	private int ID;
@@ -45,10 +47,27 @@ public class Pelicula {
 	
 	public Valoracion getValoracion(Usuario pUsuario)
 	{
+		if (listaValoraciones != null) {
+			for (Valoracion valoracion : listaValoraciones) {
+				if (valoracion.getUser().equals(pUsuario)) {
+					return valoracion;
+				}
+			}
+		}
 		return null;
 	}
 	public void guardarValoracion(Usuario user, String reseña, int nota) {
-
+		//Verificacion si la pelicula esta valorada
+		for (Valoracion valoracion : listaValoraciones) {
+			if (valoracion.getUser().equals(user.getUsername())) {
+				valoracion.setReseña(reseña);
+				valoracion.setNota(nota);
+				return;
+			}
+		}
+		//Si el user no ha hecho ninguna valoracion a la pelicula
+		Valoracion nuevaValoracion = new Valoracion(nota, reseña, user);
+		listaValoraciones.add(nuevaValoracion);
 	}
 	//TODO Creo que calcularPromedio debería de devolver un valor que fuera float
 	/*private void calcularPromedio() {
@@ -56,7 +75,23 @@ public class Pelicula {
 	}
 	*/
 	public ArrayList<Valoracion>verValoraciones(String username) {
-		return null;
+
+		ArrayList<Valoracion> valoracionesUsuario = new ArrayList<>();
+		ArrayList<Valoracion> otrasValoraciones = new ArrayList<>();
+
+		//La valoracion del usuario que solicita ver las valoraciones se va a "valoracionesUsuario" y las demas a "otrasValoraciones"
+		for (Valoracion valoracion : listaValoraciones) {
+			if (valoracion.getUser().equals(username)) {
+				valoracionesUsuario.add(valoracion);
+			} else {
+				otrasValoraciones.add(valoracion);
+			}
+		}
+
+		//Se combinan las dos listas
+		valoracionesUsuario.addAll(otrasValoraciones);
+
+		return valoracionesUsuario;
 	}
 
 	public void setID(int id) {

@@ -8,6 +8,12 @@ public class Valoracion{
     private String reseña;
     private Usuario user;
 
+    public Valoracion(float pNota, String pReseña, Usuario pUser)
+    {
+        nota=pNota;
+        reseña=pReseña;
+        user=pUser;
+    }
 
     public float getPuntuacion(){
         return nota;

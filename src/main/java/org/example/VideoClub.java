@@ -28,7 +28,10 @@ public class VideoClub {
             JSON.put("ID",unaPelicula.getID());
             JSON.put("titulo",unaPelicula.getTitulo());
             JSON.put("descrip",unaPelicula.getDescripcion());
-            JSON.put("media",unaPelicula.getMediaValoracion());
+            JSON.put("media",  String.format("%.2f", unaPelicula.getMediaValoracion()));
+        }
+        else{
+            JSON=null;
         }
 
         return  JSON;
@@ -38,7 +41,10 @@ public class VideoClub {
     public void alquilarPeli(String username, int idPeli) {
             Pelicula unaPelicula=gestorPeliculas.buscarPeliSeleccionada(idPeli);
             Usuario unUsuario= GestorUsuarios.getGestorUsuarios().getUsuario(username);
-            unUsuario.añadirAlquiler(unaPelicula);
+            if (unUsuario !=null && unaPelicula != null){
+                unUsuario.añadirAlquiler(unaPelicula);
+            }
+
     }
 
     public JSONObject verAlquileres(String username) {

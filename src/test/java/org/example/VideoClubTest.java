@@ -14,6 +14,8 @@ public class VideoClubTest extends TestCase {
 
     public void setUp() throws Exception {
         super.setUp();
+        GestorUsuarios.getGestorUsuarios().reset();
+        GestorPeliculas.getGestorPeliculas().reset();
         usuario1 = new Usuario(
                 "jperez",
                 "password123",
@@ -49,6 +51,7 @@ public class VideoClubTest extends TestCase {
         GestorPeliculas.getGestorPeliculas().addPelicula(p2);
         GestorPeliculas.getGestorPeliculas().addPelicula(p3);
 
+
     }
 
     public void tearDown() throws Exception {
@@ -59,6 +62,8 @@ public class VideoClubTest extends TestCase {
     }
 
     public void testMostrarPeliculasSimilares() {
+
+
         String esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("Inception").toString(),esperado);
         esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101},{\"titulo\":\"Option\",\"id\":103}]}";
@@ -73,12 +78,45 @@ public class VideoClubTest extends TestCase {
     }
 
     public void testSeleccionarPelicula() {
+
+        String esperado=  "{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"NaN\"}";
+      assertEquals(esperado,VideoClub.getUnVideoClub().seleccionarPelicula(101).toString());
+      Valoracion v1 = new Valoracion((float)5.5,"Ta bien",usuario1);
+      Valoracion v2= new Valoracion((float)9.8,"Excelente pelicula",usuario2);
+      Valoracion v3= new Valoracion((float)3.3,"Ta mala",u1);
+      p1.addValoracion(v1);
+      p1.addValoracion(v2);
+      p1.addValoracion(v3);
+
+      esperado="{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"6,20\"}";
+      assertEquals(esperado, VideoClub.getUnVideoClub().seleccionarPelicula(101).toString());
+
+      assertNull(VideoClub.getUnVideoClub().seleccionarPelicula(300));
+
     }
 
     public void testAlquilarPeli() {
+
+        VideoClub.getUnVideoClub().alquilarPeli("mlopez",103);
+        JSONArray json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
+        assertTrue (json1.getJSONObject(0).get("titulo")=="Option" && json1.length()==1) ;
+        VideoClub.getUnVideoClub().alquilarPeli("mlopez",101);
+        json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
+        assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
+
+        VideoClub.getUnVideoClub().alquilarPeli("mlopez",300);
+        json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
+        assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
+
+
+
+
+
     }
 
     public void testVerAlquileres() {
+
+
         String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2025-01-10 15:56:23\"}]}";
         assertEquals(VideoClub.getUnVideoClub().verAlquileres("pancho").toString(),esperado) ;
         assertNull(VideoClub.getUnVideoClub().verAlquileres(""));

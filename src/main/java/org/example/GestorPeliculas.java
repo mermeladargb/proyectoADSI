@@ -73,4 +73,7 @@ public class GestorPeliculas {
 	public void addPelicula (Pelicula pPelicula){
 		pelis.add(pPelicula);
 	}
+	public void reset (){
+		pelis=new ArrayList<Pelicula>();
+	}
 }

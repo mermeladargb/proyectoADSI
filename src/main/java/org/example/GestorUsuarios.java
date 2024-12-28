@@ -103,4 +103,8 @@ public class GestorUsuarios {
     {
         usuarios.add(unUsuario);
     }
+
+    public void reset(){
+        usuarios=new ArrayList<Usuario>();
+    }
 }

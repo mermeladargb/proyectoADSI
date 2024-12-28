@@ -51,10 +51,10 @@ public class Pelicula {
 
 	}
 	//TODO Creo que calcularPromedio debería de devolver un valor que fuera float
-	private void calcularPromedio() {
+	/*private void calcularPromedio() {
 		listaValoraciones.stream().mapToDouble(Valoracion::getPuntuacion).average();
 	}
-	
+	*/
 	public ArrayList<Valoracion>verValoraciones(String username) {
 		return null;
 	}
@@ -91,6 +91,10 @@ public class Pelicula {
 		return aceptadaPor;
 	}
 	public double getMediaValoracion(){
-		return  this.listaValoraciones.stream().mapToDouble(Valoracion::getPuntuacion).sum() / this.listaValoraciones.size();
+		return this.listaValoraciones.stream().mapToDouble(Valoracion::getPuntuacion).sum() / this.listaValoraciones.size();
+	}
+	public void addValoracion(Valoracion pValoracion){
+		listaValoraciones.add(pValoracion);
+
 	}
 }

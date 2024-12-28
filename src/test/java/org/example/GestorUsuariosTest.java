@@ -10,6 +10,7 @@ public class GestorUsuariosTest extends TestCase {
     Pelicula p1,p2,p3,p4;
     public void setUp() throws Exception {
         super.setUp();
+        GestorUsuarios.getGestorUsuarios().reset();
         usuario1 = new Usuario(
                 "jperez",
                 "password123",
@@ -21,7 +22,7 @@ public class GestorUsuariosTest extends TestCase {
                 false  // No es administrador
         );
 
-         usuario2 = new Usuario(
+        usuario2 = new Usuario(
                 "mlopez",
                 "securePass",
                 "María",
@@ -44,6 +45,7 @@ public class GestorUsuariosTest extends TestCase {
         GestorUsuarios.getGestorUsuarios().addUsuario(usuario1);
         GestorUsuarios.getGestorUsuarios().addUsuario(usuario2);
         GestorUsuarios.getGestorUsuarios().addUsuario(u1);
+
     }
 
     public void tearDown() throws Exception {
@@ -57,6 +59,8 @@ public class GestorUsuariosTest extends TestCase {
     public void testGetUsuario() {
         //System.out.println(u1.verAlquileres().getJSONObject(0).get("titulo"));
         //System.out.println(VideoClub.getUnVideoClub().verAlquileres("pancho"));
+
+
 
         assertEquals(GestorUsuarios.getGestorUsuarios().getUsuario("pancho"),u1);
         assertNull(GestorUsuarios.getGestorUsuarios().getUsuario(""));

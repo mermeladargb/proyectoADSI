@@ -28,7 +28,7 @@ public class Alquiler {
 			Date fechaInicio = formatoFecha.parse(fecha);
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTime(fechaInicio);
-			calendar.add(Calendar.DAY_OF_MONTH, 15);
+			calendar.add(Calendar.DAY_OF_MONTH, 2);
 			Date fechaFin = calendar.getTime();
 			unJSON.put("peliID",pelicula.getID());
 			unJSON.put("titulo",pelicula.getTitulo());

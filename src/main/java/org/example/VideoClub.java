@@ -50,7 +50,7 @@ public class VideoClub {
     public JSONObject verAlquileres(String username) {
         Usuario unUsuario=GestorUsuarios.getGestorUsuarios().getUsuario(username);
         if (unUsuario!=null){
-            return GestorUsuarios.getGestorUsuarios().getUsuario(username).mostrarAlquileres();
+            return unUsuario.mostrarAlquileres();
         }
         return null;
 

@@ -40,6 +40,16 @@ public class MenuPrincipal extends JFrame {
         });
         panelPrincipal.add(botonVerMisListas);
 
+        JButton botonVerHistorial = new JButton("Ver mi historial alquileres");
+        botonVerHistorial.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MenuHistorialAlquileres menuHistorial = new MenuHistorialAlquileres(username);
+                menuHistorial.setVisible(true);
+            }
+        });
+        panelPrincipal.add(botonVerHistorial);
+
         panelCredenciales = new JPanel();
         panelCredenciales.setLayout(new GridLayout(3, 1));
         add(panelCredenciales);

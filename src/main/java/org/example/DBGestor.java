@@ -35,13 +35,19 @@ public class DBGestor {
                 pelicula.setDescripcion(rs.getString("descripcion"));
                 pelicula.setAceptada(rs.getBoolean("aceptada"));
 
-              /*
-                Usuario solicitadaPor = new Usuario(rs.getString("solicitadaPor"));
-                Admin aceptadaPor = new Admin(rs.getString("aceptadaPor"));
+                String solicitadaPorUsername = rs.getString("username_solicitador");
+                if (solicitadaPorUsername != null) {
+                    Usuario solicitadaPor = GestorUsuarios.getGestorUsuarios().getUsuario(solicitadaPorUsername);
+                    pelicula.setSolicitadaPor(solicitadaPor);
+                }
 
-                pelicula.setSolicitadaPor(solicitadaPor);
-                pelicula.setAceptadaPor(aceptadaPor);
-*/
+                String aceptadaPorUsername = rs.getString("username_admin");
+                if (aceptadaPorUsername != null) {
+                    Usuario aceptadaPor = GestorUsuarios.getGestorUsuarios().getUsuario(aceptadaPorUsername);
+                    if (aceptadaPor != null && aceptadaPor.esAdmin()) {
+                        pelicula.setAceptadaPor(aceptadaPor);
+                    }
+                }
                 peliculas.add(pelicula);
             }
         } catch (SQLException e) {
@@ -95,9 +101,10 @@ public class DBGestor {
             while (rs.next()) {
                 Usuario usuario = GestorUsuarios.getGestorUsuarios().getUsuario(rs.getString("username"));
                 Lista lista = new Lista(usuario, rs.getString("nombre"));
-                lista.cambiarVisibilidad(); // Cambiar visibilidad según la BD
+                //TODO al cargar los datos mirar si la visibilidad se pone bien
+                lista.cambiarVisibilidad();
 
-                //Cargar peliculas de la lista
+
                 String sqlPeliculas = "SELECT peliculaID FROM lista_peliculas WHERE listaNombre = ?";
                 try (PreparedStatement ps = conn.prepareStatement(sqlPeliculas)) {
                     ps.setString(1, lista.getNombre());

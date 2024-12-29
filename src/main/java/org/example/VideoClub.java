@@ -141,9 +141,9 @@ public class VideoClub {
         Lista lista = GestorListas.getGestorListas().getListaUsuario(username, nombreLista);
         JSONObject json = new JSONObject();
         JSONArray array = new JSONArray(lista.getPeliculas());
-        json.append("nombreLista", lista.getNombre());
-        json.append("visible", lista.esVisible());
-        json.append("peliculas", array);
+        json.put("nombreLista", lista.getNombre());
+        json.put("visible", lista.esVisible());
+        json.put("peliculas", array);
         return json;
     }
 

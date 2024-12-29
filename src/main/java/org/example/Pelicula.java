@@ -132,4 +132,12 @@ public class Pelicula {
 		listaValoraciones.add(pValoracion);
 
 	}
+
+	public void setSolicitadaPor(Usuario solicitadaPor) {
+		this.solicitadaPor = solicitadaPor;
+	}
+
+	public void setAceptadaPor(Usuario aceptadaPor) {
+		this.aceptadaPor = aceptadaPor;
+	}
 }

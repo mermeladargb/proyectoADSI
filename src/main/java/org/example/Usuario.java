@@ -81,8 +81,10 @@ public class Usuario {
 	public Usuario getAceptado_Por() {
 		return aceptado_Por;
 	}
-	
 
+	public boolean esAdmin() {
+		return  es_Admin;
+	}
 
 	public boolean validarDatos() {
 	    boolean aceptado = true;
@@ -146,6 +148,7 @@ public class Usuario {
 
 		return json.put("alquileres", new JSONArray(lJSONS));
 	}
+
 
 }
 

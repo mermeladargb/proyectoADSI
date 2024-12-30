@@ -46,11 +46,8 @@ public class MenuListas extends JFrame {
             panelMisListas.add(new JLabel("No has creado ninguna lista"));
         }
         else {
-            Iterator<Object> iter = listas.iterator();
-            int i = 0;
-            while (iter.hasNext() && i < 10) {
-                String nombreLista = (String) iter.next();
-                JButton boton = new JButton(nombreLista);
+            for (Object o : listas) {
+                JButton boton = new JButton((String) o);
                 boton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
@@ -59,7 +56,6 @@ public class MenuListas extends JFrame {
                     }
                 });
                 panelMisListas.add(boton);
-                i++;
             }
         }
 

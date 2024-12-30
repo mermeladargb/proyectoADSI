@@ -89,7 +89,21 @@ public class MenuListas extends JFrame {
         boolean visible = (boolean) json.get("visible");
         List<Object> peliculas = json.getJSONArray("peliculas").toList();
 
-        panelLista.add(new JLabel("Lista: " + nombreLista + ", visible: " + visible));
+        JLabel label = new JLabel("Lista: " + nombreLista + ", visible: " + visible);
+        panelLista.add(label);
+
+        JButton botonCambiarVisibilidad = new JButton("Cambiar visibilidad");
+        botonCambiarVisibilidad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                VideoClub.getUnVideoClub().cambiarVisibilidadLista(username, nombreLista);
+                verLista(nombreLista);
+                cardLayout.show(cardPanel, "verlista");
+                revalidate();
+                repaint();
+            }
+        });
+        panelLista.add(botonCambiarVisibilidad);
 
         JButton botonAñadirPeli = new JButton("Añadir película");
         botonAñadirPeli.addActionListener(new ActionListener() {

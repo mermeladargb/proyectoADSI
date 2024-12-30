@@ -34,6 +34,7 @@ public class Pelicula {
 		if (titulo.toLowerCase().contains(nombrePeli.toLowerCase())){
 			unJSON.put("id",ID);
 			unJSON.put("titulo",titulo);
+			unJSON.put("media", String.format("%.2f", getMediaValoracion()));
 		}
 		else{
 			unJSON=null;

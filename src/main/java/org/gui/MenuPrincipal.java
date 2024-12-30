@@ -50,8 +50,18 @@ public class MenuPrincipal extends JFrame {
         });
         panelPrincipal.add(botonVerHistorial);
 
+        JButton botonBuscarPelicula = new JButton("Buscar Pelicula");
+        botonBuscarPelicula.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                BuscarPelicula buscaPelicula = new BuscarPelicula(username);
+                buscaPelicula.setVisible(true);
+            }
+        });
+        panelPrincipal.add(botonBuscarPelicula);
+
         panelCredenciales = new JPanel();
-        panelCredenciales.setLayout(new GridLayout(3, 1));
+        panelCredenciales.setLayout(new GridLayout(4, 1));
         add(panelCredenciales);
         panelCredencialesUsuario = new JTextField("u1");
         panelCredencialesContraseña = new JTextField("Contraseña");

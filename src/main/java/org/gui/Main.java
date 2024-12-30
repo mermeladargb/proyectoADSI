@@ -14,7 +14,9 @@ public class Main {
         GestorListas.getGestorListas().crearLista(u1, "lista2");
         GestorUsuarios.getGestorUsuarios().addUsuario(u1);
         Pelicula p1 = new Pelicula(1, "P1", "p1", null, null);
-        Pelicula p2 = new Pelicula(1, "P2", "p2", null, null);
+        Pelicula p2 = new Pelicula(2, "P2", "p2", null, null);
+        GestorPeliculas.getGestorPeliculas().addPelicula(p1);
+        GestorPeliculas.getGestorPeliculas().addPelicula(p2);
         GestorListas.getGestorListas().añadirPeliculaALista("u1", "lista1", p1);
         for (int i = 0; i < 20; i++)
             GestorListas.getGestorListas().añadirPeliculaALista("u1", "lista1", p2);

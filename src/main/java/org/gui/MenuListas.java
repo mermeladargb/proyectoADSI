@@ -7,8 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 public class MenuListas extends JFrame {
     private String username;
@@ -19,8 +19,17 @@ public class MenuListas extends JFrame {
     private JScrollPane scrollMisListas;
     private JScrollPane scrollLista;
     private JPanel panelCrearLista;
-    private JTextField nombreLista;
+    private JTextField fieldNombreLista;
     private JButton botonMenuCrearLista;
+
+    private JPanel panelAñadirPeli;
+    private JButton botonBuscarPeli;
+    private JTextField fieldNombrePeli;
+
+
+    private JPanel panelListaPelis;
+    private JScrollPane scrollListaPelis;
+
 
     public MenuListas(String username) {
         this.username = username;
@@ -36,23 +45,30 @@ public class MenuListas extends JFrame {
 
         panelCrearLista = new JPanel();
 
+        panelAñadirPeli = new JPanel();
+
+        panelListaPelis = new JPanel();
+        scrollListaPelis = new JScrollPane(panelListaPelis);
+
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         cardPanel.add(scrollMisListas, "mislistas");
         cardPanel.add(scrollLista, "verlista");
         cardPanel.add(panelCrearLista, "crearlista");
+        cardPanel.add(panelAñadirPeli, "añadirpeli");
+        cardPanel.add(scrollListaPelis, "listapelis");
 
         panelCrearLista.setLayout(new BoxLayout(panelCrearLista, BoxLayout.Y_AXIS));
         panelCrearLista.add(new JLabel("Nombre de la lista"));
-        nombreLista = new JTextField();
-        panelCrearLista.add(nombreLista);
+        fieldNombreLista = new JTextField();
+        panelCrearLista.add(fieldNombreLista);
         JButton botonCrearLista = new JButton("Crear lista");
         botonCrearLista.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (nombreLista.getText().isEmpty())
+                if (fieldNombreLista.getText().isEmpty())
                     return;
-                VideoClub.getUnVideoClub().crearLista(username, nombreLista.getText());
+                VideoClub.getUnVideoClub().crearLista(username, fieldNombreLista.getText());
                 actualizarMisListas();
                 cardLayout.show(cardPanel, "mislistas");
             }
@@ -74,6 +90,16 @@ public class MenuListas extends JFrame {
         List<Object> peliculas = json.getJSONArray("peliculas").toList();
 
         panelLista.add(new JLabel("Lista: " + nombreLista + ", visible: " + visible));
+
+        JButton botonAñadirPeli = new JButton("Añadir película");
+        botonAñadirPeli.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                actualizarAñadirPeli(nombreLista);
+                cardLayout.show(cardPanel, "añadirpeli");
+            }
+        });
+        panelLista.add(botonAñadirPeli);
 
         if (peliculas.isEmpty()) {
             panelLista.add(new JLabel("Esta lista no tiene películas"));
@@ -122,10 +148,82 @@ public class MenuListas extends JFrame {
         botonMenuCrearLista.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                nombreLista.setText("");
+                fieldNombreLista.setText("");
                 cardLayout.show(cardPanel, "crearlista");
             }
         });
         panelMisListas.add(botonMenuCrearLista);
+    }
+
+    private void actualizarAñadirPeli(String nombreLista) {
+        panelAñadirPeli.removeAll();
+        panelAñadirPeli.setLayout(new BoxLayout(panelAñadirPeli, BoxLayout.Y_AXIS));
+
+        fieldNombrePeli = new JTextField("Nombre de la película");
+        botonBuscarPeli = new JButton("Buscar");
+        botonBuscarPeli.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (fieldNombrePeli.getText().isEmpty())
+                    return;
+                mostrarPelis(nombreLista, fieldNombrePeli.getText());
+                cardLayout.show(cardPanel, "listapelis");
+            }
+        });
+
+        JButton botonAtras = new JButton("Volver");
+        botonAtras.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(cardPanel, "verlista");
+            }
+        });
+
+        panelAñadirPeli.add(fieldNombrePeli);
+        panelAñadirPeli.add(botonBuscarPeli);
+        panelAñadirPeli.add(botonAtras);
+    }
+
+    private void mostrarPelis(String nombreLista, String busqueda) {
+        panelListaPelis.removeAll();
+
+        JSONObject json = VideoClub.getUnVideoClub().mostrarPeliculasSimilares(busqueda);
+        List<Object> listaPelis = json.getJSONArray("peliculas").toList();
+
+        JButton botonAtras = new JButton("Volver");
+        botonAtras.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(cardPanel, "añadirpeli");
+            }
+        });
+
+        if (listaPelis.isEmpty()) {
+            panelListaPelis.add(new JLabel("No se ha encontrado ninguna película"));
+            panelListaPelis.add(botonAtras);
+        }
+
+        else {
+            panelListaPelis.setLayout(new GridLayout(0, 2));
+            panelListaPelis.add(new JLabel("Resultados"));
+            panelListaPelis.add(botonAtras);
+
+            for (Object o : json.getJSONArray("peliculas").toList()) {
+                Map<String, Object> jsonObject = (Map<String, Object>) o;
+                String nombrePeli = (String) jsonObject.get("titulo");
+                int idPeli = (int) jsonObject.get("id");
+                System.out.println("Peli: " + nombrePeli + ", id: " + idPeli);
+                JLabel labelNombrePeli = new JLabel(nombrePeli);
+                JButton botonAñadir = new JButton("Añadir");
+                botonAñadir.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent actionEvent) {
+                        VideoClub.getUnVideoClub().añadirPeliculaALista(username, nombreLista, idPeli);
+                    }
+                });
+                panelListaPelis.add(labelNombrePeli);
+                panelListaPelis.add(botonAñadir);
+            }
+        }
     }
 }

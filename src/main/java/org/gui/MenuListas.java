@@ -16,6 +16,8 @@ public class MenuListas extends JFrame {
     private JPanel cardPanel;
     private JPanel panelMisListas;
     private JPanel panelLista;
+    private JScrollPane scrollMisListas;
+    private JScrollPane scrollLista;
 
     public MenuListas(String username) {
         this.username = username;
@@ -23,18 +25,19 @@ public class MenuListas extends JFrame {
         setSize(400, 400);
 
         panelMisListas = new JPanel();
-        //setContentPane(panelMisListas);
-        panelMisListas.setLayout(new GridLayout(10, 1));
+        scrollMisListas = new JScrollPane(panelMisListas);
+        panelMisListas.setLayout(new BoxLayout(panelMisListas, BoxLayout.Y_AXIS));
 
         panelLista = new JPanel();
+        scrollLista = new JScrollPane(panelLista);
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.add(panelMisListas, "mislistas");
-        cardPanel.add(panelLista, "verlista");
+        cardPanel.add(scrollMisListas, "mislistas");
+        cardPanel.add(scrollLista, "verlista");
 
         JSONObject json = VideoClub.getUnVideoClub().getListasUsuario(username);
-        List<String> listas = (List<String>) json.getJSONArray("listas").toList().get(0);
+        List<Object> listas = json.getJSONArray("listas").toList();
 
         JLabel label = new JLabel("Listas de " + username);
         panelMisListas.add(label);
@@ -43,10 +46,10 @@ public class MenuListas extends JFrame {
             panelMisListas.add(new JLabel("No has creado ninguna lista"));
         }
         else {
-            Iterator<String> iter = listas.iterator();
+            Iterator<Object> iter = listas.iterator();
             int i = 0;
             while (iter.hasNext() && i < 10) {
-                String nombreLista = iter.next();
+                String nombreLista = (String) iter.next();
                 JButton boton = new JButton(nombreLista);
                 boton.addActionListener(new ActionListener() {
                     @Override
@@ -66,7 +69,7 @@ public class MenuListas extends JFrame {
 
     private void verLista(String nombreLista) {
         panelLista.removeAll();
-        panelLista.setLayout(new GridLayout(12, 1));
+        panelLista.setLayout(new BoxLayout(panelLista, BoxLayout.Y_AXIS));
 
         JSONObject json = VideoClub.getUnVideoClub().getListaUsuario(username, nombreLista);
         boolean visible = (boolean) json.get("visible");
@@ -74,17 +77,12 @@ public class MenuListas extends JFrame {
 
         panelLista.add(new JLabel("Lista: " + nombreLista + ", visible: " + visible));
 
-
         if (peliculas.isEmpty()) {
             panelLista.add(new JLabel("Esta lista no tiene películas"));
         }
         else {
-            Iterator<Object> iter = peliculas.iterator();
-            int i = 0;
-            while (iter.hasNext() && i < 10) {
-                panelLista.add(new JLabel((String) iter.next()));
-                i++;
-            }
+            for (Object o : peliculas)
+                panelLista.add(new JLabel((String) o));
         }
         JButton botonAtras = new JButton("Volver");
         panelLista.add(botonAtras);

@@ -52,11 +52,10 @@ public class GestorListas {
 		lista.get(0).añadirPelicula(pelicula);
 	}
 	
-	public List<String> buscarLista(String nombreLista) {
+	public List<Lista> buscarLista(String nombreLista) {
 		return listas.stream()
 				.filter(l -> l.esVisible())
 				.filter(l -> l.getNombre().toLowerCase().contains(nombreLista))
-				.map(l -> l.getNombre() + ":" + l.getNombreUsuario())
 				.collect(Collectors.toList());
 	}
 	

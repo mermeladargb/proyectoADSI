@@ -133,7 +133,7 @@ public class VideoClub {
         List<String> listas = GestorListas.getGestorListas().getListasUsuario(username);
         JSONObject json = new JSONObject();
         JSONArray array = new JSONArray(listas);
-        json.append("listas", array);
+        json.put("listas", array);
         return json;
     }
 
@@ -153,10 +153,16 @@ public class VideoClub {
     }
 
     public JSONObject buscarLista(String nombreLista) {
-        List<String> listas = GestorListas.getGestorListas().buscarLista(nombreLista);
+        List<Lista> listas = GestorListas.getGestorListas().buscarLista(nombreLista);
         JSONObject json = new JSONObject();
-        JSONArray array = new JSONArray(listas);
-        json.append("listas", array);
+        JSONArray array = new JSONArray();
+        for (Lista l : listas) {
+            JSONObject lista = new JSONObject();
+            lista.put("username", l.getNombreUsuario());
+            lista.put("pelicula", l.getNombre());
+            array.put(lista);
+        }
+        json.put("listas", array);
         return json;
     }
 

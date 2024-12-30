@@ -199,6 +199,7 @@ public class BuscarPelicula extends JFrame {
         // Obtener los componentes del panel de detalles
         id = idPelicula;
         JSONObject jsonPeli= VideoClub.getUnVideoClub().seleccionarPelicula(idPelicula);
+        System.out.println(idPelicula);
         detallesArea.setText("");
         // Mostrar información detallada de la película
         String detalles = "Título: " + jsonPeli.get("titulo") + "\n" +

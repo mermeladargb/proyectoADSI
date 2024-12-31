@@ -63,8 +63,15 @@ public class VideoClub {
 
         JSONObject peliculaJSON = new JSONObject();
         peliculaJSON.put("idPelicula", pelicula.getID());
-        peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
-        peliculaJSON.put("descripcion", valoracion.getReseña());
+
+        //Condicion: Si no hay una valoracion no nos devuelve una excepcion
+        if (valoracion != null){
+            peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
+            peliculaJSON.put("descripcion", valoracion.getReseña());
+        } else{
+            peliculaJSON.put("puntuacion", JSONObject.NULL);
+            peliculaJSON.put("descripcion", "");
+        }
         return peliculaJSON;
     }
 

@@ -34,25 +34,17 @@ public class GestorPeliculas {
 	{
 		return pelis.iterator();
 	}
-	
+
 	public Pelicula buscarPeliSeleccionada(int idPeli) {
-		int i=0;
-		boolean enc= false;
-		Pelicula unaPeli= new Pelicula();
-		while (i<pelis.size() && ! enc)
-		{
-			if (pelis.get(i).getID()==idPeli)
-			{
-				enc=true;
-				unaPeli= pelis.get(i);
+		for (Pelicula pelicula : pelis) {
+			if (pelicula.getID() == idPeli) {
+				return pelicula;
 			}
-			i++;
 		}
-		if (!enc){
-			unaPeli=null;
-		}
-		return unaPeli;
+		System.out.println("Película no encontrada con ID:");
+		return null;
 	}
+
 
 
 	public JSONObject mostrarPeliculas(String nombrePeli) {

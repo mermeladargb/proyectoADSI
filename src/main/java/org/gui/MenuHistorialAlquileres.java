@@ -52,9 +52,11 @@ public class MenuHistorialAlquileres extends JFrame {
                 for (int i = alquileres.length()-1; i >=0  ; i--) {
                     JSONObject alquiler = alquileres.getJSONObject(i);
                     String titulo = alquiler.getString("titulo");
+                    int peliculaId = alquiler.getInt("peliID");
 
                     // Crear un botón para cada alquiler
                     JButton boton = new JButton(titulo);
+                    JButton botonPuntuar = new JButton("Puntuar");
                     boton.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent actionEvent) {
@@ -62,7 +64,17 @@ public class MenuHistorialAlquileres extends JFrame {
                             cardLayout.show(cardPanel, "verlista");  // Cambiar la vista
                         }
                     });
-                    panelHistorialAlquileres.add(boton);
+                    botonPuntuar.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent actionEvent) {
+                            new MenuPuntuarPelicula(peliculaId, username);
+                        }
+                    });
+
+                    JPanel panelPelicula = new JPanel(new FlowLayout(FlowLayout.LEFT));
+                    panelPelicula.add(boton);
+                    panelPelicula.add(botonPuntuar);
+                    panelHistorialAlquileres.add(panelPelicula);
                 }
             }
 

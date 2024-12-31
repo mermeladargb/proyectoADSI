@@ -1,6 +1,5 @@
-import org.example.GestorListas;
-import org.example.Pelicula;
-import org.example.Usuario;
+package org.example;
+
 import org.junit.Before;
 import org.junit.Test;
 

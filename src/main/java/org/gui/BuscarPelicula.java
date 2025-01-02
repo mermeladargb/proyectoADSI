@@ -8,9 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BuscarPelicula extends JFrame {
@@ -21,7 +19,6 @@ public class BuscarPelicula extends JFrame {
     private JPanel panelResultados;
     private JPanel panelDetalles;
     private JSONObject peliculas;
-    private JList<String> listaResultados; // Lista de títulos
     private DefaultListModel<String> listModel; // Modelo para títulos
     private Map<String, JSONObject> peliculaMap; // Mapeo de títulos a JSONObject
     private JTextArea detallesArea;
@@ -29,7 +26,7 @@ public class BuscarPelicula extends JFrame {
 
     public BuscarPelicula(String username) {
         this.username = username;
-        this.peliculas=new JSONObject();
+        this.peliculas = new JSONObject();
 
         // Configuración inicial del JFrame
         setTitle("Buscar Películas");
@@ -90,47 +87,33 @@ public class BuscarPelicula extends JFrame {
     }
 
     private void initPanelResultados() {
-        panelResultados = new JPanel();
-        panelResultados.setLayout(new BorderLayout());
+        //Crear panel GridBagLayout para los resultados
+        panelResultados = new JPanel(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
 
-        // Título del panel de resultados
-        JLabel resultadosLabel = new JLabel("Resultados de la búsqueda:", SwingConstants.CENTER);
-        panelResultados.add(resultadosLabel, BorderLayout.NORTH);
+        //Añadir titulo "Resultados de la búsqueda"
+        JLabel resultadosLabel = new JLabel("Resultados de la búsqueda:", SwingConstants.LEFT);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 3;
+        panelResultados.add(resultadosLabel, gbc);
 
-        // Inicializar modelo y lista de resultados
-        listModel = new DefaultListModel<>();
-        listaResultados = new JList<>(listModel);
-        listaResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        // Mapeo para buscar detalles a partir del título
-        peliculaMap = new HashMap<>();
-
-        // Detectar selección en la lista
-        listaResultados.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                String tituloSeleccionado = listaResultados.getSelectedValue();
-                if (tituloSeleccionado != null) {
-                    JSONObject peliculaSeleccionada = peliculaMap.get(tituloSeleccionado);
-                    if (peliculaSeleccionada != null) {
-                        mostrarDetalles((int) peliculaSeleccionada.get("id"));
-                        cardLayout.show(cardPanel, "Detalles");
-                    }
-                }
-            }
-        });
-
-        JScrollPane scrollPane = new JScrollPane(listaResultados);
-        panelResultados.add(scrollPane, BorderLayout.CENTER);
-
-        // Botón para regresar al panel de búsqueda
+        //Botón para regresar al panel de búsqueda
         JButton backButton = new JButton("Volver");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        panelResultados.add(backButton, gbc);
+
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cardLayout.show(cardPanel, "Busqueda");
             }
         });
-        panelResultados.add(backButton, BorderLayout.SOUTH);
     }
 
     private void initPanelDetalles() {
@@ -165,7 +148,7 @@ public class BuscarPelicula extends JFrame {
         alquilarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VideoClub.getUnVideoClub().alquilarPeli(username,id);
+                VideoClub.getUnVideoClub().alquilarPeli(username, id);
                 JOptionPane.showMessageDialog(panelDetalles,
                         "Película alquilada con éxito.",
                         "Alquiler",
@@ -178,29 +161,65 @@ public class BuscarPelicula extends JFrame {
     }
 
     private void mostrarResultados(JSONObject json) {
-        // Limpiar modelo y mapeo
-        listModel.clear();
-        peliculaMap.clear();
+        panelResultados.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5); //Espacio entre los componentes de la pelicula
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
 
-        // Agregar películas al modelo y mapeo
+        JLabel resultadosLabel = new JLabel("Resultados de la búsqueda:", SwingConstants.CENTER);
+        gbc.gridwidth = 3;
+        panelResultados.add(resultadosLabel, gbc);
+        gbc.gridy++;
+
         for (Object obj : json.getJSONArray("peliculas")) {
             JSONObject pelicula = (JSONObject) obj;
             String titulo = pelicula.getString("titulo");
-            String texto= titulo + " (Media: " + pelicula.get("media") + ")";
-            listModel.addElement(texto); // Mostrar solo el título
-            peliculaMap.put(texto, pelicula); // Guardar mapeo para detalles
+            int idPelicula = pelicula.getInt("id");
+
+            JPanel peliculaPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+            JLabel tituloLabel = new JLabel(titulo);
+
+            // Botón "Ver detalles"
+            JButton verDetallesButton = new JButton("Ver detalles");
+            verDetallesButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    mostrarDetalles(idPelicula);
+                    cardLayout.show(cardPanel, "Detalles");
+                }
+            });
+
+            // Botón "Ver reseñas"
+            JButton verReseñasButton = new JButton("Ver reseñas");
+            verReseñasButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    new MenuVerReseñas(idPelicula, username).setVisible(true);
+                }
+            });
+
+            peliculaPanel.add(tituloLabel);
+            peliculaPanel.add(verDetallesButton);
+            peliculaPanel.add(verReseñasButton);
+
+            gbc.gridx = 0;
+            gbc.gridwidth = 3;
+            panelResultados.add(peliculaPanel, gbc);
+            gbc.gridy++;
         }
 
-        // Actualizar la lista visible
-        listaResultados.setModel(listModel);
+        panelResultados.revalidate();
+        panelResultados.repaint();
     }
 
     private void mostrarDetalles(int idPelicula) {
-        // Obtener los componentes del panel de detalles
         id = idPelicula;
-        JSONObject jsonPeli= VideoClub.getUnVideoClub().seleccionarPelicula(idPelicula);
-        System.out.println(idPelicula);
+        JSONObject jsonPeli = VideoClub.getUnVideoClub().seleccionarPelicula(idPelicula);
         detallesArea.setText("");
+
         // Mostrar información detallada de la película
         String detalles = "Título: " + jsonPeli.get("titulo") + "\n" +
                 "Descripción: " + jsonPeli.get("descrip") + "\n" +

@@ -1,44 +1,40 @@
 package org.gui;
 
+import org.example.VideoClub;
+import org.json.JSONObject;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import org.example.Usuario;
-import org.example.VideoClub;
-
-
 public class EliminarCuentas extends JFrame {
     private JPanel panelEliminarCuentas;
 
-    public EliminarCuentas(Usuario admin) {
+    public EliminarCuentas(String adminUsername) {
         panelEliminarCuentas = new JPanel();
         setContentPane(panelEliminarCuentas);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
         setLocationRelativeTo(null);
 
-        ArrayList<Usuario> usuarios = VideoClub.getUnVideoClub().getUsuarios(); 
+        ArrayList<JSONObject> usuarios = VideoClub.getUnVideoClub().getUsuariosJson(); 
 
-        for (Usuario usuario : usuarios) {
-            if (!usuario.isEsAdmin()) {
+        for (JSONObject usuario : usuarios) {
+            if (!usuario.getBoolean("esAdmin")) {
                 JPanel usuarioPanel = new JPanel();
-                usuarioPanel.add(new JLabel(usuario.getUsername()));
+                usuarioPanel.add(new JLabel(usuario.getString("username")));
                 JButton eliminarButton = new JButton("Eliminar");
 
                 eliminarButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent actionEvent) {
-                        VideoClub.getUnVideoClub().eliminarCuentaSeleccionada(usuario);
+                        String username = usuario.getString("username");
+                        VideoClub.getUnVideoClub().eliminarCuentaSeleccionada(username);
                         JOptionPane.showMessageDialog(null, "Usuario eliminado");
                         dispose();
-                        new EliminarCuentas(admin);
+                        new EliminarCuentas(adminUsername);
                     }
                 });
 

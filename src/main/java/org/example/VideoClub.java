@@ -137,22 +137,61 @@ public class VideoClub {
         return resultado;
     }
 
+ 
+    public JSONObject aceptarSolicitud(String username) {
+        Usuario usuario = gestorUsuarios.getUsuario(username);
+        if (usuario != null && gestorUsuarios.getSolicitudes().contains(usuario)) {
+            usuario.setAceptadoPor(gestorUsuarios.getUsuario("admin")); 
+            gestorUsuarios.addUsuario(usuario);  
+            gestorUsuarios.getSolicitudes().remove(usuario);  
+            return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud aceptada");
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
+        }
+    }
+
+    public JSONObject rechazarSolicitud(String username) {
+        Usuario usuario = gestorUsuarios.getUsuario(username);
+        if (usuario != null && gestorUsuarios.getSolicitudes().contains(usuario)) {
+            gestorUsuarios.getSolicitudes().remove(usuario);  // Eliminar el usuario de la lista de solicitudes
+            return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud rechazada");
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
+        }
+    }
+
+
     public JSONObject modificarCuentaSeleccionada(Usuario usuario) {
         // Implementar lógica para modificar cuenta seleccionada
         return new JSONObject();
     }
 
-    public JSONObject eliminarCuentaSeleccionada(Usuario usuario) {
+    public JSONObject eliminarCuentaSeleccionada(String username) {
+        Usuario usuario = gestorUsuarios.getUsuario(username);
         gestorUsuarios.eliminarCuenta(usuario);
         return new JSONObject().put("estado", "exitoso").put("mensaje", "Cuenta eliminada correctamente");
     }
 
-    public ArrayList<Usuario> getUsuarios() {
-        return gestorUsuarios.getUsuarios();
+    public ArrayList<JSONObject> getUsuariosJson() {
+        ArrayList<JSONObject> usuariosJson = new ArrayList<>();
+        for (Usuario usuario : gestorUsuarios.getUsuarios()) {
+            JSONObject usuarioJson = new JSONObject();
+            usuarioJson.put("username", usuario.getUsername());
+            usuarioJson.put("esAdmin", usuario.isEsAdmin());
+            usuariosJson.add(usuarioJson);
+        }
+        return usuariosJson;
     }
 
-    public Usuario getUsuario(String username) {
-        return gestorUsuarios.getUsuario(username);
+    public JSONObject obtenerDatosUsuario(String username) {
+        Usuario usuario = gestorUsuarios.getUsuario(username);
+        JSONObject datosUsuario = new JSONObject();
+        datosUsuario.put("username", usuario.getUsername());
+        datosUsuario.put("nombre", usuario.getNombre());
+        datosUsuario.put("apellido", usuario.getApellido());
+        datosUsuario.put("correo", usuario.getCorreo());
+        datosUsuario.put("contraseña", usuario.getContraseña());
+        return datosUsuario;
     }
 
     public void crearLista(String username, String nombreLista) {
@@ -200,6 +239,8 @@ public class VideoClub {
     public void cambiarVisibilidadLista(String username, String nombreLista) {
         GestorListas.getGestorListas().cambiarVisibilidadLista(username, nombreLista);
     }
+    
+
 
     public void ñó() {
         System.out.println("ñó");

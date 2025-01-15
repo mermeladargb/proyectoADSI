@@ -1,7 +1,6 @@
 package org.gui;
 
 import org.example.VideoClub;
-import org.example.Usuario;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -13,7 +12,7 @@ import java.awt.event.ActionListener;
 public class VerSolicitudes extends JFrame {
     private JPanel panelSolicitudes;
 
-    public VerSolicitudes(Usuario admin) {
+    public VerSolicitudes(String adminUsername) {
         panelSolicitudes = new JPanel();
         setContentPane(panelSolicitudes);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -27,7 +26,6 @@ public class VerSolicitudes extends JFrame {
         for (int i = 0; i < solicitudes.length(); i++) {
             JSONObject solicitudJSON = solicitudes.getJSONObject(i);
             String username = solicitudJSON.getString("username");
-            Usuario solicitud = VideoClub.getUnVideoClub().getUsuario(username); 
 
             JPanel solicitudPanel = new JPanel();
             solicitudPanel.add(new JLabel(username));
@@ -37,19 +35,20 @@ public class VerSolicitudes extends JFrame {
             aceptarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    admin.aceptarCuenta(solicitud);
+                    VideoClub.getUnVideoClub().aceptarSolicitud(username);
                     JOptionPane.showMessageDialog(null, "Solicitud aceptada");
                     dispose();
-                    new VerSolicitudes(admin);
+                    new VerSolicitudes(adminUsername);
                 }
             });
 
             rechazarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
+                    VideoClub.getUnVideoClub().rechazarSolicitud(username);
                     JOptionPane.showMessageDialog(null, "Solicitud rechazada");
                     dispose();
-                    new VerSolicitudes(admin);
+                    new VerSolicitudes(adminUsername);
                 }
             });
 

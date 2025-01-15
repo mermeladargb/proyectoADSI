@@ -1,7 +1,6 @@
 package org.gui;
 
 import org.example.VideoClub;
-import org.example.Usuario;
 import org.json.JSONObject;
 
 import javax.swing.*;
@@ -26,7 +25,6 @@ public class MenuPrincipal extends JFrame {
     private JButton botonRegistrar;
 
     private String username;
-    private Usuario usuarioActual;
 
     public MenuPrincipal() {
         setSize(800, 800);
@@ -92,11 +90,13 @@ public class MenuPrincipal extends JFrame {
         botonModificarCuenta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                JTextField usernameField = new JTextField(usuarioActual.getUsername());
-                JTextField nombreField = new JTextField(usuarioActual.getNombre());
-                JTextField apellidoField = new JTextField(usuarioActual.getApellido());
-                JTextField correoField = new JTextField(usuarioActual.getCorreo());
-                JPasswordField contraseñaField = new JPasswordField(usuarioActual.getContraseña());
+                JSONObject datosUsuario = VideoClub.getUnVideoClub().obtenerDatosUsuario(username);
+
+                JTextField usernameField = new JTextField(datosUsuario.getString("username"));
+                JTextField nombreField = new JTextField(datosUsuario.getString("nombre"));
+                JTextField apellidoField = new JTextField(datosUsuario.getString("apellido"));
+                JTextField correoField = new JTextField(datosUsuario.getString("correo"));
+                JPasswordField contraseñaField = new JPasswordField(datosUsuario.getString("contraseña"));
 
                 Object[] message = {
                     "Username:", usernameField,
@@ -108,7 +108,7 @@ public class MenuPrincipal extends JFrame {
 
                 int option = JOptionPane.showConfirmDialog(null, message, "Modificar Cuenta", JOptionPane.OK_CANCEL_OPTION);
                 if (option == JOptionPane.OK_OPTION) {
-                    usuarioActual.actualizarCuenta(usernameField.getText(), new String(contraseñaField.getPassword()), nombreField.getText(), apellidoField.getText(), correoField.getText());
+                    VideoClub.getUnVideoClub().actualizarDatos(nombreField.getText(), apellidoField.getText(), usernameField.getText(), new String(contraseñaField.getPassword()), correoField.getText());
                     JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
                 }
             }
@@ -117,21 +117,21 @@ public class MenuPrincipal extends JFrame {
         botonMostrarSolicitudes.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new VerSolicitudes(usuarioActual);
+                new VerSolicitudes(username);
             }
         });
 
         botonEliminarCuentas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new EliminarCuentas(usuarioActual);
+                new EliminarCuentas(username);
             }
         });
 
         botonModificarCuentas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new ModificarCuentas(usuarioActual);
+                new ModificarCuentas(username);
             }
         });
 
@@ -148,7 +148,6 @@ public class MenuPrincipal extends JFrame {
                 String password = new String(panelCredencialesContraseña.getPassword());
                 JSONObject respuesta = VideoClub.getUnVideoClub().verificarInicioDeSesion(user, password);
                 if (respuesta.getString("estado").equals("exitoso")) {
-                    usuarioActual = VideoClub.getUnVideoClub().getUsuario(user);
                     username = user;  // Guardar el username al iniciar sesión
                     cardLayout.show(cardPanel, "principal");
                 } else {
@@ -194,7 +193,6 @@ public class MenuPrincipal extends JFrame {
 
                 JSONObject respuesta = VideoClub.getUnVideoClub().verificarRegistro(nombre, apellido, user, password, correo);
                 if (respuesta.getString("estado").equals("exitoso")) {
-                    usuarioActual = VideoClub.getUnVideoClub().getUsuario(user);
                     username = user;  // Guardar el username al registrarse
                     cardLayout.show(cardPanel, "principal");
                 } else {

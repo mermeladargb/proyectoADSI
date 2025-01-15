@@ -8,131 +8,155 @@ import java.util.List;
 
 public class VideoClub {
     private static final VideoClub unVideoClub = new VideoClub();
-   private GestorPeliculas gestorPeliculas = GestorPeliculas.getGestorPeliculas();
+    private GestorPeliculas gestorPeliculas = GestorPeliculas.getGestorPeliculas();
+    private GestorUsuarios gestorUsuarios = GestorUsuarios.getGestorUsuarios();
 
-    private VideoClub()
-    {}
+    private VideoClub() {}
 
-    public static VideoClub getUnVideoClub(){return unVideoClub;}
-
-
+    public static VideoClub getUnVideoClub(){ return unVideoClub; }
 
     public JSONObject mostrarPeliculasSimilares(String nombrePeli) {
         return gestorPeliculas.mostrarPeliculas(nombrePeli);
     }
 
     public JSONObject seleccionarPelicula(int idPeli) {
-        Pelicula unaPelicula= GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(idPeli);
+        Pelicula unaPelicula = gestorPeliculas.buscarPeliSeleccionada(idPeli);
         JSONObject JSON = new JSONObject();
-        if (unaPelicula!=null){
-            JSON.put("ID",unaPelicula.getID());
-            JSON.put("titulo",unaPelicula.getTitulo());
-            JSON.put("descrip",unaPelicula.getDescripcion());
-            JSON.put("media",  String.format("%.2f", unaPelicula.getMediaValoracion()));
+        if (unaPelicula != null) {
+            JSON.put("ID", unaPelicula.getID());
+            JSON.put("titulo", unaPelicula.getTitulo());
+            JSON.put("descrip", unaPelicula.getDescripcion());
+            JSON.put("media", String.format("%.2f", unaPelicula.getMediaValoracion()));
+        } else {
+            JSON = null;
         }
-        else{
-            JSON=null;
-        }
-
-        return  JSON;
-
+        return JSON;
     }
 
     public void alquilarPeli(String username, int idPeli) {
-            Pelicula unaPelicula=gestorPeliculas.buscarPeliSeleccionada(idPeli);
-            Usuario unUsuario= GestorUsuarios.getGestorUsuarios().getUsuario(username);
-            if (unUsuario !=null && unaPelicula != null){
-                unUsuario.añadirAlquiler(unaPelicula);
-            }
-
+        Pelicula unaPelicula = gestorPeliculas.buscarPeliSeleccionada(idPeli);
+        Usuario unUsuario = gestorUsuarios.getUsuario(username);
+        if (unUsuario != null && unaPelicula != null) {
+            unUsuario.añadirAlquiler(unaPelicula);
+        }
     }
 
     public JSONObject verAlquileres(String username) {
-        Usuario unUsuario=GestorUsuarios.getGestorUsuarios().getUsuario(username);
-        if (unUsuario!=null){
+        Usuario unUsuario = gestorUsuarios.getUsuario(username);
+        if (unUsuario != null) {
             return unUsuario.mostrarAlquileres();
         }
         return null;
-
     }
 
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
-        Usuario user = GestorUsuarios.getGestorUsuarios().getUsuario(username);
+        Usuario user = gestorUsuarios.getUsuario(username);
         Valoracion valoracion = pelicula.getValoracion(user);
 
         JSONObject peliculaJSON = new JSONObject();
         peliculaJSON.put("idPelicula", pelicula.getID());
 
-        //Condicion: Si no hay una valoracion no nos devuelve una excepcion
-        if (valoracion != null){
+        if (valoracion != null) {
             peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
             peliculaJSON.put("descripcion", valoracion.getReseña());
-        } else{
+        } else {
             peliculaJSON.put("puntuacion", JSONObject.NULL);
             peliculaJSON.put("descripcion", "");
         }
         return peliculaJSON;
     }
 
-    public void puntuarPelicula(String username, int idPelicula, String reseña, int puntuacion){
-        Usuario user = GestorUsuarios.getGestorUsuarios().getUsuario(username);
+    public void puntuarPelicula(String username, int idPelicula, String reseña, int puntuacion) {
+        Usuario user = gestorUsuarios.getUsuario(username);
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         pelicula.guardarValoracion(user, reseña, puntuacion);
-       // pelicula.calcularPromedio();
     }
 
     public JSONObject mostrarReseñas(String username, int idPelicula) {
-        //Como parametro tenemos username para que al mostrar las reseñas aparezca en primera posicion nuestra reseña y puntuacion.
-        //Usuario user = GestorUsuario.getUsuario(username);
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         ArrayList<Valoracion> listaValoraciones = pelicula.verValoraciones(username);
 
         JSONArray valoracionesArray = new JSONArray();
-
         for (Valoracion valoracion : listaValoraciones) {
             JSONObject peliculaJSON = new JSONObject();
             peliculaJSON.put("username", valoracion.getUser());
             peliculaJSON.put("reseña", valoracion.getReseña());
             peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
-
             valoracionesArray.put(peliculaJSON);
         }
 
         JSONObject resultadoJSON = new JSONObject();
         resultadoJSON.put("valoraciones", valoracionesArray);
-
         return resultadoJSON;
     }
 
-
     public JSONObject verificarRegistro(String nombre, String apellido, String username, String contraseña, String correo) {
-        return new JSONObject();
+        Usuario usuario = new Usuario(username, contraseña, nombre, apellido, correo, null, new ArrayList<Alquiler>(), false);
+        if (gestorUsuarios.cuentaValida(usuario)) {
+            if (!gestorUsuarios.cuentaExistente(usuario)) {
+                gestorUsuarios.addUsuario(usuario);
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Registro exitoso");
+            } else {
+                return new JSONObject().put("estado", "error").put("mensaje", "El nombre de usuario ya existe");
+            }
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "Datos de registro no válidos");
+        }
     }
 
     public JSONObject verificarInicioDeSesion(String username, String contraseña) {
-        return new JSONObject();
+        Usuario usuario = gestorUsuarios.getUsuario(username);
+        if (usuario != null && usuario.getContraseña().equals(contraseña)) {
+            return new JSONObject().put("estado", "exitoso").put("mensaje", "Inicio de sesión exitoso");
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "Username o contraseña incorrecta");
+        }
     }
 
     public JSONObject actualizarDatos(String nombre, String apellido, String username, String contraseña, String correo) {
-        return new JSONObject();
+        Usuario usuario = gestorUsuarios.getUsuario(username);
+        if (usuario != null) {
+            usuario.actualizarCuenta(username, contraseña, nombre, apellido, correo);
+            return new JSONObject().put("estado", "exitoso").put("mensaje", "Datos actualizados correctamente");
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "Usuario no encontrado");
+        }
     }
 
     public JSONObject mostrarSolicitudes() {
-        return new JSONObject();
+        List<Usuario> solicitudes = gestorUsuarios.getSolicitudes();
+        JSONArray solicitudesArray = new JSONArray();
+        for (Usuario solicitud : solicitudes) {
+            JSONObject solicitudJSON = new JSONObject();
+            solicitudJSON.put("username", solicitud.getUsername());
+            solicitudesArray.put(solicitudJSON);
+        }
+        JSONObject resultado = new JSONObject();
+        resultado.put("solicitudes", solicitudesArray);
+        return resultado;
     }
 
     public JSONObject modificarCuentaSeleccionada(Usuario usuario) {
+        // Implementar lógica para modificar cuenta seleccionada
         return new JSONObject();
     }
 
     public JSONObject eliminarCuentaSeleccionada(Usuario usuario) {
-        return new JSONObject();
+        gestorUsuarios.eliminarCuenta(usuario);
+        return new JSONObject().put("estado", "exitoso").put("mensaje", "Cuenta eliminada correctamente");
     }
 
+    public ArrayList<Usuario> getUsuarios() {
+        return gestorUsuarios.getUsuarios();
+    }
+
+    public Usuario getUsuario(String username) {
+        return gestorUsuarios.getUsuario(username);
+    }
 
     public void crearLista(String username, String nombreLista) {
-        Usuario u = GestorUsuarios.getGestorUsuarios().getUsuario(username);
+        Usuario u = gestorUsuarios.getUsuario(username);
         GestorListas.getGestorListas().crearLista(u, nombreLista);
     }
 
@@ -155,7 +179,7 @@ public class VideoClub {
     }
 
     public void añadirPeliculaALista(String username, String nombreLista, int idPelicula) {
-        Pelicula p = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(idPelicula);
+        Pelicula p = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         GestorListas.getGestorListas().añadirPeliculaALista(username, nombreLista, p);
     }
 
@@ -166,7 +190,7 @@ public class VideoClub {
         for (Lista l : listas) {
             JSONObject lista = new JSONObject();
             lista.put("username", l.getNombreUsuario());
-            lista.put("pelicula", l.getNombre());
+            lista.put("nombreLista", l.getNombre());
             array.put(lista);
         }
         json.put("listas", array);
@@ -176,16 +200,16 @@ public class VideoClub {
     public void cambiarVisibilidadLista(String username, String nombreLista) {
         GestorListas.getGestorListas().cambiarVisibilidadLista(username, nombreLista);
     }
-    
+
     public void ñó() {
-    	System.out.println("ñó");
+        System.out.println("ñó");
     }
-    
+
     public static void main(String[] args) {
-    	System.out.println("a");
-    	JSONObject j = new JSONObject();
-    	j.append("a", 12);
-    	System.out.println(j.get("a"));
-    	getUnVideoClub().ñó();
+        System.out.println("a");
+        JSONObject j = new JSONObject();
+        j.append("a", 12);
+        System.out.println(j.get("a"));
+        getUnVideoClub().ñó();
     }
 }

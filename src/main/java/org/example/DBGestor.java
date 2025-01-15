@@ -1,8 +1,11 @@
 package org.example;
 
-import org.example.Pelicula;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class DBGestor {
@@ -44,7 +47,7 @@ public class DBGestor {
                 String aceptadaPorUsername = rs.getString("username_admin");
                 if (aceptadaPorUsername != null) {
                     Usuario aceptadaPor = GestorUsuarios.getGestorUsuarios().getUsuario(aceptadaPorUsername);
-                    if (aceptadaPor != null && aceptadaPor.esAdmin()) {
+                    if (aceptadaPor != null && aceptadaPor.isEsAdmin()) {
                         pelicula.setAceptadaPor(aceptadaPor);
                     }
                 }

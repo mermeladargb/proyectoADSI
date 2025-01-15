@@ -6,6 +6,7 @@ import java.util.regex.*;
 public class GestorUsuarios {
     private static GestorUsuarios mGestorUsuario = new GestorUsuarios();
     private ArrayList<Usuario> usuarios = new ArrayList<>();
+    private ArrayList<Usuario> solicitudes = new ArrayList<>();
 
     private GestorUsuarios() {}
 
@@ -22,10 +23,14 @@ public class GestorUsuarios {
         return null;
     }
 
-    /*public String verAlquileres(Usuario user) {
-        return user.mostrarAlquileres();
+    public ArrayList<Usuario> getUsuarios() {
+        return usuarios;
     }
-    */
+
+    public ArrayList<Usuario> getSolicitudes() {
+        return solicitudes;
+    }
+
     public boolean cuentaExistente(Usuario user) {
         return usuarios.contains(user);
     }
@@ -99,12 +104,17 @@ public class GestorUsuarios {
         }
         return "Cuenta no valida";
     }
-    public void addUsuario(Usuario unUsuario)
-    {
+
+    public void addUsuario(Usuario unUsuario) {
         usuarios.add(unUsuario);
     }
 
-    public void reset(){
-        usuarios=new ArrayList<Usuario>();
+    public void addSolicitud(Usuario solicitud) {
+        solicitudes.add(solicitud);
+    }
+
+    public void reset() {
+        usuarios = new ArrayList<Usuario>();
+        solicitudes = new ArrayList<Usuario>();
     }
 }

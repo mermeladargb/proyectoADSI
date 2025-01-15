@@ -1,5 +1,9 @@
 package org.gui;
 
+import org.example.VideoClub;
+import org.example.Usuario;
+import org.json.JSONObject;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,17 +15,27 @@ public class MenuPrincipal extends JFrame {
     private CardLayout cardLayout;
 
     private JTextField panelCredencialesUsuario;
-    private JTextField panelCredencialesContraseña;
+    private JPasswordField panelCredencialesContraseña;
     private JButton botonLogin;
 
+    private JTextField registroUsuario;
+    private JPasswordField registroContraseña;
+    private JTextField registroNombre;
+    private JTextField registroApellido;
+    private JTextField registroCorreo;
+    private JButton botonRegistrar;
+
     private String username;
+    private Usuario usuarioActual;
 
     public MenuPrincipal() {
         setSize(800, 800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        // Panel principal con funcionalidades
         panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(new GridLayout(5, 1));
+        panelPrincipal.setLayout(new GridLayout(8, 1));
+
         JButton botonDatosUsuario = new JButton("Ver mis datos");
         botonDatosUsuario.addActionListener(new ActionListener() {
             @Override
@@ -62,20 +76,87 @@ public class MenuPrincipal extends JFrame {
         });
         panelPrincipal.add(botonBuscarPelicula);
 
+        // Funcionalidades adicionales para administrador
+        JButton botonModificarCuenta = new JButton("Modificar Cuenta");
+        panelPrincipal.add(botonModificarCuenta);
+
+        JButton botonMostrarSolicitudes = new JButton("Mostrar Solicitudes");
+        panelPrincipal.add(botonMostrarSolicitudes);
+
+        JButton botonEliminarCuentas = new JButton("Eliminar Cuentas");
+        panelPrincipal.add(botonEliminarCuentas);
+
+        JButton botonModificarCuentas = new JButton("Modificar Cuentas");
+        panelPrincipal.add(botonModificarCuentas);
+
+        botonModificarCuenta.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                JTextField usernameField = new JTextField(usuarioActual.getUsername());
+                JTextField nombreField = new JTextField(usuarioActual.getNombre());
+                JTextField apellidoField = new JTextField(usuarioActual.getApellido());
+                JTextField correoField = new JTextField(usuarioActual.getCorreo());
+                JPasswordField contraseñaField = new JPasswordField(usuarioActual.getContraseña());
+
+                Object[] message = {
+                    "Username:", usernameField,
+                    "Nombre:", nombreField,
+                    "Apellido:", apellidoField,
+                    "Correo:", correoField,
+                    "Contraseña:", contraseñaField
+                };
+
+                int option = JOptionPane.showConfirmDialog(null, message, "Modificar Cuenta", JOptionPane.OK_CANCEL_OPTION);
+                if (option == JOptionPane.OK_OPTION) {
+                    usuarioActual.actualizarCuenta(usernameField.getText(), new String(contraseñaField.getPassword()), nombreField.getText(), apellidoField.getText(), correoField.getText());
+                    JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
+                }
+            }
+        });
+
+        botonMostrarSolicitudes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new VerSolicitudes(usuarioActual);
+            }
+        });
+
+        botonEliminarCuentas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new EliminarCuentas(usuarioActual);
+            }
+        });
+
+        botonModificarCuentas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new ModificarCuentas(usuarioActual);
+            }
+        });
+
+        // Panel de inicio de sesión
         panelInicioSesion = new JPanel();
         panelInicioSesion.setLayout(new GridLayout(4, 1));
-        add(panelInicioSesion);
-        panelCredencialesUsuario = new JTextField("u1");
-        panelCredencialesContraseña = new JTextField("Contraseña");
+        panelCredencialesUsuario = new JTextField();
+        panelCredencialesContraseña = new JPasswordField();
         botonLogin = new JButton("Iniciar sesión");
         botonLogin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                // Falta verificar los datos
-                username = panelCredencialesUsuario.getText();
-                cardLayout.show(cardPanel, "principal");
+                String user = panelCredencialesUsuario.getText();
+                String password = new String(panelCredencialesContraseña.getPassword());
+                JSONObject respuesta = VideoClub.getUnVideoClub().verificarInicioDeSesion(user, password);
+                if (respuesta.getString("estado").equals("exitoso")) {
+                    usuarioActual = VideoClub.getUnVideoClub().getUsuario(user);
+                    username = user;  // Guardar el username al iniciar sesión
+                    cardLayout.show(cardPanel, "principal");
+                } else {
+                    JOptionPane.showMessageDialog(null, respuesta.getString("mensaje"));
+                }
             }
         });
+
         JButton botonRegistro = new JButton("Registrarse");
         botonRegistro.addActionListener(new ActionListener() {
             @Override
@@ -83,14 +164,45 @@ public class MenuPrincipal extends JFrame {
                 cardLayout.show(cardPanel, "registro");
             }
         });
+
+        panelInicioSesion.add(new JLabel("Username:"));
         panelInicioSesion.add(panelCredencialesUsuario);
+        panelInicioSesion.add(new JLabel("Contraseña:"));
         panelInicioSesion.add(panelCredencialesContraseña);
         panelInicioSesion.add(botonLogin);
         panelInicioSesion.add(botonRegistro);
 
+        // Panel de registro
         panelRegistro = new JPanel();
-        JLabel l = new JLabel("registro");
-        panelRegistro.add(l);
+        panelRegistro.setLayout(new GridLayout(6, 1));
+
+        registroUsuario = new JTextField();
+        registroContraseña = new JPasswordField();
+        registroNombre = new JTextField();
+        registroApellido = new JTextField();
+        registroCorreo = new JTextField();
+
+        botonRegistrar = new JButton("Registrar");
+        botonRegistrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String user = registroUsuario.getText();
+                String password = new String(registroContraseña.getPassword());
+                String nombre = registroNombre.getText();
+                String apellido = registroApellido.getText();
+                String correo = registroCorreo.getText();
+
+                JSONObject respuesta = VideoClub.getUnVideoClub().verificarRegistro(nombre, apellido, user, password, correo);
+                if (respuesta.getString("estado").equals("exitoso")) {
+                    usuarioActual = VideoClub.getUnVideoClub().getUsuario(user);
+                    username = user;  // Guardar el username al registrarse
+                    cardLayout.show(cardPanel, "principal");
+                } else {
+                    JOptionPane.showMessageDialog(null, respuesta.getString("mensaje"));
+                }
+            }
+        });
+
         JButton botonRegistroAtras = new JButton("Atrás");
         botonRegistroAtras.addActionListener(new ActionListener() {
             @Override
@@ -98,15 +210,31 @@ public class MenuPrincipal extends JFrame {
                 cardLayout.show(cardPanel, "iniciosesion");
             }
         });
+
+        panelRegistro.add(new JLabel("Nuevo Usuario:"));
+        panelRegistro.add(registroUsuario);
+        panelRegistro.add(new JLabel("Contraseña:"));
+        panelRegistro.add(registroContraseña);
+        panelRegistro.add(new JLabel("Nombre:"));
+        panelRegistro.add(registroNombre);
+        panelRegistro.add(new JLabel("Apellido:"));
+        panelRegistro.add(registroApellido);
+        panelRegistro.add(new JLabel("Correo:"));
+        panelRegistro.add(registroCorreo);
+        panelRegistro.add(botonRegistrar);
         panelRegistro.add(botonRegistroAtras);
 
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        cardPanel.add(panelRegistro, "registro");
         cardPanel.add(panelInicioSesion, "iniciosesion");
+        cardPanel.add(panelRegistro, "registro");
         cardPanel.add(panelPrincipal, "principal");
 
         add(cardPanel);
         cardLayout.show(cardPanel, "iniciosesion");
+    }
+
+    public static void main(String[] args) {
+        new MenuPrincipal();
     }
 }

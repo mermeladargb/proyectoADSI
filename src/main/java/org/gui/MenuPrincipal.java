@@ -6,7 +6,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MenuPrincipal extends JFrame {
-    private JPanel panelCredenciales, panelPrincipal;
+    private JPanel panelInicioSesion, panelRegistro, panelPrincipal;
+    private JPanel cardPanel;
+    private CardLayout cardLayout;
 
     private JTextField panelCredencialesUsuario;
     private JTextField panelCredencialesContraseña;
@@ -60,9 +62,9 @@ public class MenuPrincipal extends JFrame {
         });
         panelPrincipal.add(botonBuscarPelicula);
 
-        panelCredenciales = new JPanel();
-        panelCredenciales.setLayout(new GridLayout(4, 1));
-        add(panelCredenciales);
+        panelInicioSesion = new JPanel();
+        panelInicioSesion.setLayout(new GridLayout(4, 1));
+        add(panelInicioSesion);
         panelCredencialesUsuario = new JTextField("u1");
         panelCredencialesContraseña = new JTextField("Contraseña");
         botonLogin = new JButton("Iniciar sesión");
@@ -71,13 +73,40 @@ public class MenuPrincipal extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 // Falta verificar los datos
                 username = panelCredencialesUsuario.getText();
-                remove(panelCredenciales);
-                add(panelPrincipal);
-                validate();
+                cardLayout.show(cardPanel, "principal");
             }
         });
-        panelCredenciales.add(panelCredencialesUsuario);
-        panelCredenciales.add(panelCredencialesContraseña);
-        panelCredenciales.add(botonLogin);
+        JButton botonRegistro = new JButton("Registrarse");
+        botonRegistro.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(cardPanel, "registro");
+            }
+        });
+        panelInicioSesion.add(panelCredencialesUsuario);
+        panelInicioSesion.add(panelCredencialesContraseña);
+        panelInicioSesion.add(botonLogin);
+        panelInicioSesion.add(botonRegistro);
+
+        panelRegistro = new JPanel();
+        JLabel l = new JLabel("registro");
+        panelRegistro.add(l);
+        JButton botonRegistroAtras = new JButton("Atrás");
+        botonRegistroAtras.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                cardLayout.show(cardPanel, "iniciosesion");
+            }
+        });
+        panelRegistro.add(botonRegistroAtras);
+
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+        cardPanel.add(panelRegistro, "registro");
+        cardPanel.add(panelInicioSesion, "iniciosesion");
+        cardPanel.add(panelPrincipal, "principal");
+
+        add(cardPanel);
+        cardLayout.show(cardPanel, "iniciosesion");
     }
 }

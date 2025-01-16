@@ -10,7 +10,11 @@ import java.util.ArrayList;
 
 public class DBGestor {
     private static final String DB_URL = "jdbc:sqlite:database.db";
+    private static DBGestor mDBGestor = new DBGestor();
 
+    public static DBGestor getDBGestor() {
+        return mDBGestor;
+    }
 
     private Connection conectar() {
         Connection conn = null;
@@ -164,6 +168,15 @@ public class DBGestor {
 
             ps.executeUpdate();
         } catch (SQLException e) {
+        }
+    }
+
+    public void updateSQL(String consulta) {
+        try (Connection conn = conectar()) {
+            Statement st = conn.createStatement();
+            st.execute(consulta);
+        } catch (Exception e) {
+            System.out.printf("Error al ejecutar '%s': %s", consulta, e.getMessage());
         }
     }
 }

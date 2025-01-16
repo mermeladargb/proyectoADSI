@@ -34,127 +34,6 @@ public class MenuPrincipal extends JFrame {
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new GridLayout(10, 1));
 
-        JButton botonDatosUsuario = new JButton("Ver mis datos");
-        botonDatosUsuario.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                MenuDatosUsuario menuDatosUsuario = new MenuDatosUsuario(username);
-                menuDatosUsuario.setVisible(true);
-            }
-        });
-        panelPrincipal.add(botonDatosUsuario);
-
-        JButton botonVerMisListas = new JButton("Ver mis listas");
-        botonVerMisListas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                MenuListas menuListas = new MenuListas(username);
-                menuListas.setVisible(true);
-            }
-        });
-        panelPrincipal.add(botonVerMisListas);
-
-        JButton botonVerHistorial = new JButton("Ver mi historial alquileres");
-        botonVerHistorial.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                MenuHistorialAlquileres menuHistorial = new MenuHistorialAlquileres(username);
-                menuHistorial.setVisible(true);
-            }
-        });
-        panelPrincipal.add(botonVerHistorial);
-
-        JButton botonBuscarPelicula = new JButton("Buscar Pelicula");
-        botonBuscarPelicula.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                BuscarPelicula buscaPelicula = new BuscarPelicula(username);
-                buscaPelicula.setVisible(true);
-            }
-        });
-        panelPrincipal.add(botonBuscarPelicula);
-
-        // Funcionalidades adicionales para administrador
-        JButton botonModificarCuenta = new JButton("Modificar Cuenta");
-        panelPrincipal.add(botonModificarCuenta);
-
-        JButton botonMostrarSolicitudes = new JButton("Mostrar Solicitudes");
-        panelPrincipal.add(botonMostrarSolicitudes);
-
-        JButton botonEliminarCuentas = new JButton("Eliminar Cuentas");
-        panelPrincipal.add(botonEliminarCuentas);
-
-        JButton botonModificarCuentas = new JButton("Modificar Cuentas");
-        panelPrincipal.add(botonModificarCuentas);
-
-        JButton botonPedirPeliculas = new JButton("Pedir Peliculas");
-        panelPrincipal.add(botonPedirPeliculas);
-
-        JButton botonAceptarPeticiones = new JButton("Aceptar Peticiones");
-        panelPrincipal.add(botonAceptarPeticiones);
-
-        botonModificarCuenta.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                JSONObject datosUsuario = VideoClub.getUnVideoClub().obtenerDatosUsuario(username);
-
-                JTextField usernameField = new JTextField(datosUsuario.getString("username"));
-                JTextField nombreField = new JTextField(datosUsuario.getString("nombre"));
-                JTextField apellidoField = new JTextField(datosUsuario.getString("apellido"));
-                JTextField correoField = new JTextField(datosUsuario.getString("correo"));
-                JPasswordField contraseñaField = new JPasswordField(datosUsuario.getString("contraseña"));
-
-                Object[] message = {
-                    "Username:", usernameField,
-                    "Nombre:", nombreField,
-                    "Apellido:", apellidoField,
-                    "Correo:", correoField,
-                    "Contraseña:", contraseñaField
-                };
-
-                int option = JOptionPane.showConfirmDialog(null, message, "Modificar Cuenta", JOptionPane.OK_CANCEL_OPTION);
-                if (option == JOptionPane.OK_OPTION) {
-                    VideoClub.getUnVideoClub().actualizarDatos(nombreField.getText(), apellidoField.getText(), usernameField.getText(), new String(contraseñaField.getPassword()), correoField.getText());
-                    JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
-                }
-            }
-        });
-
-        botonMostrarSolicitudes.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                new VerSolicitudes(username);
-            }
-        });
-
-        botonEliminarCuentas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                new EliminarCuentas(username);
-            }
-        });
-
-        botonModificarCuentas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                new ModificarCuentas(username);
-            }
-        });
-
-        botonPedirPeliculas.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                //new PedirPeliculas();
-            }
-        });
-
-        botonAceptarPeticiones.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                //new AceptarPeticiones();
-            }
-        });
-
         // Panel de inicio de sesión
         panelInicioSesion = new JPanel();
         panelInicioSesion.setLayout(new GridLayout(4, 1));
@@ -169,6 +48,7 @@ public class MenuPrincipal extends JFrame {
                 JSONObject respuesta = VideoClub.getUnVideoClub().verificarInicioDeSesion(user, password);
                 if (respuesta.getString("estado").equals("exitoso")) {
                     username = user;  // Guardar el username al iniciar sesión
+                    crearMenuPrincipal(false);  // falta comprobar si es admin
                     cardLayout.show(cardPanel, "principal");
                 } else {
                     JOptionPane.showMessageDialog(null, respuesta.getString("mensaje"));
@@ -252,7 +132,136 @@ public class MenuPrincipal extends JFrame {
         cardLayout.show(cardPanel, "iniciosesion");
     }
 
-    public static void main(String[] args) {
-        new MenuPrincipal();
+    private void crearMenuPrincipal(boolean esAdmin) {
+        JButton botonDatosUsuario = new JButton("Ver mis datos");
+        botonDatosUsuario.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MenuDatosUsuario menuDatosUsuario = new MenuDatosUsuario(username);
+                menuDatosUsuario.setVisible(true);
+            }
+        });
+        panelPrincipal.add(botonDatosUsuario);
+
+        JButton botonVerMisListas = new JButton("Ver mis listas");
+        botonVerMisListas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MenuListas menuListas = new MenuListas(username);
+                menuListas.setVisible(true);
+            }
+        });
+        panelPrincipal.add(botonVerMisListas);
+
+        JButton botonBuscarListas = new JButton("Buscar listas");
+        botonBuscarListas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MenuBuscarListas menuBuscarListas = new MenuBuscarListas();
+                menuBuscarListas.setVisible(true);
+            }
+        });
+        panelPrincipal.add(botonBuscarListas);
+
+        JButton botonVerHistorial = new JButton("Ver mi historial alquileres");
+        botonVerHistorial.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                MenuHistorialAlquileres menuHistorial = new MenuHistorialAlquileres(username);
+                menuHistorial.setVisible(true);
+            }
+        });
+        panelPrincipal.add(botonVerHistorial);
+
+        JButton botonBuscarPelicula = new JButton("Buscar Pelicula");
+        botonBuscarPelicula.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                BuscarPelicula buscaPelicula = new BuscarPelicula(username);
+                buscaPelicula.setVisible(true);
+            }
+        });
+        panelPrincipal.add(botonBuscarPelicula);
+
+        JButton botonPedirPeliculas = new JButton("Pedir Peliculas");
+        panelPrincipal.add(botonPedirPeliculas);
+        botonPedirPeliculas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //new PedirPeliculas();
+            }
+        });
+
+        if (esAdmin) {
+            // Funcionalidades adicionales para administrador
+            JButton botonModificarCuenta = new JButton("Modificar Cuenta");
+            panelPrincipal.add(botonModificarCuenta);
+
+            JButton botonMostrarSolicitudes = new JButton("Mostrar Solicitudes");
+            panelPrincipal.add(botonMostrarSolicitudes);
+
+            JButton botonEliminarCuentas = new JButton("Eliminar Cuentas");
+            panelPrincipal.add(botonEliminarCuentas);
+
+            JButton botonModificarCuentas = new JButton("Modificar Cuentas");
+            panelPrincipal.add(botonModificarCuentas);
+
+            JButton botonAceptarPeticiones = new JButton("Aceptar Peticiones");
+            panelPrincipal.add(botonAceptarPeticiones);
+            botonAceptarPeticiones.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    //new AceptarPeticiones();
+                }
+            });
+
+            botonModificarCuenta.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    JSONObject datosUsuario = VideoClub.getUnVideoClub().obtenerDatosUsuario(username);
+
+                    JTextField usernameField = new JTextField(datosUsuario.getString("username"));
+                    JTextField nombreField = new JTextField(datosUsuario.getString("nombre"));
+                    JTextField apellidoField = new JTextField(datosUsuario.getString("apellido"));
+                    JTextField correoField = new JTextField(datosUsuario.getString("correo"));
+                    JPasswordField contraseñaField = new JPasswordField(datosUsuario.getString("contraseña"));
+
+                    Object[] message = {
+                            "Username:", usernameField,
+                            "Nombre:", nombreField,
+                            "Apellido:", apellidoField,
+                            "Correo:", correoField,
+                            "Contraseña:", contraseñaField
+                    };
+
+                    int option = JOptionPane.showConfirmDialog(null, message, "Modificar Cuenta", JOptionPane.OK_CANCEL_OPTION);
+                    if (option == JOptionPane.OK_OPTION) {
+                        VideoClub.getUnVideoClub().actualizarDatos(nombreField.getText(), apellidoField.getText(), usernameField.getText(), new String(contraseñaField.getPassword()), correoField.getText());
+                        JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
+                    }
+                }
+            });
+
+            botonMostrarSolicitudes.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    new VerSolicitudes(username);
+                }
+            });
+
+            botonEliminarCuentas.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    new EliminarCuentas(username);
+                }
+            });
+
+            botonModificarCuentas.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    new ModificarCuentas(username);
+                }
+            });
+        }
     }
 }

@@ -189,6 +189,7 @@ public class MenuListas extends JFrame {
         botonAtras.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                verLista(nombreLista);
                 cardLayout.show(cardPanel, "verlista");
             }
         });

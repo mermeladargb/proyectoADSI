@@ -32,7 +32,7 @@ public class MenuPrincipal extends JFrame {
 
         // Panel principal con funcionalidades
         panelPrincipal = new JPanel();
-        panelPrincipal.setLayout(new GridLayout(8, 1));
+        panelPrincipal.setLayout(new GridLayout(10, 1));
 
         JButton botonDatosUsuario = new JButton("Ver mis datos");
         botonDatosUsuario.addActionListener(new ActionListener() {
@@ -87,6 +87,12 @@ public class MenuPrincipal extends JFrame {
         JButton botonModificarCuentas = new JButton("Modificar Cuentas");
         panelPrincipal.add(botonModificarCuentas);
 
+        JButton botonPedirPeliculas = new JButton("Pedir Peliculas");
+        panelPrincipal.add(botonPedirPeliculas);
+
+        JButton botonAceptarPeticiones = new JButton("Aceptar Peticiones");
+        panelPrincipal.add(botonAceptarPeticiones);
+
         botonModificarCuenta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -132,6 +138,20 @@ public class MenuPrincipal extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 new ModificarCuentas(username);
+            }
+        });
+
+        botonPedirPeliculas.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //new PedirPeliculas();
+            }
+        });
+
+        botonAceptarPeticiones.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                //new AceptarPeticiones();
             }
         });
 

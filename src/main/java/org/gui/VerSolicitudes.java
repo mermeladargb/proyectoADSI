@@ -14,6 +14,7 @@ public class VerSolicitudes extends JFrame {
 
     public VerSolicitudes(String adminUsername) {
         panelSolicitudes = new JPanel();
+        panelSolicitudes.setLayout(new BoxLayout(panelSolicitudes, BoxLayout.Y_AXIS)); // Añadir un layout para organizar los componentes
         setContentPane(panelSolicitudes);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
@@ -27,7 +28,7 @@ public class VerSolicitudes extends JFrame {
             JSONObject solicitudJSON = solicitudes.getJSONObject(i);
             String username = solicitudJSON.getString("username");
 
-            JPanel solicitudPanel = new JPanel();
+            JPanel solicitudPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
             solicitudPanel.add(new JLabel(username));
             JButton aceptarButton = new JButton("Aceptar");
             JButton rechazarButton = new JButton("Rechazar");
@@ -35,20 +36,20 @@ public class VerSolicitudes extends JFrame {
             aceptarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    VideoClub.getUnVideoClub().aceptarSolicitud(username);
+                    VideoClub.getUnVideoClub().aceptarSolicitud(adminUsername, username); // Asegúrate de pasar el nombre de usuario del administrador
                     JOptionPane.showMessageDialog(null, "Solicitud aceptada");
                     dispose();
-                    new VerSolicitudes(adminUsername);
+                    new VerSolicitudes(adminUsername); // Refrescar la ventana
                 }
             });
 
             rechazarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    VideoClub.getUnVideoClub().rechazarSolicitud(username);
+                    VideoClub.getUnVideoClub().rechazarSolicitud(adminUsername, username); // Asegúrate de pasar el nombre de usuario del administrador
                     JOptionPane.showMessageDialog(null, "Solicitud rechazada");
                     dispose();
-                    new VerSolicitudes(adminUsername);
+                    new VerSolicitudes(adminUsername); // Refrescar la ventana
                 }
             });
 

@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class DBGestor {
     private static final String DB_URL = "jdbc:sqlite:database.db";
@@ -166,6 +167,19 @@ public class DBGestor {
             ps.setString(5, pelicula.getSolicitadaPor().getUsername());
             ps.setString(6, pelicula.getAceptadaPor().getUsername());
 
+            ps.executeUpdate();
+        } catch (SQLException e) {
+        }
+    }
+
+    public void añadirAlquiler(int idPeli, String username, Date fecha){
+        String sql = "INSERT INTO alquileres VALUES(?, ?, ?)";
+
+        try (Connection conn = conectar();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, username);
+            ps.setInt(2, idPeli);
+            ps.setDate(3, (java.sql.Date) fecha);
             ps.executeUpdate();
         } catch (SQLException e) {
         }

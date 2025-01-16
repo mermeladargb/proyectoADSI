@@ -11,8 +11,8 @@ public class SolicitudPelicula {
         user=pUser;
     }
 
-    public boolean esPelicula(String pTitulo){
-        return (titulo==pTitulo);
+    public String getTitulo(){
+        return (titulo);
     }
 
     public Usuario solicitadaPor(){

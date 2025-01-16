@@ -10,6 +10,7 @@ public class VideoClub {
     private static final VideoClub unVideoClub = new VideoClub();
     private GestorPeliculas gestorPeliculas = GestorPeliculas.getGestorPeliculas();
     private GestorUsuarios gestorUsuarios = GestorUsuarios.getGestorUsuarios();
+    private GestorSolicitudesPeliculas gestorSolicitudesPeliculas = GestorSolicitudesPeliculas.getmGestorSolicutudesPeliculas();
 
     private VideoClub() {}
 
@@ -239,8 +240,14 @@ public class VideoClub {
     public void cambiarVisibilidadLista(String username, String nombreLista) {
         GestorListas.getGestorListas().cambiarVisibilidadLista(username, nombreLista);
     }
-    
 
+    public void validarPelicula(String pTitulo, String pUser){
+        gestorSolicitudesPeliculas.validarPelicula(pTitulo, pUser);
+    }
+    
+    public void obtenerCatalogoPeliculas(){
+        
+    }
 
     public void ñó() {
         System.out.println("ñó");

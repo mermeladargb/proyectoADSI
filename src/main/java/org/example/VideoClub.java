@@ -120,14 +120,19 @@ public class VideoClub {
     
 
     public JSONObject actualizarDatos(String nombre, String apellido, String username, String contraseña, String correo) {
-        Usuario usuario = gestorUsuarios.getUsuario(username);
-        if (usuario != null) {
-            usuario.actualizarCuenta(username, contraseña, nombre, apellido, correo);
-            return new JSONObject().put("estado", "exitoso").put("mensaje", "Datos actualizados correctamente");
-        } else {
-            return new JSONObject().put("estado", "error").put("mensaje", "Usuario no encontrado");
+        try {
+            String resultado = gestorUsuarios.modificarCuenta(nombre, contraseña, apellido, username, correo, false); // Asegúrate de pasar el valor correcto para `es_Admin`
+            if (resultado.equals("Cuenta modificada correctamente")) {
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Datos actualizados correctamente");
+            } else {
+                return new JSONObject().put("estado", "error").put("mensaje", resultado);
+            }
+        } catch (Exception e) {
+            return new JSONObject().put("estado", "error").put("mensaje", "Error al actualizar los datos");
         }
     }
+    
+    
     
     public JSONObject mostrarSolicitudes() {
         List<Usuario> solicitudes = gestorUsuarios.getSolicitudes();
@@ -146,11 +151,20 @@ public class VideoClub {
     public JSONObject aceptarSolicitud(String adminUsername, String username) {
         Usuario adminUsuario = gestorUsuarios.getUsuario(adminUsername);
         if (adminUsuario != null && adminUsuario.isEsAdmin()) {
-            Usuario usuario = gestorUsuarios.getUsuario(username);
-            if (usuario != null && gestorUsuarios.getSolicitudes().contains(usuario)) {
-                usuario.setAceptadoPor(adminUsuario); 
-                gestorUsuarios.addUsuario(usuario);  
-                gestorUsuarios.getSolicitudes().remove(usuario);  
+            Usuario usuario = null;
+    
+            // Buscar al usuario en la lista de solicitudes
+            for (Usuario solicitud : gestorUsuarios.getSolicitudes()) {
+                if (solicitud.getUsername().equals(username)) {
+                    usuario = solicitud;
+                    break;
+                }
+            }
+    
+            if (usuario != null) {
+                usuario.setAceptadoPor(adminUsuario);
+                gestorUsuarios.addUsuario(usuario);
+                gestorUsuarios.getSolicitudes().remove(usuario);
                 return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud aceptada");
             } else {
                 return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
@@ -159,6 +173,7 @@ public class VideoClub {
             return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
         }
     }
+    
     
     
     public JSONObject rechazarSolicitud(String adminUsername, String username) {
@@ -293,6 +308,8 @@ public class VideoClub {
     }
 
     
+
+
     public void ñó() {
         System.out.println("ñó");
     }

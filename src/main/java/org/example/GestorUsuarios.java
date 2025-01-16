@@ -2,6 +2,7 @@ package org.example;
 
 import java.util.ArrayList;
 import java.util.regex.*;
+import org.json.JSONObject; 
 
 public class GestorUsuarios {
     private static GestorUsuarios mGestorUsuario = new GestorUsuarios();
@@ -96,13 +97,13 @@ public class GestorUsuarios {
 
     public String modificarCuenta(String nombre, String contraseña, String apellido, String username, String correo, boolean es_Admin) {
         Usuario usuario = getUsuario(username);
-        ArrayList<Alquiler> lista = usuario.getAlquileres();
-        Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista, es_Admin);
-        if (cuentaValida(user)) {
-            usuarios.add(user);
-            return "Cuenta añadida al GestorUsuarios correctamente";
+        if (usuario != null) {
+            // Actualizar la cuenta del usuario con los nuevos datos
+            usuario.actualizarCuenta(username, contraseña, nombre, apellido, correo);
+            return "Cuenta modificada correctamente";
+        } else {
+            return "Usuario no encontrado";
         }
-        return "Cuenta no valida";
     }
 
     public void addUsuario(Usuario unUsuario) {
@@ -116,5 +117,31 @@ public class GestorUsuarios {
     public void reset() {
         usuarios = new ArrayList<Usuario>();
         solicitudes = new ArrayList<Usuario>();
+    }
+
+    public JSONObject aceptarSolicitud(String adminUsername, String username) {
+        Usuario adminUsuario = getUsuario(adminUsername);
+        if (adminUsuario != null && adminUsuario.isEsAdmin()) {
+            Usuario usuario = null;
+
+            // Buscar en la lista de solicitudes en lugar de en la lista de usuarios
+            for (Usuario solicitud : getSolicitudes()) {
+                if (solicitud.getUsername().equals(username)) {
+                    usuario = solicitud;
+                    break;
+                }
+            }
+
+            if (usuario != null) {
+                usuario.setAceptadoPor(adminUsuario);
+                addUsuario(usuario);
+                getSolicitudes().remove(usuario);
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud aceptada");
+            } else {
+                return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
+            }
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
+        }
     }
 }

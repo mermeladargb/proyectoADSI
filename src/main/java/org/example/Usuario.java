@@ -67,11 +67,14 @@ public class Usuario {
     }
     
     public String enviarSolicitud(Pelicula pelicula) {
-        ArrayList<Pelicula> solicitudes = GestorSolicitudesPeliculas.getmGestorSolicutudesPeliculas().getSolicitudes();
-        solicitudes.add(pelicula);
+        SolicitudPelicula solicitud = new SolicitudPelicula(pelicula.getTitulo(), this);
+        ArrayList<SolicitudPelicula> solicitudes = GestorSolicitudesPeliculas.getmGestorSolicutudesPeliculas().getSolicitudes();
+        solicitudes.add(solicitud);
         String mensaje = "Enviado solicitud de la Pelicula al GestorSolicitudesPeliculas " + pelicula.getTitulo() + "\n";
         return mensaje;
     }
+    
+    
 
     public Usuario getAceptado_Por() {
         return aceptado_Por;

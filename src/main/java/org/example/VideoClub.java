@@ -96,8 +96,8 @@ public class VideoClub {
         Usuario usuario = new Usuario(username, contraseña, nombre, apellido, correo, null, new ArrayList<Alquiler>(), false);
         if (gestorUsuarios.cuentaValida(usuario)) {
             if (!gestorUsuarios.cuentaExistente(usuario)) {
-                gestorUsuarios.addUsuario(usuario);
-                return new JSONObject().put("estado", "exitoso").put("mensaje", "Registro exitoso");
+                gestorUsuarios.addSolicitud(usuario);  
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Registro exitoso. Esperando aprobación del administrador.");
             } else {
                 return new JSONObject().put("estado", "error").put("mensaje", "El nombre de usuario ya existe");
             }
@@ -109,11 +109,15 @@ public class VideoClub {
     public JSONObject verificarInicioDeSesion(String username, String contraseña) {
         Usuario usuario = gestorUsuarios.getUsuario(username);
         if (usuario != null && usuario.getContraseña().equals(contraseña)) {
-            return new JSONObject().put("estado", "exitoso").put("mensaje", "Inicio de sesión exitoso");
+            return new JSONObject()
+                .put("estado", "exitoso")
+                .put("mensaje", "Inicio de sesión exitoso")
+                .put("esAdmin", usuario.isEsAdmin()); 
         } else {
             return new JSONObject().put("estado", "error").put("mensaje", "Username o contraseña incorrecta");
         }
     }
+    
 
     public JSONObject actualizarDatos(String nombre, String apellido, String username, String contraseña, String correo) {
         Usuario usuario = gestorUsuarios.getUsuario(username);
@@ -124,7 +128,7 @@ public class VideoClub {
             return new JSONObject().put("estado", "error").put("mensaje", "Usuario no encontrado");
         }
     }
-
+    
     public JSONObject mostrarSolicitudes() {
         List<Usuario> solicitudes = gestorUsuarios.getSolicitudes();
         JSONArray solicitudesArray = new JSONArray();
@@ -137,42 +141,81 @@ public class VideoClub {
         resultado.put("solicitudes", solicitudesArray);
         return resultado;
     }
-
- 
-    public JSONObject aceptarSolicitud(String username) {
-        Usuario usuario = gestorUsuarios.getUsuario(username);
-        if (usuario != null && gestorUsuarios.getSolicitudes().contains(usuario)) {
-            usuario.setAceptadoPor(gestorUsuarios.getUsuario("admin")); 
-            gestorUsuarios.addUsuario(usuario);  
-            gestorUsuarios.getSolicitudes().remove(usuario);  
-            return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud aceptada");
+    
+    
+    public JSONObject aceptarSolicitud(String adminUsername, String username) {
+        Usuario adminUsuario = gestorUsuarios.getUsuario(adminUsername);
+        if (adminUsuario != null && adminUsuario.isEsAdmin()) {
+            Usuario usuario = gestorUsuarios.getUsuario(username);
+            if (usuario != null && gestorUsuarios.getSolicitudes().contains(usuario)) {
+                usuario.setAceptadoPor(adminUsuario); 
+                gestorUsuarios.addUsuario(usuario);  
+                gestorUsuarios.getSolicitudes().remove(usuario);  
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud aceptada");
+            } else {
+                return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
+            }
         } else {
-            return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
+            return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
         }
     }
-
-    public JSONObject rechazarSolicitud(String username) {
-        Usuario usuario = gestorUsuarios.getUsuario(username);
-        if (usuario != null && gestorUsuarios.getSolicitudes().contains(usuario)) {
-            gestorUsuarios.getSolicitudes().remove(usuario);  // Eliminar el usuario de la lista de solicitudes
-            return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud rechazada");
+    
+    
+    public JSONObject rechazarSolicitud(String adminUsername, String username) {
+        Usuario adminUsuario = gestorUsuarios.getUsuario(adminUsername);
+        if (adminUsuario != null && adminUsuario.isEsAdmin()) {
+            Usuario usuario = gestorUsuarios.getUsuario(username);
+            if (usuario != null && gestorUsuarios.getSolicitudes().contains(usuario)) {
+                gestorUsuarios.getSolicitudes().remove(usuario);  
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Solicitud rechazada");
+            } else {
+                return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
+            }
         } else {
-            return new JSONObject().put("estado", "error").put("mensaje", "Solicitud no encontrada");
+            return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
         }
     }
-
-
-    public JSONObject modificarCuentaSeleccionada(Usuario usuario) {
-        // Implementar lógica para modificar cuenta seleccionada
-        return new JSONObject();
-    }
-
-    public JSONObject eliminarCuentaSeleccionada(String username) {
+    
+    
+    public void eliminarCuentaSeleccionada(String username) {
         Usuario usuario = gestorUsuarios.getUsuario(username);
-        gestorUsuarios.eliminarCuenta(usuario);
-        return new JSONObject().put("estado", "exitoso").put("mensaje", "Cuenta eliminada correctamente");
+        if (usuario != null) {
+            gestorUsuarios.eliminarCuenta(usuario);
+        }
     }
-
+    
+    
+    public JSONObject eliminarCuenta(String adminUsername, String username) {
+        Usuario adminUsuario = gestorUsuarios.getUsuario(adminUsername);
+        if (adminUsuario != null && adminUsuario.isEsAdmin()) {
+            Usuario usuario = gestorUsuarios.getUsuario(username);
+            if (usuario != null) {
+                gestorUsuarios.eliminarCuenta(usuario);
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Cuenta eliminada correctamente");
+            } else {
+                return new JSONObject().put("estado", "error").put("mensaje", "Usuario no encontrado");
+            }
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
+        }
+    }
+    
+    public JSONObject modificarCuenta(String adminUsername, String nombre, String apellido, String username, String contraseña, String correo) {
+        Usuario adminUsuario = gestorUsuarios.getUsuario(adminUsername);
+        if (adminUsuario != null && adminUsuario.isEsAdmin()) {
+            Usuario usuario = gestorUsuarios.getUsuario(username);
+            if (usuario != null) {
+                usuario.actualizarCuenta(username, contraseña, nombre, apellido, correo);
+                return new JSONObject().put("estado", "exitoso").put("mensaje", "Datos actualizados correctamente");
+            } else {
+                return new JSONObject().put("estado", "error").put("mensaje", "Usuario no encontrado");
+            }
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
+        }
+    }
+    
+    
     public ArrayList<JSONObject> getUsuariosJson() {
         ArrayList<JSONObject> usuariosJson = new ArrayList<>();
         for (Usuario usuario : gestorUsuarios.getUsuarios()) {
@@ -183,7 +226,7 @@ public class VideoClub {
         }
         return usuariosJson;
     }
-
+    
     public JSONObject obtenerDatosUsuario(String username) {
         Usuario usuario = gestorUsuarios.getUsuario(username);
         JSONObject datosUsuario = new JSONObject();
@@ -194,12 +237,12 @@ public class VideoClub {
         datosUsuario.put("contraseña", usuario.getContraseña());
         return datosUsuario;
     }
-
+    
     public void crearLista(String username, String nombreLista) {
         Usuario u = gestorUsuarios.getUsuario(username);
         GestorListas.getGestorListas().crearLista(u, nombreLista);
     }
-
+    
     public JSONObject getListasUsuario(String username) {
         List<String> listas = GestorListas.getGestorListas().getListasUsuario(username);
         JSONObject json = new JSONObject();
@@ -207,7 +250,7 @@ public class VideoClub {
         json.put("listas", array);
         return json;
     }
-
+    
     public JSONObject getListaUsuario(String username, String nombreLista) {
         Lista lista = GestorListas.getGestorListas().getListaUsuario(username, nombreLista);
         JSONObject json = new JSONObject();
@@ -217,12 +260,12 @@ public class VideoClub {
         json.put("peliculas", array);
         return json;
     }
-
+    
     public void añadirPeliculaALista(String username, String nombreLista, int idPelicula) {
         Pelicula p = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         GestorListas.getGestorListas().añadirPeliculaALista(username, nombreLista, p);
     }
-
+    
     public JSONObject buscarLista(String nombreLista) {
         List<Lista> listas = GestorListas.getGestorListas().buscarLista(nombreLista);
         JSONObject json = new JSONObject();
@@ -236,7 +279,7 @@ public class VideoClub {
         json.put("listas", array);
         return json;
     }
-
+    
     public void cambiarVisibilidadLista(String username, String nombreLista) {
         GestorListas.getGestorListas().cambiarVisibilidadLista(username, nombreLista);
     }
@@ -249,10 +292,11 @@ public class VideoClub {
         
     }
 
+    
     public void ñó() {
         System.out.println("ñó");
     }
-
+    
     public static void main(String[] args) {
         System.out.println("a");
         JSONObject j = new JSONObject();

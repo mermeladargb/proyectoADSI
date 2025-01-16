@@ -40,8 +40,8 @@ public class GestorUsuarios {
         Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista, es_Admin);
         if (cuentaValida(user)) {
             if (!cuentaExistente(user)) {
-                usuarios.add(user);
-                return "Cuenta añadida al GestorUsuarios correctamente";
+                solicitudes.add(user);  // Añadir a la lista de solicitudes en lugar de usuarios
+                return "Solicitud de cuenta añadida correctamente. Un administrador debe aprobarla.";
             }
             return "Cuenta existente";
         }

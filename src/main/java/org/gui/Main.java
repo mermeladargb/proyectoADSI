@@ -8,12 +8,12 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        Usuario u1 = new Usuario("u1", "12345678", null, null, "a@a", null, new ArrayList<Alquiler>(), false);
-        Usuario u2 = new Usuario("u2", "12345678", null, null, "a@a", null, new ArrayList<Alquiler>(), false);
-        Usuario u3 = new Usuario("u3", "12345678", null, null, "a@a", null, new ArrayList<Alquiler>(), false);
-        Usuario u4 = new Usuario("u4", "12345678", null, null, "a@a", null, new ArrayList<Alquiler>(), false);
-        Usuario u5 = new Usuario("u5", "12345678", null, null, "a@a", null, new ArrayList<Alquiler>(), false);
-        Usuario u6 = new Usuario("u6", "12345678", null, null, "a@a", null, new ArrayList<Alquiler>(), false);
+        Usuario u1 = new Usuario("u1", "12345678", "u1", "u1", "a@a", null, new ArrayList<Alquiler>(), false);
+        Usuario u3 = new Usuario("u3", "12345678", "u1", "u1", "a@a", null, new ArrayList<Alquiler>(), false);
+        Usuario u4 = new Usuario("u4", "12345678", "u1", "u1", "a@a", null, new ArrayList<Alquiler>(), false);
+        Usuario u2 = new Usuario("u2", "12345678", "u1", "u1", "a@a", null, new ArrayList<Alquiler>(), false);
+        Usuario u5 = new Usuario("u5", "12345678", "u1", "u1", "a@a", null, new ArrayList<Alquiler>(), false);
+        Usuario u6 = new Usuario("u6", "12345678", "u1", "u1", "a@a", null, new ArrayList<Alquiler>(), false);
 
         GestorListas.getGestorListas().crearLista(u1, "lista1");
         GestorListas.getGestorListas().crearLista(u1, "lista2");

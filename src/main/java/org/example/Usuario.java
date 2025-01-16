@@ -43,11 +43,9 @@ public class Usuario {
         return apellido;
     }
     
-    public String añadirAlquiler(Pelicula unPelicula) {
+    public void añadirAlquiler(Pelicula unPelicula) {
         Alquiler alquiler= new Alquiler( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), unPelicula);
         this.lAlquileres.add(alquiler);
-        String mensaje = "Alquiler añadido correctamente";
-        return mensaje;
     }
     
     public Usuario setAceptadoPor(Usuario admin){

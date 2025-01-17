@@ -124,6 +124,18 @@ public class GestorUsuarios {
 
     public void addUsuario(Usuario unUsuario) {
         usuarios.add(unUsuario);
+
+        String sql = "INSERT INTO usuarios (username, nombre, apellido, contraseña, correo, es_admin, aceptado_por) " +
+                "VALUES ('" + unUsuario.getUsername() + "', '"
+                + unUsuario.getNombre() + "', '"
+                + unUsuario.getApellido() + "', '"
+                + unUsuario.getContraseña() + "', '"
+                + unUsuario.getCorreo() + "', "
+                + (unUsuario.isEsAdmin() ? 1 : 0) + ", "
+                + (unUsuario.getAceptado_Por() != null ? "'" + unUsuario.getAceptado_Por().getUsername() + "'" : "NULL") + ")";
+
+        DBGestor dbGestor = new DBGestor();
+        dbGestor.ejecutarConsulta(sql);
     }
 
     public void addSolicitud(Usuario solicitud) {

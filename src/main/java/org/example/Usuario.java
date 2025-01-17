@@ -58,13 +58,33 @@ public class Usuario {
         return contraseña;
     }   
     
-    public void actualizarCuenta(String username, String contraseña, String nombre, String apellido, String correo) {
-        this.username=username;
-        this.contraseña=contraseña;
-        this.nombre=nombre;
-        this.apellido=apellido;
-        this.correo=correo;
+    public boolean actualizarCuenta(String username, String contraseña, String nombre, String apellido, String correo) {
+        String prevUsername = this.username;
+        String prevContraseña = this.contraseña;
+        String prevNombre = this.nombre;
+        String prevApellido = this.apellido;
+        String prevCorreo = this.correo;
+    
+        this.username = username;
+        this.contraseña = contraseña;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+    
+        if (validarDatos()) {
+            return true;
+        } else {
+
+            this.username = prevUsername;
+            this.contraseña = prevContraseña;
+            this.nombre = prevNombre;
+            this.apellido = prevApellido;
+            this.correo = prevCorreo;
+            return false;
+        }
     }
+    
+    
     
     public String enviarSolicitud(Pelicula pelicula) {
         SolicitudPelicula solicitud = new SolicitudPelicula(pelicula.getTitulo(), this);
@@ -86,32 +106,29 @@ public class Usuario {
 
     public boolean validarDatos() {
         boolean aceptado = true;
-
+    
         // Verificar longitud de la contraseña
         if (this.contraseña.length() < 8) {
-            System.out.println("Error: La contraseña debe tener al menos 8 caracteres.");
             aceptado = false;
         }
-
+    
         // Verificar si la contraseña contiene al menos un carácter especial
         Pattern specialCharPattern = Pattern.compile("[^a-zA-Z0-9]");
         Matcher matcher = specialCharPattern.matcher(this.contraseña);
         if (!matcher.find()) {
-            System.out.println("Error: La contraseña debe contener al menos un carácter especial.");
             aceptado = false;
         }
-
+    
         // Verificar si el correo tiene la estructura correcta
         Pattern emailPattern = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
         matcher = emailPattern.matcher(this.correo);
         if (!matcher.matches()) {
-            System.out.println("Error: El correo electrónico no tiene una estructura válida.");
             aceptado = false;
         }
-
+    
         return aceptado;
     }
-
+    
     public ArrayList<Alquiler> getAlquileres() {
         return lAlquileres;
     }

@@ -1,20 +1,26 @@
 package org.gui;
 
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 import org.example.VideoClub;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class VerSolicitudes extends JFrame {
     private JPanel panelSolicitudes;
 
     public VerSolicitudes(String adminUsername) {
         panelSolicitudes = new JPanel();
-        panelSolicitudes.setLayout(new BoxLayout(panelSolicitudes, BoxLayout.Y_AXIS)); // Añadir un layout para organizar los componentes
+        panelSolicitudes.setLayout(new BoxLayout(panelSolicitudes, BoxLayout.Y_AXIS));
         setContentPane(panelSolicitudes);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
@@ -36,20 +42,28 @@ public class VerSolicitudes extends JFrame {
             aceptarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    VideoClub.getUnVideoClub().aceptarSolicitud(adminUsername, username); // Asegúrate de pasar el nombre de usuario del administrador
-                    JOptionPane.showMessageDialog(null, "Solicitud aceptada");
+                    JSONObject respuesta = VideoClub.getUnVideoClub().aceptarSolicitud(adminUsername, username);
+                    if (respuesta.getString("estado").equals("exitoso")) {
+                        JOptionPane.showMessageDialog(null, "Solicitud aceptada");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error: " + respuesta.getString("mensaje"));
+                    }
                     dispose();
-                    new VerSolicitudes(adminUsername); // Refrescar la ventana
+                    new VerSolicitudes(adminUsername);
                 }
             });
 
             rechazarButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    VideoClub.getUnVideoClub().rechazarSolicitud(adminUsername, username); // Asegúrate de pasar el nombre de usuario del administrador
-                    JOptionPane.showMessageDialog(null, "Solicitud rechazada");
+                    JSONObject respuesta = VideoClub.getUnVideoClub().rechazarSolicitud(adminUsername, username);
+                    if (respuesta.getString("estado").equals("exitoso")) {
+                        JOptionPane.showMessageDialog(null, "Solicitud rechazada");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error: " + respuesta.getString("mensaje"));
+                    }
                     dispose();
-                    new VerSolicitudes(adminUsername); // Refrescar la ventana
+                    new VerSolicitudes(adminUsername);
                 }
             });
 

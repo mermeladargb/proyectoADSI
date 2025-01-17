@@ -37,7 +37,7 @@ public class MenuPrincipal extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                cardLayout.show(cardPanel, "iniciosesion"); 
+                cardLayout.show(cardPanel, "iniciosesion");
             }
         });
 
@@ -62,16 +62,15 @@ public class MenuPrincipal extends JFrame {
                 String password = new String(panelCredencialesContraseña.getPassword());
                 JSONObject respuesta = VideoClub.getUnVideoClub().verificarInicioDeSesion(user, password);
                 if (respuesta.getString("estado").equals("exitoso")) {
-                    username = user;  
-                    esAdmin = respuesta.getBoolean("esAdmin"); 
-                    crearMenuPrincipal(); 
+                    username = user;
+                    esAdmin = respuesta.getBoolean("esAdmin");
+                    crearMenuPrincipal();
                     cardLayout.show(cardPanel, "principal");
                 } else {
                     JOptionPane.showMessageDialog(null, respuesta.getString("mensaje"));
                 }
             }
         });
-
 
         // Inicialización de botón de registro
         JButton botonRegistro = new JButton("Registrarse");
@@ -211,7 +210,6 @@ public class MenuPrincipal extends JFrame {
         panelPrincipal.add(botonBuscarPelicula);
     
         JButton botonPedirPeliculas = new JButton("Pedir Peliculas");
-        panelPrincipal.add(botonPedirPeliculas);
         botonPedirPeliculas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
@@ -219,79 +217,50 @@ public class MenuPrincipal extends JFrame {
                 pedirPeliculas.setVisible(true);
             }
         });
+        panelPrincipal.add(botonPedirPeliculas);
+    
+
     
         if (esAdmin) {
             // Funcionalidades adicionales para administrador
-            JButton botonModificarCuenta = new JButton("Modificar Cuenta");
-            panelPrincipal.add(botonModificarCuenta);
-    
+        
             JButton botonMostrarSolicitudes = new JButton("Mostrar Solicitudes");
             panelPrincipal.add(botonMostrarSolicitudes);
-    
+        
             JButton botonEliminarCuentas = new JButton("Eliminar Cuentas");
             panelPrincipal.add(botonEliminarCuentas);
-    
+        
             JButton botonModificarCuentas = new JButton("Modificar Cuentas");
             panelPrincipal.add(botonModificarCuentas);
-    
+        
             JButton botonAceptarPeticiones = new JButton("Aceptar Peticiones");
             panelPrincipal.add(botonAceptarPeticiones);
-            
-    
-            botonModificarCuenta.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    String adminUsername = username; // Asegúrate de que este valor esté correcto
-                    JSONObject datosUsuario = VideoClub.getUnVideoClub().obtenerDatosUsuario(username);
-            
-                    JTextField usernameField = new JTextField(datosUsuario.getString("username"));
-                    JTextField nombreField = new JTextField(datosUsuario.getString("nombre"));
-                    JTextField apellidoField = new JTextField(datosUsuario.getString("apellido"));
-                    JTextField correoField = new JTextField(datosUsuario.getString("correo"));
-                    JPasswordField contraseñaField = new JPasswordField(datosUsuario.getString("contraseña"));
-            
-                    Object[] message = {
-                        "Username:", usernameField,
-                        "Nombre:", nombreField,
-                        "Apellido:", apellidoField,
-                        "Correo:", correoField,
-                        "Contraseña:", contraseñaField
-                    };
-            
-                    int option = JOptionPane.showConfirmDialog(null, message, "Modificar Cuenta", JOptionPane.OK_CANCEL_OPTION);
-                    if (option == JOptionPane.OK_OPTION) {
-                        JSONObject respuesta = VideoClub.getUnVideoClub().modificarCuenta(adminUsername, nombreField.getText(), apellidoField.getText(), username, new String(contraseñaField.getPassword()), correoField.getText(), usernameField.getText());
-                        if (respuesta.getString("estado").equals("exitoso")) {
-                            JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Error: " + respuesta.getString("mensaje"));
-                        }
-                    }
-                }
-            });
-            
-    
+        
+            // Acción para el botón Mostrar Solicitudes
             botonMostrarSolicitudes.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     new VerSolicitudes(username);
                 }
             });
-    
+        
+            // Acción para el botón Eliminar Cuentas
             botonEliminarCuentas.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     new EliminarCuentas(username);
                 }
             });
-    
+        
+            // Acción para el botón Modificar Cuentas
             botonModificarCuentas.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     new ModificarCuentas(username);
                 }
             });
-
+        
+            // Acción para el botón Aceptar Peticiones
             botonAceptarPeticiones.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
@@ -299,11 +268,10 @@ public class MenuPrincipal extends JFrame {
                 }
             });
         }
-    
+        
         panelPrincipal.revalidate();
         panelPrincipal.repaint();
     }
-    
 
 
     public static void main(String[] args) {

@@ -21,8 +21,15 @@ public class GestorUsuarios {
                 return user;
             }
         }
+        for (Usuario solicitud : solicitudes) {
+            if (solicitud.getUsername().equals(username)) {
+                return solicitud;
+            }
+        }
         return null;
     }
+    
+    
 
     public ArrayList<Usuario> getUsuarios() {
         return usuarios;
@@ -37,17 +44,18 @@ public class GestorUsuarios {
     }
 
     public String registrarUsuario(String nombre, String contraseña, String apellido, String username, String correo, boolean es_Admin) {
-        ArrayList<Alquiler> lista = new ArrayList<>();
-        Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista, es_Admin);
-        if (cuentaValida(user)) {
-            if (!cuentaExistente(user)) {
-                solicitudes.add(user);  
-                return "Solicitud de cuenta añadida correctamente. Un administrador debe aprobarla.";
-            }
-            return "Cuenta existente";
+    ArrayList<Alquiler> lista = new ArrayList<>();
+    Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista, es_Admin);
+    if (cuentaValida(user)) {
+        if (!cuentaExistente(user)) {
+            addSolicitud(user);
+            return "Solicitud de cuenta añadida correctamente. Un administrador debe aprobarla.";
         }
-        return "Cuenta no valida";
+        return "Cuenta existente";
     }
+    return "Cuenta no valida";
+}
+
 
     public boolean cuentaValida(Usuario user) {
         boolean valido = true;
@@ -94,21 +102,20 @@ public class GestorUsuarios {
             return "La cuenta no está en la lista";
         }
     }
-
-    public String modificarCuenta(String nombre, String contraseña, String apellido, String username, String correo, boolean es_Admin, String nuevoUsername) {
+    public String modificarCuenta(String nombre, String contraseña, String apellido, String username, String correo, boolean es_Admin) {
         Usuario usuario = getUsuario(username);
         if (usuario != null) {
-            if (!username.equals(nuevoUsername) && getUsuario(nuevoUsername) != null) {
-                return "El nuevo nombre de usuario ya existe";
+            if (usuario.actualizarCuenta(username, contraseña, nombre, apellido, correo)) {
+                return "Cuenta modificada correctamente";
+            } else {
+                return "Datos no válidos";
             }
-            usuario.actualizarCuenta(nuevoUsername, contraseña, nombre, apellido, correo);
-            return "Cuenta modificada correctamente";
         } else {
             return "Usuario no encontrado";
         }
     }
-    
-    
+
+
 
     public void addUsuario(Usuario unUsuario) {
         usuarios.add(unUsuario);
@@ -117,6 +124,7 @@ public class GestorUsuarios {
     public void addSolicitud(Usuario solicitud) {
         solicitudes.add(solicitud);
     }
+    
 
     public void reset() {
         usuarios = new ArrayList<Usuario>();

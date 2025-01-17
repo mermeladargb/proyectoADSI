@@ -46,7 +46,7 @@ public class Usuario {
     public void añadirAlquiler(Pelicula unaPelicula) {
         Alquiler alquiler= new Alquiler( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), unaPelicula);
         this.lAlquileres.add(alquiler);
-        //DBGestor.getDBGestor().añadirAlquiler(unaPelicula.getID(),username, new Date());
+        DBGestor.getDBGestor().añadirAlquiler(unaPelicula.getID(),username, new Date());
     }
     
     public Usuario setAceptadoPor(Usuario admin){

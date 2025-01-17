@@ -179,7 +179,7 @@ public class DBGestor {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, username);
             ps.setInt(2, idPeli);
-            ps.setDate(3, (java.sql.Date) fecha);
+            ps.setDate(3, new java.sql.Date(fecha.getTime()));
             ps.executeUpdate();
         } catch (SQLException e) {
         }

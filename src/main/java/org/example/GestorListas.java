@@ -22,6 +22,10 @@ public class GestorListas {
 			Lista l = new Lista(usuario, nombreLista);
 			listas.add(l);
 		}
+		DBGestor.getDBGestor().updateSQL(
+				"INSERT INTO listas(nombre, visible, username)"
+				+ "VALUES('" + nombreLista + "', false, '" + usuario.getUsername() + "')"
+		);
 	}
 	
 	public List<String> getListasUsuario(String username) {
@@ -50,6 +54,11 @@ public class GestorListas {
 		if (lista.isEmpty())
 			return;
 		lista.get(0).añadirPelicula(pelicula);
+
+		int idLista = DBGestor.getDBGestor().getIdLista(username, nombreLista);
+		DBGestor.getDBGestor().updateSQL(
+				"INSERT INTO pertenece_a VALUES(" + idLista + "," + pelicula.getID() + ")"
+		);
 	}
 	
 	public List<Lista> buscarLista(String nombreLista) {
@@ -67,6 +76,10 @@ public class GestorListas {
 		if (lista.isEmpty())
 			return;
 		lista.get(0).cambiarVisibilidad();
+		int idLista = DBGestor.getDBGestor().getIdLista(username, nombreLista);
+		DBGestor.getDBGestor().updateSQL(
+			"UPDATE listas SET visible = NOT visible WHERE id = " + idLista
+		);
 	}
 
 	// para las junits

@@ -243,18 +243,18 @@ public class DBGestor {
             Statement st = conn.createStatement();
             st.execute(consulta);
         } catch (Exception e) {
-            System.out.printf("Error al ejecutar '%s': %s", consulta, e.getMessage());
+            System.out.printf("Error al ejecutar '%s': %s\n", consulta, e.getMessage());
         }
     }
 
     public int getIdLista(String username, String nombreLista) {
-        String consulta = "SELECT id FROM listas WHERE username=" + username + " AND nombre=" + nombreLista;
+        String consulta = "SELECT id FROM listas WHERE username='" + username + "' AND nombre='" + nombreLista + "'";
         try (Connection conn = conectar()) {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(consulta);
-            return rs.getInt("id_lista");
+            return rs.getInt("id");
         } catch (Exception e) {
-            System.out.printf("Error al ejecutar '%s': %s", consulta, e.getMessage());
+            System.out.printf("Error al ejecutar '%s': %s\n", consulta, e.getMessage());
             return -1;
         }
     }

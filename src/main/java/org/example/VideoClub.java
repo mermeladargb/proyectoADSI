@@ -256,6 +256,7 @@ public class VideoClub {
     public void crearLista(String username, String nombreLista) {
         Usuario u = gestorUsuarios.getUsuario(username);
         GestorListas.getGestorListas().crearLista(u, nombreLista);
+        DBGestor.getDBGestor().updateSQL("INSERT INTO listas(nombre, visible, username) VALUES('" + nombreLista + "',false,'" + username + "')");
     }
     
     public JSONObject getListasUsuario(String username) {
@@ -279,6 +280,8 @@ public class VideoClub {
     public void añadirPeliculaALista(String username, String nombreLista, int idPelicula) {
         Pelicula p = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         GestorListas.getGestorListas().añadirPeliculaALista(username, nombreLista, p);
+        int id = DBGestor.getDBGestor().getIdLista(username, nombreLista);
+        DBGestor.getDBGestor().updateSQL("INSERT INTO pertenece_a VALUES(" + id + "," + idPelicula + ")");
     }
     
     public JSONObject buscarLista(String nombreLista) {

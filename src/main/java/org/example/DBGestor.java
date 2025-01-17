@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class DBGestor {
-    private static final String DB_URL = "jdbc:sqlite:database.db";
+    private static final String DB_URL = "jdbc:sqlite:baseDeDatos.db";
     private static DBGestor mDBGestor = new DBGestor();
 
     public static DBGestor getDBGestor() {
@@ -191,6 +191,18 @@ public class DBGestor {
             st.execute(consulta);
         } catch (Exception e) {
             System.out.printf("Error al ejecutar '%s': %s", consulta, e.getMessage());
+        }
+    }
+
+    public int getIdLista(String username, String nombreLista) {
+        String consulta = "SELECT id FROM listas WHERE username=" + username + " AND nombre=" + nombreLista;
+        try (Connection conn = conectar()) {
+            Statement st = conn.createStatement();
+            ResultSet rs = st.executeQuery(consulta);
+            return rs.getInt("id_lista");
+        } catch (Exception e) {
+            System.out.printf("Error al ejecutar '%s': %s", consulta, e.getMessage());
+            return -1;
         }
     }
 }

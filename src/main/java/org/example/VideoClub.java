@@ -314,11 +314,6 @@ public class VideoClub {
     public void cambiarVisibilidadLista(String username, String nombreLista) {
         GestorListas.getGestorListas().cambiarVisibilidadLista(username, nombreLista);
     }
-
-    public void validarPelicula(String pTitulo, String pUser){
-        //gestorSolicitudesPeliculas.validarPelicula(pTitulo, pUser);
-        //TODO
-    }
     
     public ArrayList<JSONObject> obtenerCatalogoPeliculas(){
         ArrayList<JSONObject> peliculas = API.main();

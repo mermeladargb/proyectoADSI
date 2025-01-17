@@ -13,10 +13,8 @@ public class API {
     public static JSONObject getDatosPelicula(String titulo){
         
         JSONObject output = new JSONObject();
-        System.out.println("Se llega hasta getDatosPelicula en API.java (Linea 16)");
         try {
             String apiKey = "350aba2d"; //Clave para conexiones a la api OMDb
-            String title = titulo;
             String urlString = "http://www.omdbapi.com/?apikey=" + apiKey + "&t=" + titulo.replace(" ","+");
 
 

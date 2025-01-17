@@ -7,8 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 public class ModificarCuentas extends JFrame {
@@ -74,7 +72,7 @@ public class ModificarCuentas extends JFrame {
                                 );
 
                                 if (respuesta.getString("estado").equals("exitoso")) {
-                                    JOptionPane.showMessageDialog(modificarFrame, "Cuenta modificada correctamente");
+                                    // Aquí se elimina el mensaje de confirmación
                                     modificarFrame.dispose();
                                     panelModificarCuentas.revalidate();
                                     panelModificarCuentas.repaint();
@@ -87,21 +85,8 @@ public class ModificarCuentas extends JFrame {
                         modificarFrame.add(saveButton);
                         modificarFrame.setVisible(true);
 
-                        // Listener para manejar el cierre de la ventana de modificación
-                        modificarFrame.addWindowListener(new WindowAdapter() {
-                            @Override
-                            public void windowClosing(WindowEvent e) {
-                                int confirm = JOptionPane.showConfirmDialog(
-                                    modificarFrame,
-                                    "¿Estás seguro de que deseas cerrar la ventana? Los cambios no se guardarán.",
-                                    "Confirmar Cierre",
-                                    JOptionPane.YES_NO_OPTION,
-                                    JOptionPane.QUESTION_MESSAGE);
-                                if (confirm == JOptionPane.YES_OPTION) {
-                                    modificarFrame.dispose();
-                                }
-                            }
-                        });
+                        // Listener para manejar el cierre de la ventana de modificación sin mostrar confirmación
+                        modificarFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     }
                 });
 

@@ -39,6 +39,15 @@ public class DBGestor {
 
     }
 
+    public void ejecutarConsulta(String sql) {
+        try (Connection conn = conectar();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+            System.out.println("Consulta ejecutada");
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        }
+    }
 
     public ArrayList<Pelicula> cargarPeliculas() {
         ArrayList<Pelicula> peliculas = new ArrayList<>();

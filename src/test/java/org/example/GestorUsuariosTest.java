@@ -1,6 +1,7 @@
 package org.example;
 
 import junit.framework.TestCase;
+import org.json.JSONArray;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,9 @@ public class GestorUsuariosTest extends TestCase {
     public void setUp() throws Exception {
         super.setUp();
         GestorUsuarios.getGestorUsuarios().reset();
+        GestorPeliculas.getGestorPeliculas().reset();
+
+
         usuario1 = new Usuario(
                 "jperez",
                 "password123",
@@ -29,7 +33,7 @@ public class GestorUsuariosTest extends TestCase {
                 "López",
                 "maria.lopez@example.com",
                 u1, // Aceptado por el administrador
-                null,
+                new ArrayList<Alquiler>(),
                 false  // No es administrador
         );
         p1= new Pelicula(  101,
@@ -38,6 +42,8 @@ public class GestorUsuariosTest extends TestCase {
                 usuario1,
                 usuario2
         );
+        p2= new Pelicula(  102, "Insertar", "pepe", usuario1, usuario2);
+        p3= new Pelicula(  103, "Option", "pepe", usuario1, usuario2);
         a1= new Alquiler("2024-12-26 15:56:23",p1);
         ArrayList<Alquiler>lista=new ArrayList<Alquiler>();
         lista.add(a1);
@@ -57,8 +63,6 @@ public class GestorUsuariosTest extends TestCase {
     }
 
     public void testGetUsuario() {
-        //System.out.println(u1.verAlquileres().getJSONObject(0).get("titulo"));
-        //System.out.println(VideoClub.getUnVideoClub().verAlquileres("pancho"));
 
 
 
@@ -69,6 +73,13 @@ public class GestorUsuariosTest extends TestCase {
 
     public void testCuentaExistente() {
     }
+    public void testVerAlquileres() {
+        String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}]}";
+        assertEquals(GestorUsuarios.getGestorUsuarios().verAlquileres("pancho").toString(),esperado) ;
+        assertNull(VideoClub.getUnVideoClub().verAlquileres(""));
+        assertEquals(GestorUsuarios.getGestorUsuarios().verAlquileres("mlopez").getJSONArray("alquileres").length(),0);
+    }
+
 
     public void testRegistrarUsuario() {
     }
@@ -80,5 +91,18 @@ public class GestorUsuariosTest extends TestCase {
     }
 
     public void testModificarCuenta() {
+    }
+
+    public void testAlquilarPeli() {
+        GestorUsuarios.getGestorUsuarios().alquilarPeli("mlopez",p3);
+        JSONArray json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
+        assertTrue (json1.getJSONObject(0).get("titulo")=="Option" && json1.length()==1) ;
+        GestorUsuarios.getGestorUsuarios().alquilarPeli("mlopez",p1);
+        json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
+        assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
+
+        GestorUsuarios.getGestorUsuarios().alquilarPeli("mlopez",null);
+        json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
+        assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
     }
 }

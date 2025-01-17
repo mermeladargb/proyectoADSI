@@ -1,19 +1,26 @@
 package org.gui;
 
-import org.example.VideoClub;
-import org.json.JSONObject;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import org.example.VideoClub;
+import org.json.JSONObject;
 
 public class ModificarCuentas extends JFrame {
     private JPanel panelModificarCuentas;
 
     public ModificarCuentas(String adminUsername) {
-        panelModificarCuentas = new JPanel();
+        panelModificarCuentas = new JPanel(new GridLayout(0, 1));
         setContentPane(panelModificarCuentas);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(400, 300);
@@ -49,8 +56,13 @@ public class ModificarCuentas extends JFrame {
 
                         int option = JOptionPane.showConfirmDialog(null, message, "Modificar Cuenta", JOptionPane.OK_CANCEL_OPTION);
                         if (option == JOptionPane.OK_OPTION) {
-                            VideoClub.getUnVideoClub().actualizarDatos(nombreField.getText(), apellidoField.getText(), usernameField.getText(), new String(contraseñaField.getPassword()), correoField.getText());
-                            JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
+                            JSONObject respuesta = VideoClub.getUnVideoClub().modificarCuenta(adminUsername, nombreField.getText(), apellidoField.getText(), username, new String(contraseñaField.getPassword()), correoField.getText(), usernameField.getText());
+                            if (respuesta.getString("estado").equals("exitoso")) {
+                                JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
+                                dispose(); 
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Error: " + respuesta.getString("mensaje"));
+                            }
                         }
                     }
                 });

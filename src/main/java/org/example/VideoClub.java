@@ -107,18 +107,21 @@ public class VideoClub {
     }
     
 
-    public JSONObject actualizarDatos(String nombre, String apellido, String username, String contraseña, String correo) {
-        try {
-            String resultado = gestorUsuarios.modificarCuenta(nombre, contraseña, apellido, username, correo, false); // Asegúrate de pasar el valor correcto para `es_Admin`
+    public JSONObject modificarCuenta(String adminUsername, String nombre, String apellido, String username, String contraseña, String correo, String nuevoUsername) {
+        Usuario adminUsuario = gestorUsuarios.getUsuario(adminUsername);
+        if (adminUsuario != null && adminUsuario.isEsAdmin()) {
+            String resultado = gestorUsuarios.modificarCuenta(nombre, contraseña, apellido, username, correo, false, nuevoUsername);
             if (resultado.equals("Cuenta modificada correctamente")) {
                 return new JSONObject().put("estado", "exitoso").put("mensaje", "Datos actualizados correctamente");
             } else {
                 return new JSONObject().put("estado", "error").put("mensaje", resultado);
             }
-        } catch (Exception e) {
-            return new JSONObject().put("estado", "error").put("mensaje", "Error al actualizar los datos");
+        } else {
+            return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
         }
     }
+    
+    
     
     
     

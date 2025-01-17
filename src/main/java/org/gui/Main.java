@@ -4,12 +4,7 @@ import java.util.ArrayList;
 
 import javax.swing.SwingUtilities;
 
-import org.example.Alquiler;
-import org.example.GestorListas;
-import org.example.GestorPeliculas;
-import org.example.GestorUsuarios;
-import org.example.Pelicula;
-import org.example.Usuario;
+import org.example.*;
 
 public class Main {
 
@@ -63,6 +58,12 @@ public class Main {
 
         GestorPeliculas.getGestorPeliculas().addPelicula(p1);
         GestorPeliculas.getGestorPeliculas().addPelicula(p2);
+
+        DBGestor.getDBGestor().cargarUsuarios();
+        Pelicula peli = new Pelicula(1, "SW", "bla", null, null);
+        GestorPeliculas.getGestorPeliculas().addPelicula(peli);
+        DBGestor.getDBGestor().cargarListas();
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {

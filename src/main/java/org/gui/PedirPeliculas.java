@@ -27,14 +27,22 @@ public class PedirPeliculas extends JFrame {
 
             String titulo = pelicula.getString("Title");
             peliculaPanel.add(new JLabel(titulo));
-            JButton modificarButton = new JButton("Pedir");
+            String trama = pelicula.getString("Plot");
+            peliculaPanel.add(new JLabel(trama));
+            JButton pedirButton = new JButton("Pedir");
+            peliculaPanel.add(pedirButton);
 
-            modificarButton.addActionListener(new ActionListener() {
+            System.out.println(titulo);
+            System.out.println(trama);
+
+            pedirButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     VideoClub.getUnVideoClub().pedirPelicula(username, titulo);
                 }
             });
         }
+
+        setVisible(true);
     }
 }

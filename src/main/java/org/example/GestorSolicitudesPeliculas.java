@@ -79,6 +79,14 @@ public class GestorSolicitudesPeliculas {
         //Creacion y adicion de la pelicula al gestor de peliculas
         Pelicula peliNueva = new Pelicula(pID, pTitulo, trama, solicitadaPor, aceptadaPor);
         GestorPeliculas.getGestorPeliculas().addPelicula(peliNueva);
+<<<<<<< HEAD
+    }
+
+    public void rechazarSolicitudPelicula(String titulo) {
+        SolicitudPelicula solicitudPelicula = this.getSolicitud(titulo);
+        solicitudes.remove(solicitudPelicula);
+=======
+>>>>>>> 85f7f57 (.)
     }
 
     public void rechazarSolicitudPelicula(String titulo) {

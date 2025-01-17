@@ -70,7 +70,7 @@ public class GestorPeliculasTest extends TestCase {
     public void testGetGestorPeliculas() {
     }
     @Test
-    public void testmostrarPelicula() {
+    public void testverDetallesPelicula() {
         String esperado=  "{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"NaN\"}";
         assertEquals(esperado,VideoClub.getUnVideoClub().seleccionarPelicula(101).toString());
         Valoracion v1 = new Valoracion((float)5.5,"Ta bien",usuario1);

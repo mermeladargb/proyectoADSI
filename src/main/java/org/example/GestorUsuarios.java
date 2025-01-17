@@ -150,7 +150,7 @@ public class GestorUsuarios {
 
     public void alquilarPeli(String username, Pelicula unaPelicula) {
         Usuario unUsuario= getUsuario(username);
-        if(unUsuario != null) {
+        if(unUsuario != null && unaPelicula!=null) {
             unUsuario.añadirAlquiler(unaPelicula);
         }
 

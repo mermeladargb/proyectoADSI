@@ -17,7 +17,7 @@ public class PedirPeliculas extends JFrame {
         panelPedirPeliculas = new JPanel();
         setContentPane(panelPedirPeliculas);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(400, 300);
+        setSize(1200, 800);
         setLocationRelativeTo(null);
 
         ArrayList<JSONObject> peliculas = VideoClub.getUnVideoClub().obtenerCatalogoPeliculas();
@@ -30,10 +30,10 @@ public class PedirPeliculas extends JFrame {
             String trama = pelicula.getString("Plot");
             peliculaPanel.add(new JLabel(trama));
             JButton pedirButton = new JButton("Pedir");
-            peliculaPanel.add(pedirButton);
 
-            System.out.println(titulo);
-            System.out.println(trama);
+            //Pruebas
+            //System.out.println(titulo);
+            //System.out.println(trama);
 
             pedirButton.addActionListener(new ActionListener() {
                 @Override
@@ -41,6 +41,9 @@ public class PedirPeliculas extends JFrame {
                     VideoClub.getUnVideoClub().pedirPelicula(username, titulo);
                 }
             });
+
+            peliculaPanel.add(pedirButton);
+            panelPedirPeliculas.add(peliculaPanel);
         }
 
         setVisible(true);

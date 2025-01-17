@@ -236,12 +236,7 @@ public class MenuPrincipal extends JFrame {
     
             JButton botonAceptarPeticiones = new JButton("Aceptar Peticiones");
             panelPrincipal.add(botonAceptarPeticiones);
-            botonAceptarPeticiones.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    new AceptarPeticiones();
-                }
-            });
+            
     
             botonModificarCuenta.addActionListener(new ActionListener() {
                 @Override
@@ -288,6 +283,13 @@ public class MenuPrincipal extends JFrame {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
                     new ModificarCuentas(username);
+                }
+            });
+
+            botonAceptarPeticiones.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent actionEvent) {
+                    new AceptarPeticiones(username);
                 }
             });
         }

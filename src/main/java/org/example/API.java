@@ -10,14 +10,14 @@ import org.json.JSONObject;
 
 public class API {
 
-    public static String getDatosPelicula(String titulo){
+    public static JSONObject getDatosPelicula(String titulo){
         
-        String plot = null;
-        
+        JSONObject output = new JSONObject();
+        System.out.println("Se llega hasta getDatosPelicula en API.java (Linea 16)");
         try {
-            String apiKey = "da65ada"; //Clave para conexiones a la api OMDb
+            String apiKey = "350aba2d"; //Clave para conexiones a la api OMDb
             String title = titulo;
-            String urlString = "http://www.omdapi.com/?apikey=" + apiKey + "&t=" + titulo.replace("","%20");
+            String urlString = "http://www.omdbapi.com/?apikey=" + apiKey + "&t=" + titulo.replace(" ","+");
 
 
             URL url = new URL(urlString);
@@ -31,18 +31,18 @@ public class API {
             while ((inputLine = in.readLine()) != null) {
                 respuesta.append(inputLine);
             }
-
-            respuesta.toString();
-            JSONObject output = new JSONObject(respuesta);
-            plot = output.getString("Plot");
+            
+            output = new JSONObject(respuesta.toString());
             
             in.close();
 
         } catch (Exception e) {
+            System.out.println("Womp Womp");
             e.printStackTrace();
         }
 
-        return(plot);
+        System.out.println(output);
+        return(output);
     }
     
     public static ArrayList<JSONObject> main(){
@@ -73,11 +73,16 @@ public class API {
                 }
                 
                 JSONObject peliculaJson = new JSONObject(respuesta.toString());
-                peliculasJson.add(peliculaJson);
+
+                if (!GestorSolicitudesPeliculas.getmGestorSolicutudesPeliculas().esta(peliculaJson.getString("Title"))) {
+                    peliculasJson.add(peliculaJson);
+                }
+                else  {System.out.println(peliculaJson.getString("Plot"));}
                 
                 in.close();
     
-                System.out.println(respuesta.toString());
+                //Prueba
+                //System.out.println(respuesta.toString());
 
             } catch (Exception e) {
                 System.out.println("Womp Womp");

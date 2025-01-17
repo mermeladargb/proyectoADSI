@@ -303,6 +303,18 @@ public class VideoClub {
     public void pedirPelicula(String pTitulo, String pUser){
         gestorSolicitudesPeliculas.addSolicitud(pTitulo,pUser);
     }
+
+    public ArrayList<SolicitudPelicula> pedirSolicitudesPeliculas(){
+        return(gestorSolicitudesPeliculas.getSolicitudes());
+    }
+
+    public void aceptarSolicitudPelicula(String pTitulo, String pUser){
+        gestorSolicitudesPeliculas.aceptarSolicitudPelicula(pTitulo,pUser);
+    }
+
+    public void rechazarSolicitudPelicula(String pTitulo){
+        gestorSolicitudesPeliculas.rechazarSolicitudPelicula(pTitulo);
+    }
     
 
 

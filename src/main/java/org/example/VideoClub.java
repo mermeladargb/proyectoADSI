@@ -21,33 +21,21 @@ public class VideoClub {
     }
 
     public JSONObject seleccionarPelicula(int idPeli) {
-        Pelicula unaPelicula = gestorPeliculas.buscarPeliSeleccionada(idPeli);
-        JSONObject JSON = new JSONObject();
-        if (unaPelicula != null) {
-            JSON.put("ID", unaPelicula.getID());
-            JSON.put("titulo", unaPelicula.getTitulo());
-            JSON.put("descrip", unaPelicula.getDescripcion());
-            JSON.put("media", String.format("%.2f", unaPelicula.getMediaValoracion()));
-        } else {
-            JSON = null;
-        }
-        return JSON;
+
+       return GestorPeliculas.getGestorPeliculas().verDetallesPelicula(idPeli);
+
     }
 
     public void alquilarPeli(String username, int idPeli) {
         Pelicula unaPelicula = gestorPeliculas.buscarPeliSeleccionada(idPeli);
-        Usuario unUsuario = gestorUsuarios.getUsuario(username);
-        if (unUsuario != null && unaPelicula != null) {
-            unUsuario.añadirAlquiler(unaPelicula);
+        if ( unaPelicula != null) {
+            gestorUsuarios.alquilarPeli(username,unaPelicula);
         }
     }
 
     public JSONObject verAlquileres(String username) {
-        Usuario unUsuario = gestorUsuarios.getUsuario(username);
-        if (unUsuario != null) {
-            return unUsuario.mostrarAlquileres();
-        }
-        return null;
+        return gestorUsuarios.verAlquileres(username);
+
     }
 
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {

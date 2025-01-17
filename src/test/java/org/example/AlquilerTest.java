@@ -24,7 +24,7 @@ public class AlquilerTest extends TestCase {
     }
 
     public void testMostrarAlquiler() {
-        String esperado = "{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2025-01-10 15:56:23\"}";
+        String esperado = "{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}";
         assertEquals(a1.mostrarAlquiler().toString(),esperado) ;
     }
 

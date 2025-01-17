@@ -68,4 +68,18 @@ public class GestorPeliculas {
 	public void reset (){
 		pelis=new ArrayList<Pelicula>();
 	}
+
+	public JSONObject verDetallesPelicula (int pIdPeli) {
+		Pelicula unaPelicula= buscarPeliSeleccionada(pIdPeli);
+		JSONObject JSON = new JSONObject();
+		if (unaPelicula != null) {
+			JSON.put("ID", unaPelicula.getID());
+			JSON.put("titulo", unaPelicula.getTitulo());
+			JSON.put("descrip", unaPelicula.getDescripcion());
+			JSON.put("media", String.format("%.2f", unaPelicula.getMediaValoracion()));
+		} else {
+			JSON = null;
+		}
+		return JSON;
+	}
 }

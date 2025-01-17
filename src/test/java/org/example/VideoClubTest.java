@@ -64,11 +64,11 @@ public class VideoClubTest extends TestCase {
     public void testMostrarPeliculasSimilares() {
 
 
-        String esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101}]}";
+        String esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("Inception").toString(),esperado);
-        esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101},{\"titulo\":\"Option\",\"id\":103}]}";
+        esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"},{\"titulo\":\"Option\",\"id\":103,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("ption").toString(),esperado);
-        esperado=  "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101},{\"titulo\":\"Insertar\",\"id\":102}]}";
+        esperado=  "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"},{\"titulo\":\"Insertar\",\"id\":102,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("in").toString(),esperado);
 
         //Se muestran todas las peliculas sino se introduce valor
@@ -117,7 +117,7 @@ public class VideoClubTest extends TestCase {
     public void testVerAlquileres() {
 
 
-        String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2025-01-10 15:56:23\"}]}";
+        String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}]}";
         assertEquals(VideoClub.getUnVideoClub().verAlquileres("pancho").toString(),esperado) ;
         assertNull(VideoClub.getUnVideoClub().verAlquileres(""));
         assertEquals(VideoClub.getUnVideoClub().verAlquileres("mlopez").getJSONArray("alquileres").length(),0);

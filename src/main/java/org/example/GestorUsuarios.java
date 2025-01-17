@@ -144,4 +144,21 @@ public class GestorUsuarios {
             return new JSONObject().put("estado", "error").put("mensaje", "No tienes permisos de administrador");
         }
     }
+
+    public void alquilarPeli(String username, Pelicula unaPelicula) {
+        Usuario unUsuario= getUsuario(username);
+        if(unUsuario != null) {
+            unUsuario.añadirAlquiler(unaPelicula);
+        }
+
+
+    }
+
+    public JSONObject verAlquileres(String username) {
+        Usuario unUsuario =getUsuario(username);
+        if (unUsuario != null) {
+            return unUsuario.mostrarAlquileres();
+        }
+        return null;
+    }
 }

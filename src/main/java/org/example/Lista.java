@@ -18,10 +18,6 @@ public class Lista {
 		this.visible = false;
 	}
 	
-	public boolean esDeUsuario(String username) {
-		return this.user.getUsername().equals(username);
-	}
-	
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -31,7 +27,9 @@ public class Lista {
 	}
 	
 	public void añadirPelicula(Pelicula pelicula) {
-		this.listaPeliculas.add(pelicula);
+		List<String> peliculas = getPeliculas();
+		if (peliculas.contains(pelicula.getTitulo()))
+			this.listaPeliculas.add(pelicula);
 	}
 	
 	public List<String> getPeliculas() {

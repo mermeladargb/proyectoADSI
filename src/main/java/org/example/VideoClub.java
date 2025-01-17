@@ -285,13 +285,18 @@ public class VideoClub {
     }
 
     public void validarPelicula(String pTitulo, String pUser){
-        gestorSolicitudesPeliculas.validarPelicula(pTitulo, pUser);
+        //gestorSolicitudesPeliculas.validarPelicula(pTitulo, pUser);
+        //TODO
     }
     
-    public void obtenerCatalogoPeliculas(){
-        
+    public ArrayList<JSONObject> obtenerCatalogoPeliculas(){
+        ArrayList<JSONObject> peliculas = API.main();
+        return (peliculas);
     }
 
+    public void pedirPelicula(String pTitulo, String pUser){
+        gestorSolicitudesPeliculas.addSolicitud(pTitulo,pUser);
+    }
     
     public void ñó() {
         System.out.println("ñó");

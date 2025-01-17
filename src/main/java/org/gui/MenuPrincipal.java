@@ -206,7 +206,8 @@ public class MenuPrincipal extends JFrame {
         botonPedirPeliculas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                //new PedirPeliculas();
+                PedirPeliculas pedirPeliculas = new PedirPeliculas(username);
+                pedirPeliculas.setVisible(true);
             }
         });
     
@@ -229,7 +230,7 @@ public class MenuPrincipal extends JFrame {
             botonAceptarPeticiones.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    //new AceptarPeticiones();
+                    new AceptarPeticiones();
                 }
             });
     

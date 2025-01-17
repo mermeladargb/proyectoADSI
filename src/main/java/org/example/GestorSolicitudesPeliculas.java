@@ -35,7 +35,7 @@ public class GestorSolicitudesPeliculas {
     }
 
     // VOID TEMPORAL
-    public void validarPelicula(String pTitulo, String pUser) {
+    public void addSolicitud(String pTitulo, String pUser) {
         //LLAMADA A LA API PARA TITULO Y DESCRIPCION
         //TODO
 

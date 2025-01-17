@@ -27,6 +27,27 @@ public class DBGestor {
         return conn;
     }
 
+    public void cargarDatos() {
+        cargarPeliculas();
+        cargarUsuarios();
+        cargarValoraciones();
+        cargarAlquileres();
+        cargarListas();
+    }
+
+    public void cargarValoraciones() {
+
+    }
+
+    public void ejecutarConsulta(String sql) {
+        try (Connection conn = conectar();
+             Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(sql);
+            System.out.println("Consulta ejecutada");
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        }
+    }
 
     public ArrayList<Pelicula> cargarPeliculas() {
         ArrayList<Pelicula> peliculas = new ArrayList<>();
@@ -73,24 +94,35 @@ public class DBGestor {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
+                String username = rs.getString("username");
+                String contraseña = rs.getString("contraseña");
+                String nombre = rs.getString("nombre");
+                String apellido = rs.getString("apellido");
+                String correo = rs.getString("correo");
+                String aceptado_por = rs.getString("aceptado_por");
+                boolean es_admin = rs.getBoolean("es_admin");
                 Usuario usuario = new Usuario(
-                        rs.getString("username"),
-                        rs.getString("contraseña"),
-                        rs.getString("nombre"),
-                        rs.getString("apellido"),
-                        rs.getString("correo"),
+                        username,
+                        contraseña,
+                        nombre,
+                        apellido,
+                        correo,
                         null,
                         new ArrayList<>(),
-                        rs.getBoolean("esAdmin")
+                        es_admin
                 );
-
                 //Si el usuario fue aceptado por otro administrador
-                String aceptadoPorUsername = rs.getString("aceptadoPor");
-                if (aceptadoPorUsername != null) {
-                    Usuario aceptadoPor = GestorUsuarios.getGestorUsuarios().getUsuario(aceptadoPorUsername);
+                if (aceptado_por != null) {
+                    // Nota: puede suceder que el usuario haya sido aceptado por un administrador, pero que este
+                    // no esté cargado todavía. En ese caso, el atributo aceptadoPor será nulo, pero el usuario
+                    // es considerado correcto
+                    Usuario aceptadoPor = GestorUsuarios.getGestorUsuarios().getUsuario(aceptado_por);
                     usuario.setAceptadoPor(aceptadoPor);
+                    GestorUsuarios.getGestorUsuarios().addUsuario(usuario);
                 }
-                usuarios.add(usuario);
+                else {
+                    GestorUsuarios.getGestorUsuarios().addSolicitud(usuario);
+                }
             }
         } catch (SQLException e) {
             System.out.println("Error al cargar usuarios: " + e.getMessage());
@@ -98,8 +130,7 @@ public class DBGestor {
         return usuarios;
     }
 
-    public ArrayList<Lista> cargarListas() {
-        ArrayList<Lista> listas = new ArrayList<>();
+    public void cargarListas() {
         String sql = "SELECT * FROM listas";
 
         try (Connection conn = conectar();
@@ -107,29 +138,38 @@ public class DBGestor {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                Usuario usuario = GestorUsuarios.getGestorUsuarios().getUsuario(rs.getString("username"));
-                Lista lista = new Lista(usuario, rs.getString("nombre"));
-                //TODO al cargar los datos mirar si la visibilidad se pone bien
-                lista.cambiarVisibilidad();
+                int idLista = rs.getInt("id");
+                String username = rs.getString("username");
+                String nombreLista = rs.getString("nombre");
+                boolean visible = rs.getBoolean("visible");
+                Usuario usuario = GestorUsuarios.getGestorUsuarios().getUsuario(username);
+                if (usuario == null) {
+                    System.out.println("No existe el usuario " + username);
+                    return;
+                }
+                GestorListas.getGestorListas().crearLista(usuario, nombreLista);
+                Lista lista = GestorListas.getGestorListas().getListaUsuario(username, nombreLista);
+                if (visible)
+                    lista.cambiarVisibilidad();
 
-
-                String sqlPeliculas = "SELECT peliculaID FROM lista_peliculas WHERE listaNombre = ?";
+                String sqlPeliculas = "SELECT id_pelicula FROM pertenece_a WHERE id_lista = ?";
                 try (PreparedStatement ps = conn.prepareStatement(sqlPeliculas)) {
-                    ps.setString(1, lista.getNombre());
+                    ps.setInt(1, idLista);
                     ResultSet rsPeliculas = ps.executeQuery();
                     while (rsPeliculas.next()) {
-                        Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(rsPeliculas.getInt("peliculaID"));
+                        Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(rsPeliculas.getInt("id_pelicula"));
                         if (pelicula != null) {
                             lista.añadirPelicula(pelicula);
                         }
+                        else {
+                            System.out.println("No existe la película con id " + rsPeliculas.getInt("id_pelicula"));
+                        }
                     }
                 }
-                listas.add(lista);
             }
         } catch (SQLException e) {
             System.out.println("Error al cargar listas:" + e.getMessage());
         }
-        return listas;
     }
 
     public void cargarAlquileres() {

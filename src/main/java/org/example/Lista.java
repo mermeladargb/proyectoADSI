@@ -15,6 +15,7 @@ public class Lista {
 		this.user = usuario;
 		this.nombre = nombreLista;
 		this.listaPeliculas = new ArrayList<>();
+		this.visible = false;
 	}
 	
 	public boolean esDeUsuario(String username) {

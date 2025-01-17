@@ -63,6 +63,16 @@ public class GestorPeliculas {
 		return  resultado.put("peliculas",lJSON);
 	}
 	public void addPelicula (Pelicula pPelicula){
+		DBGestor dbGestor = new DBGestor();
+		String sqlInsert = String.format(
+				"INSERT INTO peliculas (ID, titulo, descripcion, aceptada) VALUES (%d, '%s', '%s', %b)",
+				pPelicula.getID(),
+				pPelicula.getTitulo().replace("'", "''"),
+				pPelicula.getDescripcion().replace("'", "''"),
+				pPelicula.estaAceptada()
+		);
+
+		dbGestor.ejecutarConsulta(sqlInsert);
 		pelis.add(pPelicula);
 	}
 	public void reset (){

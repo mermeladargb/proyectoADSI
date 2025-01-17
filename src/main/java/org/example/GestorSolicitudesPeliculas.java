@@ -50,10 +50,8 @@ public class GestorSolicitudesPeliculas {
             Usuario user = GestorUsuarios.getGestorUsuarios().getUsuario(pUser);
             SolicitudPelicula solicitud = new SolicitudPelicula(pTitulo, user);
             solicitudes.add(solicitud);
-            System.out.println("Pelicula añadida con exito");
         }
         else{System.out.println("Esta Pelicula ya ha sido solicitada");}
-        System.out.println("Este mensaje es temporal, una vez confirmado que todo funciona correctamente este mensaje puede ser borrado en la clase GestorSolicitudesPeliculas.java lineas 53, 55 y 56");
     }
 
     public void aceptarSolicitudPelicula(String pTitulo, String pUser) {

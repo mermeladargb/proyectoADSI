@@ -38,7 +38,7 @@ public class PedirPeliculas extends JFrame {
             pedirButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    VideoClub.getUnVideoClub().pedirPelicula(username, titulo);
+                    VideoClub.getUnVideoClub().pedirPelicula(titulo, username);
                 }
             });
 

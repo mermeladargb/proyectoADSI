@@ -28,11 +28,13 @@ public class AceptarPeticiones extends JFrame {
 
             String titulo = solicitud.getTitulo();
             peliculaPanel.add(new JLabel(titulo));
+            System.out.println(titulo);
             Usuario user = solicitud.solicitadaPor();
             String nombreUsuario = user.getUsername();
             peliculaPanel.add(new JLabel(nombreUsuario));
+            System.out.println(nombreUsuario);
             JButton aceptarButton = new JButton("Aceptar");
-            JButton rechazarButton = new JButton("Aceptar");
+            JButton rechazarButton = new JButton("Rechazar");
 
 
             //Pruebas

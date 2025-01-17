@@ -50,7 +50,7 @@ public class API {
         ArrayList<JSONObject> peliculasJson = new ArrayList<>();
 
         String[] candidatos = {
-            "Cars", "Up", "Avatar", "Home Alone", "Sharknado"
+            "Cars", "Up", "Avatar", "Home Alone", "Sharknado", "Me Before You"
         };
 
         for (String candidato : candidatos){

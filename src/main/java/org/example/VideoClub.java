@@ -60,6 +60,10 @@ public class VideoClub {
         Usuario user = gestorUsuarios.getUsuario(username);
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         pelicula.guardarValoracion(user, reseña, puntuacion);
+
+        String sql = "INSERT OR REPLACE INTO valoraciones (username_usuario, id_pelicula, puntuacion, descripcion) VALUES ('"
+                + username + "', " + idPelicula + ", " + puntuacion + ", '" + reseña + "')";
+        DBGestor.getDBGestor().ejecutarConsulta(sql);
     }
 
     public JSONObject mostrarReseñas(String username, int idPelicula) {
@@ -181,6 +185,9 @@ public class VideoClub {
         Usuario usuario = gestorUsuarios.getUsuario(username);
         if (usuario != null) {
             gestorUsuarios.eliminarCuenta(usuario);
+
+            String sql = "DELETE FROM usuarios WHERE username = '" + username + "'";
+            DBGestor.getDBGestor().ejecutarConsulta(sql);
         }
     }
     
@@ -225,6 +232,11 @@ public class VideoClub {
         if (usuario != null) {
             String resultado = gestorUsuarios.modificarCuenta(nombre, contraseña, apellido, username, correo, usuario.isEsAdmin());
             if (resultado.equals("Cuenta modificada correctamente")) {
+
+                String sql = "UPDATE usuarios SET nombre = '" + nombre + "', apellido = '" + apellido + "', correo = '" + correo + "', contrasena = '" + contraseña
+                        + "', username = '" + username + "' WHERE username = '" + username + "'";
+                DBGestor.getDBGestor().ejecutarConsulta(sql);
+
                 return new JSONObject().put("estado", "exitoso").put("mensaje", "Datos actualizados correctamente");
             } else {
                 return new JSONObject().put("estado", "error").put("mensaje", resultado);
@@ -322,6 +334,11 @@ public class VideoClub {
 
     public void pedirPelicula(String pTitulo, String pUser){
         gestorSolicitudesPeliculas.addSolicitud(pTitulo,pUser);
+
+        String sql = "INSERT INTO peliculas (titulo, descripcion, aceptada, username_solicitador) " +
+                "VALUES ('" + pTitulo + "', 'Pendiente de aprobación', 0, '" + pUser + "')";
+
+        DBGestor.getDBGestor().ejecutarConsulta(sql);
     }
 
     public ArrayList<SolicitudPelicula> pedirSolicitudesPeliculas(){

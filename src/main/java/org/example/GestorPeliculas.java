@@ -13,20 +13,8 @@ public class GestorPeliculas {
 
 	private GestorPeliculas() {
 		pelis=new ArrayList<Pelicula>();
-		//dbGestor = new DBGestor();
-		//cargarPeliculasDesdeBD();
 	}
 
-	private void cargarPeliculasDesdeBD() {
-		//pelis = dbGestor.cargarPeliculas();
-		System.out.println("Peliculas cargadas");
-	}
-/*
-	public void agregarPelicula(Pelicula nuevaPeli) {
-		pelis.add(nuevaPeli);
-		dbGestor.guardarPelicula(nuevaPeli);
-		System.out.println("Pelicula guardada");
-	}*/
 	public static GestorPeliculas getGestorPeliculas() {
 		return unGestorpelis;
 	}

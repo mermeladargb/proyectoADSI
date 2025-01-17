@@ -97,6 +97,11 @@ public class GestorUsuarios {
     public String eliminarCuenta(Usuario user) {
         if (usuarios.contains(user)) {
             usuarios.remove(user);
+
+            String sql = "DELETE FROM usuarios WHERE id = '" + user.getUsername() + "'";
+            DBGestor dbGestor = new DBGestor();
+            dbGestor.ejecutarConsulta(sql);
+
             return "Cuenta eliminada correctamente";
         } else {
             return "La cuenta no está en la lista";

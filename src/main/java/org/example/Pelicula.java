@@ -67,21 +67,12 @@ public class Pelicula {
 			if (valoracion.getUser().equals(user.getUsername())) {
 				valoracion.setReseña(reseña);
 				valoracion.setNota(nota);
-				System.out.println("Lista de valoraciones actual: ");
-				for (Valoracion v : listaValoraciones) {
-					System.out.println("Usuario: " + v.getUser() + ", Nota: " + v.getPuntuacion() + ", Reseña: " + v.getReseña());
-				}
-
 				return;
 			}
 		}
 		//Si el user no ha hecho ninguna valoracion a la pelicula
 		Valoracion nuevaValoracion = new Valoracion(nota, reseña, user);
 		listaValoraciones.add(nuevaValoracion);
-		System.out.println("Lista de valoraciones actual: ");
-		for (Valoracion v : listaValoraciones) {
-			System.out.println("Usuario: " + v.getUser() + ", Nota: " + v.getPuntuacion() + ", Reseña: " + v.getReseña());
-		}
 
 	}
 	//TODO Creo que calcularPromedio debería de devolver un valor que fuera float

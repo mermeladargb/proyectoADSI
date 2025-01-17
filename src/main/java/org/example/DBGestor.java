@@ -36,7 +36,37 @@ public class DBGestor {
     }
 
     public void cargarValoraciones() {
+        String sql = "SELECT username_usuario, id_pelicula, puntuacion, descripcion FROM valoraciones";
 
+        try (Connection conn = conectar();
+             Statement st = conn.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            while (rs.next()) {
+                String username = rs.getString("username_usuario");
+                int idPelicula = rs.getInt("id_pelicula");
+                int puntuacion = rs.getInt("puntuacion");
+                String descripcion = rs.getString("descripcion");
+
+                Usuario usuario = GestorUsuarios.getGestorUsuarios().getUsuario(username);
+                if (usuario == null) {
+                    System.out.println("No existe el usuario " + username);
+                    continue;
+                }
+
+                Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(idPelicula);
+                if (pelicula == null) {
+                    System.out.println("No existe la película con ID " + idPelicula);
+                    continue;
+                }
+
+                pelicula.guardarValoracion(usuario, descripcion, puntuacion);
+            }
+
+            System.out.println("Valoraciones cargadas correctamente.");
+        } catch (SQLException e) {
+            System.out.println("Error al cargar valoraciones: " + e.getMessage());
+        }
     }
 
     public void ejecutarConsulta(String sql) {
@@ -194,23 +224,6 @@ public class DBGestor {
         }
     }
 
-    public void guardarPelicula(Pelicula pelicula) {
-        String sql = "INSERT INTO peliculas(ID, titulo, descripcion, aceptada, solicitadaPor, aceptadaPor) VALUES(?, ?, ?, ?, ?, ?)";
-
-        try (Connection conn = conectar();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setInt(1, pelicula.getID());
-            ps.setString(2, pelicula.getTitulo());
-            ps.setString(3, pelicula.getDescripcion());
-            ps.setBoolean(4, pelicula.estaAceptada());
-            ps.setString(5, pelicula.getSolicitadaPor().getUsername());
-            ps.setString(6, pelicula.getAceptadaPor().getUsername());
-
-            ps.executeUpdate();
-        } catch (SQLException e) {
-        }
-    }
 
     public void añadirAlquiler(int idPeli, String username, Date fecha){
         String sql = "INSERT INTO alquileres VALUES(?, ?, ?)";

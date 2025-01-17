@@ -63,6 +63,8 @@ public class Main {
         Pelicula peli = new Pelicula(1, "SW", "bla", null, null);
         GestorPeliculas.getGestorPeliculas().addPelicula(peli);
         DBGestor.getDBGestor().cargarListas();
+        DBGestor.getDBGestor().cargarValoraciones();
+
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

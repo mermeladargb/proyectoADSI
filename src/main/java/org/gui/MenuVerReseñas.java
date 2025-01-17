@@ -36,12 +36,6 @@ public class MenuVerReseñas extends JFrame {
     }
 
     private void cargarReseñas() {
-        VideoClub.getUnVideoClub().puntuarPelicula("u1", 1, "Buena", 5);
-        VideoClub.getUnVideoClub().puntuarPelicula("u2", 1, "Bien", 3);
-        VideoClub.getUnVideoClub().puntuarPelicula("u3", 1, "Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal,Mal, ", 4);
-        VideoClub.getUnVideoClub().puntuarPelicula("u4", 1, "Me he dormido", 4);
-        VideoClub.getUnVideoClub().puntuarPelicula("u5", 1, "Increible", 4);
-        VideoClub.getUnVideoClub().puntuarPelicula("u6", 1, "Me encanto", 4);
 
         panelReseñas.removeAll();
 

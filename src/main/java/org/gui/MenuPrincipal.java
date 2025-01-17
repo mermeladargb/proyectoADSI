@@ -41,6 +41,10 @@ public class MenuPrincipal extends JFrame {
             }
         });
 
+        // Inicializar cardLayout y cardPanel
+        cardLayout = new CardLayout();
+        cardPanel = new JPanel(cardLayout);
+
         // Panel principal con funcionalidades
         panelPrincipal = new JPanel();
         panelPrincipal.setLayout(new GridLayout(10, 1));
@@ -69,8 +73,7 @@ public class MenuPrincipal extends JFrame {
         });
 
 
-
-
+        // Inicialización de botón de registro
         JButton botonRegistro = new JButton("Registrarse");
         botonRegistro.addActionListener(new ActionListener() {
             @Override
@@ -78,24 +81,25 @@ public class MenuPrincipal extends JFrame {
                 cardLayout.show(cardPanel, "registro");
             }
         });
-        
+
+        // Añadir componentes al panel de inicio de sesión
         panelInicioSesion.add(new JLabel("Username:"));
         panelInicioSesion.add(panelCredencialesUsuario);
         panelInicioSesion.add(new JLabel("Contraseña:"));
         panelInicioSesion.add(panelCredencialesContraseña);
         panelInicioSesion.add(botonLogin);
         panelInicioSesion.add(botonRegistro);
-        
-        // Panel de registro
+
+        // Configuración del panel de registro
         panelRegistro = new JPanel();
         panelRegistro.setLayout(new GridLayout(6, 1));
-        
+
         registroUsuario = new JTextField();
         registroContraseña = new JPasswordField();
         registroNombre = new JTextField();
         registroApellido = new JTextField();
         registroCorreo = new JTextField();
-        
+
         botonRegistrar = new JButton("Registrar");
         botonRegistrar.addActionListener(new ActionListener() {
             @Override
@@ -105,7 +109,7 @@ public class MenuPrincipal extends JFrame {
                 String nombre = registroNombre.getText();
                 String apellido = registroApellido.getText();
                 String correo = registroCorreo.getText();
-        
+
                 JSONObject respuesta = VideoClub.getUnVideoClub().verificarRegistro(nombre, apellido, user, password, correo);
                 if (respuesta.getString("estado").equals("exitoso")) {
                     JOptionPane.showMessageDialog(null, "Registro exitoso. Esperando aprobación del administrador.");
@@ -115,7 +119,8 @@ public class MenuPrincipal extends JFrame {
                 }
             }
         });
-        
+
+        // Añadir componentes al panel de registro
         JButton botonRegistroAtras = new JButton("Atrás");
         botonRegistroAtras.addActionListener(new ActionListener() {
             @Override
@@ -123,7 +128,7 @@ public class MenuPrincipal extends JFrame {
                 cardLayout.show(cardPanel, "iniciosesion");
             }
         });
-        
+
         panelRegistro.add(new JLabel("Nuevo Usuario:"));
         panelRegistro.add(registroUsuario);
         panelRegistro.add(new JLabel("Contraseña:"));
@@ -136,14 +141,18 @@ public class MenuPrincipal extends JFrame {
         panelRegistro.add(registroCorreo);
         panelRegistro.add(botonRegistrar);
         panelRegistro.add(botonRegistroAtras);
-        
+
+        // Inicialización del cardLayout y cardPanel
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
-        panelPrincipal = new JPanel();  
+
+        // Configuración de paneles
+        panelPrincipal = new JPanel();
         cardPanel.add(panelInicioSesion, "iniciosesion");
         cardPanel.add(panelRegistro, "registro");
         cardPanel.add(panelPrincipal, "principal");
-        
+
+        // Añadir cardPanel al JFrame
         add(cardPanel);
         cardLayout.show(cardPanel, "iniciosesion");
     }
@@ -286,6 +295,7 @@ public class MenuPrincipal extends JFrame {
         panelPrincipal.revalidate();
         panelPrincipal.repaint();
     }
+    
 
 
     public static void main(String[] args) {

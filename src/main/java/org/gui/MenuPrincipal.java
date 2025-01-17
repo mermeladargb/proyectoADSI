@@ -246,14 +246,15 @@ public class MenuPrincipal extends JFrame {
             botonModificarCuenta.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
+                    String adminUsername = username; // Asegúrate de que este valor esté correcto
                     JSONObject datosUsuario = VideoClub.getUnVideoClub().obtenerDatosUsuario(username);
-    
+            
                     JTextField usernameField = new JTextField(datosUsuario.getString("username"));
                     JTextField nombreField = new JTextField(datosUsuario.getString("nombre"));
                     JTextField apellidoField = new JTextField(datosUsuario.getString("apellido"));
                     JTextField correoField = new JTextField(datosUsuario.getString("correo"));
                     JPasswordField contraseñaField = new JPasswordField(datosUsuario.getString("contraseña"));
-    
+            
                     Object[] message = {
                         "Username:", usernameField,
                         "Nombre:", nombreField,
@@ -261,14 +262,19 @@ public class MenuPrincipal extends JFrame {
                         "Correo:", correoField,
                         "Contraseña:", contraseñaField
                     };
-    
+            
                     int option = JOptionPane.showConfirmDialog(null, message, "Modificar Cuenta", JOptionPane.OK_CANCEL_OPTION);
                     if (option == JOptionPane.OK_OPTION) {
-                        VideoClub.getUnVideoClub().actualizarDatos(nombreField.getText(), apellidoField.getText(), usernameField.getText(), new String(contraseñaField.getPassword()), correoField.getText());
-                        JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
+                        JSONObject respuesta = VideoClub.getUnVideoClub().modificarCuenta(adminUsername, nombreField.getText(), apellidoField.getText(), username, new String(contraseñaField.getPassword()), correoField.getText(), usernameField.getText());
+                        if (respuesta.getString("estado").equals("exitoso")) {
+                            JOptionPane.showMessageDialog(null, "Cuenta modificada correctamente");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error: " + respuesta.getString("mensaje"));
+                        }
                     }
                 }
             });
+            
     
             botonMostrarSolicitudes.addActionListener(new ActionListener() {
                 @Override

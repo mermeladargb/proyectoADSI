@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class DBGestor {
-    private static final String DB_URL = "jdbc:sqlite:baseDeDatos.db";
+    private static final String DB_URL = "jdbc:sqlite:database.db";
     private static DBGestor mDBGestor = new DBGestor();
 
     public static DBGestor getDBGestor() {

@@ -160,5 +160,11 @@ public class Usuario {
         return json.put("alquileres", new JSONArray(lJSONS));
     }
 
+    public void setContraseña(String contraaseña){
+        this.contraseña=contraseña;
+    }
 
+    public void setCorreo(String correo){
+        this.correo=correo;
+    }
 }

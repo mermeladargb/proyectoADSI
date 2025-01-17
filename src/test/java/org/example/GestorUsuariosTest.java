@@ -71,8 +71,7 @@ public class GestorUsuariosTest extends TestCase {
 
     }
 
-    public void testCuentaExistente() {
-    }
+ 
     public void testVerAlquileres() {
         String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}]}";
         assertEquals(GestorUsuarios.getGestorUsuarios().verAlquileres("pancho").toString(),esperado) ;
@@ -82,16 +81,57 @@ public class GestorUsuariosTest extends TestCase {
 
 
     public void testRegistrarUsuario() {
+        String resultado = GestorUsuarios.getGestorUsuarios().registrarUsuario("George", "contraseñaSegura123", "Russel", "George", "george@gmail.com", false);
+        assertEquals("Solicitud de cuenta añadida correctamente. Un administrador debe aprobarla.", resultado);
+    
+        String resultadoCuentaExistente = GestorUsuarios.getGestorUsuarios().registrarUsuario("Lando", "contraseñaSegura123", "Norris", "Lando", "lando@gmail.com", false);
+        assertEquals("Cuenta existente", resultadoCuentaExistente);
+    
+        String resultadoCuentaNoValida = GestorUsuarios.getGestorUsuarios().registrarUsuario("Antonio", "kaka", "Giovinazzi", "Antonio", "correoIncorrecto", false);
+        assertEquals("Cuenta no valida", resultadoCuentaNoValida);
     }
-
+    
     public void testCuentaValida() {
+        Usuario usuarioValido = new Usuario("Lance", "Contraseña123!", "Lance", "Stroll", "correo@gmail.com", null, new ArrayList<Alquiler>(), false);
+        assertTrue(GestorUsuarios.getGestorUsuarios().cuentaValida(usuarioValido));
+    
+        Usuario usuarioInvalido = new Usuario("carlos", "123", "Carlos", "Sainz", "correo", null, new ArrayList<Alquiler>(), false);
+        assertFalse(GestorUsuarios.getGestorUsuarios().cuentaValida(usuarioInvalido));
     }
-
+    
     public void testEliminarCuenta() {
+        Usuario usuarioEliminar = new Usuario("Sebastian", "contraseña-123", "Sebastian", "Vettel", "poni@gmail.com", null, new ArrayList<Alquiler>(), false);
+        GestorUsuarios.getGestorUsuarios().addUsuario(usuarioEliminar);
+    
+        String resultadoEliminar = GestorUsuarios.getGestorUsuarios().eliminarCuenta(usuarioEliminar);
+        assertEquals("Cuenta eliminada correctamente", resultadoEliminar);
+    
+        String resultadoNoEliminar = GestorUsuarios.getGestorUsuarios().eliminarCuenta(usuarioEliminar);
+        assertEquals("La cuenta no está en la lista", resultadoNoEliminar);
     }
-
+    
     public void testModificarCuenta() {
+        Usuario usuarioModificar = new Usuario("Robert", "contraseña-123", "Robert", "Kubica", "33@gmail.com", null, new ArrayList<Alquiler>(), false);
+        GestorUsuarios.getGestorUsuarios().addUsuario(usuarioModificar);
+    
+        String resultadoModificar = GestorUsuarios.getGestorUsuarios().modificarCuenta("Robert", "nuevaContraseña123!", "Kubica", "33", "nuevo.correo@gmail.com", false);
+        assertEquals("Cuenta modificada correctamente", resultadoModificar);
+    
+        String resultadoNoModificar = GestorUsuarios.getGestorUsuarios().modificarCuenta("Michael", "contraseña-123", "Schumacher", "Kaiser", "kaiser@gmail.com", false);
+        assertEquals("Usuario no encontrado", resultadoNoModificar);
     }
+    
+    public void testCuentaExistente() {
+        Usuario usuarioExistente = new Usuario("Felipe", "contraseña-123", "Felipe", "Massa", "felipe@gmail.com", null, new ArrayList<Alquiler>(), false);
+        GestorUsuarios.getGestorUsuarios().addUsuario(usuarioExistente);
+    
+        assertTrue(GestorUsuarios.getGestorUsuarios().cuentaExistente(usuarioExistente));
+    
+        Usuario usuarioNoExistente = new Usuario("Lewis", "contraseña-123", "Lewis", "Hamilton", "hamilton@gmail.com", null, new ArrayList<Alquiler>(), false);
+        assertFalse(GestorUsuarios.getGestorUsuarios().cuentaExistente(usuarioNoExistente));
+    }
+    
+    
 
     public void testAlquilarPeli() {
         GestorUsuarios.getGestorUsuarios().alquilarPeli("mlopez",p3);

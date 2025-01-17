@@ -109,9 +109,6 @@ public class VideoClubTest extends TestCase {
         assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
 
 
-
-
-
     }
 
     public void testVerAlquileres() {
@@ -123,6 +120,55 @@ public class VideoClubTest extends TestCase {
         assertEquals(VideoClub.getUnVideoClub().verAlquileres("mlopez").getJSONArray("alquileres").length(),0);
     }
 
+
+    public void testObtenerDatosUsuario() {
+        JSONObject datos = VideoClub.getUnVideoClub().obtenerDatosUsuario("jperez");
+        assertEquals("jperez", datos.getString("username"));
+        assertEquals("Juan", datos.getString("nombre"));
+        assertEquals("Pérez", datos.getString("apellido"));
+        assertEquals("juan.perez@example.com", datos.getString("correo"));
+    }
+    
+    public void testModificarCuenta() {
+        JSONObject resultado = VideoClub.getUnVideoClub().modificarCuenta("Michael", "Esteban", "Ocon", "Esteban", "Contraseña-123", "esteban@gmail.com");
+        assertEquals("exitoso", resultado.getString("estado"));
+        JSONObject datos = VideoClub.getUnVideoClub().obtenerDatosUsuario("Esteban");
+        assertEquals("Esteban", datos.getString("nombre"));
+        assertEquals("Ocon", datos.getString("apellido"));
+        assertEquals("esteban@gmail.com", datos.getString("correo"));
+    }
+    
+    public void testVerificarRegistro() {
+        JSONObject resultado = VideoClub.getUnVideoClub().verificarRegistro("Michael", "Massi", "Massi", "elrobador", "michael@gmail.com");
+        assertEquals("exitoso", resultado.getString("estado"));
+        assertEquals("Registro exitoso. Esperando aprobación del administrador.", resultado.getString("mensaje"));
+    }
+    
+    public void testVerificarInicioDeSesion() {
+        JSONObject resultado = VideoClub.getUnVideoClub().verificarInicioDeSesion("alex", "password123");
+        assertEquals("exitoso", resultado.getString("estado"));
+        assertEquals("Inicio de sesión exitoso", resultado.getString("mensaje"));
+        assertFalse(resultado.getBoolean("esAdmin"));
+    }
+    
+    public void testAceptarSolicitud() {
+        VideoClub.getUnVideoClub().verificarRegistro("nico", "hulkenberg", "nico", "contraseña-123", "nico@gmail.com");
+        
+        JSONObject resultado = VideoClub.getUnVideoClub().aceptarSolicitud("pancho", "nico");
+        assertEquals("exitoso", resultado.getString("estado"));
+        assertEquals("Solicitud aceptada", resultado.getString("mensaje"));
+    }
+    
+    public void testRechazarSolicitud() {
+        VideoClub.getUnVideoClub().verificarRegistro("kevin", "magnussen", "kevin", "contraseñaSegura", "kevin@gmail.com");
+        
+        JSONObject resultado = VideoClub.getUnVideoClub().rechazarSolicitud("pancho", "kevin");
+        assertEquals("exitoso", resultado.getString("estado"));
+        assertEquals("Solicitud rechazada", resultado.getString("mensaje"));
+    }
+    
+    
+
     public void testMostrarValoracionesAntiguas() {
     }
 
@@ -132,11 +178,6 @@ public class VideoClubTest extends TestCase {
     public void testMostrarReseñas() {
     }
 
-    public void testVerificarRegistro() {
-    }
-
-    public void testVerificarInicioDeSesion() {
-    }
 
     public void testActualizarDatos() {
     }

@@ -61,16 +61,52 @@ public class UsuarioTest extends TestCase {
     }
 
     public void testActualizarCuenta() {
+        boolean actualizado = u1.actualizarCuenta("pancho", "newpassword", "Pancho", "NuevoApellido", "nuevoemail@gmail.com");
+        assertTrue(actualizado);
+        assertEquals("newpassword", u1.getContraseña());
+        assertEquals("NuevoApellido", u1.getApellido());
+        assertEquals("nuevoemail@gmail.com", u1.getCorreo());
     }
+    
+
 
     public void testEnviarSolicitud() {
+        Pelicula pelicula = new Pelicula(104, "Nueva Pelicula", "Descripción de la nueva película.", usuario1, usuario2);
+        String resultado = usuario1.enviarSolicitud(pelicula);
+        assertEquals("Enviado solicitud de la Pelicula al GestorSolicitudesPeliculas Nueva Pelicula\n", resultado);
     }
+    
+    public void testValidarDatos() {
+        // Configuración inicial con datos válidos
+        usuario1.setContraseña("password-123");
+        usuario1.setCorreo("charlesleclerc@example.com");
+        boolean datosValidos = usuario1.validarDatos();
+        assertTrue(datosValidos);
+        
+        // Configuración con datos inválidos
+        usuario1.setContraseña("pass");  // Contraseña corta
+        boolean datosInvalidos = usuario1.validarDatos();
+        assertFalse(datosInvalidos);
+    
+        // Restauración de datos válidos para siguiente prueba
+        usuario1.setContraseña("password-123");
+    
+        // Configuración con correo inválido
+        usuario1.setCorreo("pierregasly@gmail");  // Correo con formato incorrecto
+        datosInvalidos = usuario1.validarDatos();
+        assertFalse(datosInvalidos);
+    }
+    
+    public void testAceptarCuenta() {
+        usuario1.aceptarCuenta(u1);
+        assertTrue(usuario1.getAceptado_Por() != null);
+    }
+    
+    
 
     public void testGetAceptado_Por() {
     }
 
-    public void testValidarDatos() {
-    }
 
     public void testGetAlquileres() {
     }
@@ -78,8 +114,7 @@ public class UsuarioTest extends TestCase {
     public void testGetCorreo() {
     }
 
-    public void testAceptarCuenta() {
-    }
+
 
     public void testMostrarAlquileres() {
         String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}]}";

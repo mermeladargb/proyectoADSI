@@ -98,14 +98,16 @@ public class GestorPeliculasTest extends TestCase {
     @Test
     public void testMostrarPeliculas() {
 
-
+        GestorPeliculas.getGestorPeliculas().reset();
+        GestorPeliculas.getGestorPeliculas().addPelicula(p5);
         String esperado = "{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"}]}";;
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("Frozen").toString(),esperado);
+        GestorPeliculas.getGestorPeliculas().addPelicula(p6);
         esperado = "{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"},{\"titulo\":\"Freeze\",\"id\":112,\"media\":\"NaN\"}]}";
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("fr").toString(),esperado);
         p4= new Pelicula(123,"Frozen Ice","",null,null);
         GestorPeliculas.getGestorPeliculas().addPelicula(p4);
-        esperado="{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"},{\"titulo\":\"Frozen Ice\",\"id\":123,\"media\":\"NaN\"}]}";
+        esperado="{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"},{\"titulo\":\"Freeze\",\"id\":112,\"media\":\"NaN\"},{\"titulo\":\"Frozen Ice\",\"id\":123,\"media\":\"NaN\"}]}";
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("frozen").toString(),esperado);
 
         //Se muestran todas las peliculas sino se introduce valor

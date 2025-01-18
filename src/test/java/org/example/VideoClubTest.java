@@ -40,6 +40,7 @@ public class VideoClubTest extends TestCase {
         p1= new Pelicula(  101, "Inception", "Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.", usuario1, usuario2);
         p2= new Pelicula(  102, "Insertar", "pepe", usuario1, usuario2);
         p3= new Pelicula(  103, "Option", "pepe", usuario1, usuario2);
+        p4= new Pelicula(  124, "SuperLopez", "pepe", usuario1, usuario2);
         a1= new Alquiler("2024-12-26 15:56:23",p1);
         ArrayList<Alquiler> lista=new ArrayList<Alquiler>();
         lista.add(a1);
@@ -50,7 +51,7 @@ public class VideoClubTest extends TestCase {
         GestorPeliculas.getGestorPeliculas().addPelicula(p1);
         GestorPeliculas.getGestorPeliculas().addPelicula(p2);
         GestorPeliculas.getGestorPeliculas().addPelicula(p3);
-
+        GestorPeliculas.getGestorPeliculas().addPelicula(p4);
 
     }
 
@@ -63,16 +64,14 @@ public class VideoClubTest extends TestCase {
 
     public void testMostrarPeliculasSimilares() {
 
-
-        String esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"}]}";
-        assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("Inception").toString(),esperado);
+        String esperado = "{\"peliculas\":[{\"titulo\":\"SuperLopez\",\"id\":124,\"media\":\"NaN\"}]}";
+        assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("SuperLopez").toString(),esperado);
         esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"},{\"titulo\":\"Option\",\"id\":103,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("ption").toString(),esperado);
         esperado=  "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"},{\"titulo\":\"Insertar\",\"id\":102,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("in").toString(),esperado);
 
         //Se muestran todas las peliculas sino se introduce valor
-        //assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("").getJSONArray("peliculas").length(),0);
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("patata").getJSONArray("peliculas").length(),0);
 
     }

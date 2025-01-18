@@ -40,13 +40,21 @@ public class Pelicula {
 		}
 		else {
 			int cont = 0;
+			ArrayList<Integer> indicesUsados= new ArrayList<Integer>();
 			for (int i = 0; i < nombrePeli.length(); i++) {
-				if (titulo.toLowerCase().contains(Character.toString(nombrePeli.toLowerCase().charAt(i)))) {
-					cont++;
+				char c = nombrePeli.toLowerCase().charAt(i);
+
+				// Buscar el carácter en 'base', evitando usar posiciones ya utilizadas
+				for (int j = 0; j < titulo.length(); j++) {
+					if (titulo.charAt(j) == c && !indicesUsados.contains(j)) {
+						cont++;
+						indicesUsados.add(j); // Marcar la posición como utilizada
+						break; // Salir del bucle interno para evitar contar más de una vez
+					}
 				}
 			}
 
-			if (cont >= titulo.length() / 2) {
+			if (cont >= titulo.length() / 2  && cont >= nombrePeli.length() / 2) {
 				unJSON.put("id", ID);
 				unJSON.put("titulo", titulo);
 				unJSON.put("media", String.format("%.2f", getMediaValoracion()));

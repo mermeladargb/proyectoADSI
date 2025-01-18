@@ -44,7 +44,7 @@ public class Pelicula {
 					cont++;
 				}
 			}
-			System.out.println(cont/titulo.length()*100);
+
 			if (cont >= titulo.length() / 2) {
 				unJSON.put("id", ID);
 				unJSON.put("titulo", titulo);

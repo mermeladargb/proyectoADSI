@@ -75,11 +75,7 @@ public class Pelicula {
 		listaValoraciones.add(nuevaValoracion);
 
 	}
-	//TODO Creo que calcularPromedio debería de devolver un valor que fuera float
-	/*private void calcularPromedio() {
-		listaValoraciones.stream().mapToDouble(Valoracion::getPuntuacion).average();
-	}
-	*/
+
 	public ArrayList<Valoracion>verValoraciones(String username) {
 
 		ArrayList<Valoracion> valoracionesUsuario = new ArrayList<>();

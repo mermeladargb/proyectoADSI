@@ -75,7 +75,6 @@ public class DBGestor {
             stmt.executeUpdate(sql);
             System.out.println("Consulta ejecutada");
         } catch (SQLException e) {
-            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         }
     }
 

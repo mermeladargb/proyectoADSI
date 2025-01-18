@@ -29,6 +29,7 @@ public class Pelicula {
 	}
 
 
+	//Tienen nombre parecido si nombrePeli es una subcadena del titulo o si tiene determinada cantidad igual de caracteres
 	public JSONObject tieneNombreParecido(String nombrePeli){
 		JSONObject unJSON= new JSONObject();
 
@@ -56,9 +57,11 @@ public class Pelicula {
 		return unJSON;
 
 	}
+
 	public int getID() {
 		return ID;
 	}
+
 
 	public Valoracion getValoracion(Usuario pUsuario)
 	{
@@ -140,6 +143,7 @@ public class Pelicula {
 	public Usuario getAceptadaPor() {
 		return aceptadaPor;
 	}
+	//Se obtiene la media de las valoraciones de la Pelicula
 	public double getMediaValoracion(){
 		return this.listaValoraciones.stream().mapToDouble(Valoracion::getPuntuacion).sum() / this.listaValoraciones.size();
 	}

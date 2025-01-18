@@ -23,6 +23,7 @@ public class GestorPeliculas {
 		return pelis.iterator();
 	}
 
+	// Se realiza una busqueda para comprobar si esa pelicula se encuentra
 	public Pelicula buscarPeliSeleccionada(int idPeli) {
 		for (Pelicula pelicula : pelis) {
 			if (pelicula.getID() == idPeli) {
@@ -33,8 +34,7 @@ public class GestorPeliculas {
 		return null;
 	}
 
-
-
+	// Devuelve un JSON de las peliculas que tienen un nombre parecido o igual que nombrePeli
 	public JSONObject mostrarPeliculas(String nombrePeli) {
 		JSONArray lJSON= new JSONArray();
 		JSONObject resultado= new JSONObject();
@@ -50,7 +50,10 @@ public class GestorPeliculas {
 		resultado= new JSONObject();
 		return  resultado.put("peliculas",lJSON);
 	}
+
+	//Metodo para annadir en el gestor una pelicula
 	public void addPelicula (Pelicula pPelicula){
+
 		DBGestor dbGestor = new DBGestor();
 		String sqlInsert = String.format(
 				"INSERT INTO peliculas (ID, titulo, descripcion, aceptada) VALUES (%d, '%s', '%s', %b)",
@@ -63,10 +66,13 @@ public class GestorPeliculas {
 		dbGestor.ejecutarConsulta(sqlInsert);
 		pelis.add(pPelicula);
 	}
+
+	//Resetea la lista
 	public void reset (){
 		pelis=new ArrayList<Pelicula>();
 	}
 
+	//Muestra los detalles de una pelicula en concreto seleccionada por el usuario
 	public JSONObject verDetallesPelicula (int pIdPeli) {
 		Pelicula unaPelicula= buscarPeliSeleccionada(pIdPeli);
 		JSONObject JSON = new JSONObject();

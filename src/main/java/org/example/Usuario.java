@@ -42,7 +42,8 @@ public class Usuario {
     public String getApellido() {
         return apellido;
     }
-    
+
+    // Metodo para añadir un alquiler
     public void añadirAlquiler(Pelicula unaPelicula) {
         Alquiler alquiler= new Alquiler( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), unaPelicula);
         this.lAlquileres.add(alquiler);
@@ -137,6 +138,7 @@ public class Usuario {
         return correo;
     }
 
+    //Proceso en el que el admin acepta la cuenta de un usuario
     public String aceptarCuenta(Usuario unUsuario) {
         if (this.es_Admin) {    
             if (unUsuario.getAceptado_Por() != null) {
@@ -151,6 +153,7 @@ public class Usuario {
         }
     }
 
+    // Recorre los alquileres que tiene reciviendo JSONS
     public JSONObject mostrarAlquileres() {
         List<JSONObject> lJSONS = new ArrayList<>();
         for (Alquiler unAlquiler : lAlquileres) {

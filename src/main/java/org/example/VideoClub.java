@@ -16,16 +16,19 @@ public class VideoClub {
 
     public static VideoClub getUnVideoClub(){ return unVideoClub; }
 
+    //Busca peliculas similares a la cadena de nombrePeli
     public JSONObject mostrarPeliculasSimilares(String nombrePeli) {
         return gestorPeliculas.mostrarPeliculas(nombrePeli);
     }
 
+    //Metodo que se emplea cuando un usuario escoge ver detalles de una Pelicula
     public JSONObject seleccionarPelicula(int idPeli) {
 
        return GestorPeliculas.getGestorPeliculas().verDetallesPelicula(idPeli);
 
     }
 
+    // Metodo en el que un usuario alquila una pelicula
     public void alquilarPeli(String username, int idPeli) {
         Pelicula unaPelicula = gestorPeliculas.buscarPeliSeleccionada(idPeli);
         if ( unaPelicula != null) {
@@ -33,6 +36,7 @@ public class VideoClub {
         }
     }
 
+    // Metodo para ver el historial de alquileres
     public JSONObject verAlquileres(String username) {
         return gestorUsuarios.verAlquileres(username);
 

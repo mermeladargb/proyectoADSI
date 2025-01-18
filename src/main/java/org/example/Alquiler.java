@@ -20,6 +20,7 @@ public class Alquiler {
 		pelicula=pPelicula;
 	}
 
+	// Se devuelve un JSON con los principales datos del alquiler.
 	public JSONObject mostrarAlquiler(){
 
 		JSONObject unJSON= new JSONObject();

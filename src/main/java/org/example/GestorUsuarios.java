@@ -15,6 +15,7 @@ public class GestorUsuarios {
         return mGestorUsuario;
     }
 
+    //Obtener un usuario en concreto
     public Usuario getUsuario(String username) {
         for (Usuario user : usuarios) {
             if (user.getUsername().equals(username)) {
@@ -39,10 +40,12 @@ public class GestorUsuarios {
         return solicitudes;
     }
 
+    //Existe esa cuenta en el sistema
     public boolean cuentaExistente(Usuario user) {
         return usuarios.contains(user);
     }
 
+    // Se comprueba si la cuenta cumple con las especificaciones y si existe o no
     public String registrarUsuario(String nombre, String contraseña, String apellido, String username, String correo, boolean es_Admin) {
     ArrayList<Alquiler> lista = new ArrayList<>();
     Usuario user = new Usuario(username, contraseña, nombre, apellido, correo, null, lista, es_Admin);
@@ -173,6 +176,7 @@ public class GestorUsuarios {
         }
     }
 
+    // Se comrpueba si el usuario existe y se annade  la pelicula
     public void alquilarPeli(String username, Pelicula unaPelicula) {
         Usuario unUsuario= getUsuario(username);
         if(unUsuario != null && unaPelicula!=null) {
@@ -182,6 +186,7 @@ public class GestorUsuarios {
 
     }
 
+    // Metodo para los alquileres que ha hecho el usuario
     public JSONObject verAlquileres(String username) {
         Usuario unUsuario =getUsuario(username);
         if (unUsuario != null) {

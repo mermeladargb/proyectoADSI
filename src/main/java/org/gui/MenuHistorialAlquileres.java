@@ -90,6 +90,7 @@ public class MenuHistorialAlquileres extends JFrame {
             panelLista.removeAll();
             panelLista.setLayout(new GridLayout(12, 1));
 
+            //Ver descripcion del alquiler realizado
             int idPeli = (int) alquiler.get("peliID");
             String titulo = (String) alquiler.get("titulo");
             String fechaInic = (String) alquiler.get("fechaInic");

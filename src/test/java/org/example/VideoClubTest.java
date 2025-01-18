@@ -1,10 +1,11 @@
 package org.example;
 
-import junit.framework.TestCase;
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import junit.framework.TestCase;
 
 public class VideoClubTest extends TestCase {
 
@@ -18,7 +19,7 @@ public class VideoClubTest extends TestCase {
         GestorPeliculas.getGestorPeliculas().reset();
         usuario1 = new Usuario(
                 "jperez",
-                "password123",
+                "password-123",
                 "Juan",
                 "Pérez",
                 "juan.perez@example.com",
@@ -29,7 +30,7 @@ public class VideoClubTest extends TestCase {
 
         usuario2 = new Usuario(
                 "mlopez",
-                "securePass",
+                "secure-Pass1",
                 "María",
                 "López",
                 "maria.lopez@example.com",
@@ -129,26 +130,41 @@ public class VideoClubTest extends TestCase {
     }
     
     public void testModificarCuenta() {
-        JSONObject resultado = VideoClub.getUnVideoClub().modificarCuenta("Michael", "Esteban", "Ocon", "Esteban", "Contraseña-123", "esteban@gmail.com");
+        GestorUsuarios gestorUsuarios = GestorUsuarios.getGestorUsuarios();
+        VideoClub videoClub = VideoClub.getUnVideoClub();
+        
+        gestorUsuarios.addUsuario(new Usuario("Michael", "contraseña-123", "Michael", "Schumacher", "schumi@gmail.com", null, new ArrayList<Alquiler>(), true));
+        gestorUsuarios.addUsuario(new Usuario("Esteban", "contraseña-123", "Esteban", "Ocon", "estebanviejo@gmail.com", null, new ArrayList<Alquiler>(), false));
+        
+        JSONObject resultado = videoClub.modificarCuenta("Michael", "Piastri", "Ocon", "Esteban", "Contraseña-123", "esteban@gmail.com");
         assertEquals("exitoso", resultado.getString("estado"));
-        JSONObject datos = VideoClub.getUnVideoClub().obtenerDatosUsuario("Esteban");
-        assertEquals("Esteban", datos.getString("nombre"));
+        
+        JSONObject datos = videoClub.obtenerDatosUsuario("Esteban");
+        assertEquals("Piastri", datos.getString("nombre"));
         assertEquals("Ocon", datos.getString("apellido"));
         assertEquals("esteban@gmail.com", datos.getString("correo"));
     }
     
+    
     public void testVerificarRegistro() {
-        JSONObject resultado = VideoClub.getUnVideoClub().verificarRegistro("Michael", "Massi", "Massi", "elrobador", "michael@gmail.com");
+        JSONObject resultado = VideoClub.getUnVideoClub().verificarRegistro("Michael", "Massi", "Massi", "contraseña-123", "michael@gmail.com");
         assertEquals("exitoso", resultado.getString("estado"));
         assertEquals("Registro exitoso. Esperando aprobación del administrador.", resultado.getString("mensaje"));
     }
     
+    
     public void testVerificarInicioDeSesion() {
+        GestorUsuarios gestorUsuarios = GestorUsuarios.getGestorUsuarios();
+        gestorUsuarios.addUsuario(new Usuario("alex", "password123", "Alex", "Perez", "alex@example.com", null, new ArrayList<Alquiler>(), false));
+        
         JSONObject resultado = VideoClub.getUnVideoClub().verificarInicioDeSesion("alex", "password123");
         assertEquals("exitoso", resultado.getString("estado"));
         assertEquals("Inicio de sesión exitoso", resultado.getString("mensaje"));
         assertFalse(resultado.getBoolean("esAdmin"));
     }
+    
+    
+    
     
     public void testAceptarSolicitud() {
         VideoClub.getUnVideoClub().verificarRegistro("nico", "hulkenberg", "nico", "contraseña-123", "nico@gmail.com");
@@ -159,7 +175,7 @@ public class VideoClubTest extends TestCase {
     }
     
     public void testRechazarSolicitud() {
-        VideoClub.getUnVideoClub().verificarRegistro("kevin", "magnussen", "kevin", "contraseñaSegura", "kevin@gmail.com");
+        VideoClub.getUnVideoClub().verificarRegistro("kevin", "magnussen", "kevin", "contraseña-123", "kevin@gmail.com");
         
         JSONObject resultado = VideoClub.getUnVideoClub().rechazarSolicitud("pancho", "kevin");
         assertEquals("exitoso", resultado.getString("estado"));
@@ -202,14 +218,14 @@ public class VideoClubTest extends TestCase {
         p1.addValoracion(v2);
 
         //Metodo a probar
-        JSONObject resultado = VideoClub.getUnVideoClub().mostrarReseñas("jperez", p1.getID());
+        JSONObject resultado = VideoClub.getUnVideoClub().mostrarReseñas("mlopez", p1.getID());
 
         //Extraer el JSON
-        JSONArray reseñas = resultado.getJSONArray("valoraciones");
+        JSONArray reseñas = resultado.getJSONArray("reseñas");
         assertNotNull(reseñas);
         assertEquals(2, reseñas.length());
 
-        //Verificar los datos, el primer usuario que devuelve es el que hemos metido como parametro a mostrarReseñas()
+        //Verificar los datos
         JSONObject reseña1 = reseñas.getJSONObject(0);
         assertEquals("jperez", reseña1.getString("username"));
         assertEquals(9.0f, reseña1.getFloat("puntuacion"), 0.001);

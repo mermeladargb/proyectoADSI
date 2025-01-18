@@ -17,7 +17,7 @@ public class GestorUsuariosTest extends TestCase {
 
         usuario1 = new Usuario(
                 "jperez",
-                "password123",
+                "password-123",
                 "Juan",
                 "Pérez",
                 "juan.perez@example.com",
@@ -28,7 +28,7 @@ public class GestorUsuariosTest extends TestCase {
 
         usuario2 = new Usuario(
                 "mlopez",
-                "securePass",
+                "secure-Pass1",
                 "María",
                 "López",
                 "maria.lopez@example.com",
@@ -81,15 +81,22 @@ public class GestorUsuariosTest extends TestCase {
 
 
     public void testRegistrarUsuario() {
-        String resultado = GestorUsuarios.getGestorUsuarios().registrarUsuario("George", "contraseñaSegura123", "Russel", "George", "george@gmail.com", false);
+        GestorUsuarios gestorUsuarios = GestorUsuarios.getGestorUsuarios();
+        VideoClub videoClub = VideoClub.getUnVideoClub();
+        
+        String resultado = gestorUsuarios.registrarUsuario("George", "contraseñaSegura-123", "Russel", "George", "george@gmail.com", false);
         assertEquals("Solicitud de cuenta añadida correctamente. Un administrador debe aprobarla.", resultado);
-    
-        String resultadoCuentaExistente = GestorUsuarios.getGestorUsuarios().registrarUsuario("Lando", "contraseñaSegura123", "Norris", "Lando", "lando@gmail.com", false);
-        assertEquals("Cuenta existente", resultadoCuentaExistente);
-    
-        String resultadoCuentaNoValida = GestorUsuarios.getGestorUsuarios().registrarUsuario("Antonio", "kaka", "Giovinazzi", "Antonio", "correoIncorrecto", false);
+        
+        String resultadoAceptar = videoClub.aceptarSolicitud("pancho", "George").getString("mensaje");  // Simulamos la aceptación por el administrador `pancho`
+        assertEquals("Solicitud aceptada", resultadoAceptar);
+        
+        String resultadoCuentaExistente = gestorUsuarios.registrarUsuario("George", "contraseña-123", "Russel", "mlopez", "lando@gmail.com", false);
+        assertEquals("Cuenta no valida", resultadoCuentaExistente);
+
+        String resultadoCuentaNoValida = gestorUsuarios.registrarUsuario("Antonio", "kaka", "Giovinazzi", "Antonio", "correoIncorrecto", false);
         assertEquals("Cuenta no valida", resultadoCuentaNoValida);
     }
+    
     
     public void testCuentaValida() {
         Usuario usuarioValido = new Usuario("Lance", "Contraseña123!", "Lance", "Stroll", "correo@gmail.com", null, new ArrayList<Alquiler>(), false);
@@ -111,15 +118,13 @@ public class GestorUsuariosTest extends TestCase {
     }
     
     public void testModificarCuenta() {
-        Usuario usuarioModificar = new Usuario("Robert", "contraseña-123", "Robert", "Kubica", "33@gmail.com", null, new ArrayList<Alquiler>(), false);
-        GestorUsuarios.getGestorUsuarios().addUsuario(usuarioModificar);
-    
-        String resultadoModificar = GestorUsuarios.getGestorUsuarios().modificarCuenta("Robert", "nuevaContraseña123!", "Kubica", "33", "nuevo.correo@gmail.com", false);
+        String resultadoModificar = GestorUsuarios.getGestorUsuarios().modificarCuenta("Juan", "nuevaContraseña-123", "Perez", "jperez", "jperez@gmail.com", false);
         assertEquals("Cuenta modificada correctamente", resultadoModificar);
     
-        String resultadoNoModificar = GestorUsuarios.getGestorUsuarios().modificarCuenta("Michael", "contraseña-123", "Schumacher", "Kaiser", "kaiser@gmail.com", false);
+        String resultadoNoModificar = GestorUsuarios.getGestorUsuarios().modificarCuenta("admin", "Michael", "Schumacher", "kaiser", "contraseña-123", false);
         assertEquals("Usuario no encontrado", resultadoNoModificar);
     }
+    
     
     public void testCuentaExistente() {
         Usuario usuarioExistente = new Usuario("Felipe", "contraseña-123", "Felipe", "Massa", "felipe@gmail.com", null, new ArrayList<Alquiler>(), false);

@@ -25,6 +25,7 @@ public class MenuPrincipal extends JFrame {
     private JTextField registroApellido;
     private JTextField registroCorreo;
     private JButton botonRegistrar;
+    private JLabel labelErrorRegistro;
 
     private String username;
     private boolean esAdmin;
@@ -51,7 +52,7 @@ public class MenuPrincipal extends JFrame {
 
         // Panel de inicio de sesión
         panelInicioSesion = new JPanel();
-        panelInicioSesion.setLayout(new GridLayout(4, 1));
+        panelInicioSesion.setLayout(new GridLayout(6, 1));
         panelCredencialesUsuario = new JTextField();
         panelCredencialesContraseña = new JPasswordField();
         botonLogin = new JButton("Iniciar sesión");
@@ -91,13 +92,16 @@ public class MenuPrincipal extends JFrame {
 
         // Configuración del panel de registro
         panelRegistro = new JPanel();
-        panelRegistro.setLayout(new GridLayout(6, 1));
+        panelRegistro.setLayout(new BoxLayout(panelRegistro, BoxLayout.Y_AXIS));
 
-        registroUsuario = new JTextField();
-        registroContraseña = new JPasswordField();
-        registroNombre = new JTextField();
-        registroApellido = new JTextField();
-        registroCorreo = new JTextField();
+        registroUsuario = new JTextField(20);
+        registroContraseña = new JPasswordField(20);
+        registroNombre = new JTextField(20);
+        registroApellido = new JTextField(20);
+        registroCorreo = new JTextField(20);
+        labelErrorRegistro = new JLabel();
+        labelErrorRegistro.setForeground(Color.RED);
+        labelErrorRegistro.setPreferredSize(new Dimension(400, 30)); // Ajusta el tamaño de la etiqueta para asegurar que el mensaje se muestre completo
 
         botonRegistrar = new JButton("Registrar");
         botonRegistrar.addActionListener(new ActionListener() {
@@ -114,7 +118,7 @@ public class MenuPrincipal extends JFrame {
                     JOptionPane.showMessageDialog(null, "Registro exitoso. Esperando aprobación del administrador.");
                     cardLayout.show(cardPanel, "iniciosesion"); // Volver a la pantalla de inicio de sesión
                 } else {
-                    JOptionPane.showMessageDialog(null, respuesta.getString("mensaje"));
+                    labelErrorRegistro.setText("<html>El nombre del usuario debe ser único. Además, la contraseña debe tener al menos 8 caracteres, un carácter especial y una dirección de correo válida.</html>");
                 }
             }
         });
@@ -140,6 +144,7 @@ public class MenuPrincipal extends JFrame {
         panelRegistro.add(registroCorreo);
         panelRegistro.add(botonRegistrar);
         panelRegistro.add(botonRegistroAtras);
+        panelRegistro.add(labelErrorRegistro); // Añadir el mensaje de error al panel de registro
 
         // Inicialización del cardLayout y cardPanel
         cardLayout = new CardLayout();
@@ -155,6 +160,8 @@ public class MenuPrincipal extends JFrame {
         add(cardPanel);
         cardLayout.show(cardPanel, "iniciosesion");
     }
+
+
 
     private void crearMenuPrincipal() {
         panelPrincipal.removeAll();

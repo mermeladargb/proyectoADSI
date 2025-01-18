@@ -26,6 +26,9 @@ public class Main {
         GestorUsuarios.getGestorUsuarios().addUsuario(u6);
         Pelicula p1 = new Pelicula(1, "P1", "p1", null, null);
         Pelicula p2 = new Pelicula(2, "P2", "p2", null, null);
+        Pelicula p3 = new Pelicula(4, "Frozen", "p1", null, null);
+        Pelicula p4 = new Pelicula(5, "Frost", "p2", null, null);
+
         GestorListas.getGestorListas().añadirPeliculaALista("u1", "lista1", p1);
         for (int i = 0; i < 20; i++)
             GestorListas.getGestorListas().añadirPeliculaALista("u1", "lista1", p2);
@@ -58,6 +61,8 @@ public class Main {
 
         GestorPeliculas.getGestorPeliculas().addPelicula(p1);
         GestorPeliculas.getGestorPeliculas().addPelicula(p2);
+        GestorPeliculas.getGestorPeliculas().addPelicula(p3);
+        GestorPeliculas.getGestorPeliculas().addPelicula(p4);
 
         DBGestor.getDBGestor().cargarUsuarios();
         Pelicula peli = new Pelicula(1, "SW", "bla", null, null);

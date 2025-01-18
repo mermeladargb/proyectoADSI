@@ -37,8 +37,21 @@ public class Pelicula {
 			unJSON.put("titulo",titulo);
 			unJSON.put("media", String.format("%.2f", getMediaValoracion()));
 		}
-		else{
-			unJSON=null;
+		else {
+			int cont = 0;
+			for (int i = 0; i < nombrePeli.length(); i++) {
+				if (titulo.toLowerCase().contains(Character.toString(nombrePeli.toLowerCase().charAt(i)))) {
+					cont++;
+				}
+			}
+			System.out.println(cont/titulo.length()*100);
+			if (cont >= titulo.length() / 2) {
+				unJSON.put("id", ID);
+				unJSON.put("titulo", titulo);
+				unJSON.put("media", String.format("%.2f", getMediaValoracion()));
+			} else {
+				unJSON = null;
+			}
 		}
 		return unJSON;
 

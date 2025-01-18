@@ -16,16 +16,16 @@ public class GestorListas {
 	public static GestorListas getGestorListas() {
 		return unGestorListas;
 	}
-	
+
 	public void crearLista(Usuario usuario, String nombreLista) {
 		if (getListaUsuario(usuario.getUsername(), nombreLista) == null) {
 			Lista l = new Lista(usuario, nombreLista);
 			listas.add(l);
-		}
-		DBGestor.getDBGestor().updateSQL(
+			DBGestor.getDBGestor().updateSQL(
 				"INSERT INTO listas(nombre, visible, username)"
 				+ "VALUES('" + nombreLista + "', false, '" + usuario.getUsername() + "')"
-		);
+			);
+		}
 	}
 	
 	public List<String> getListasUsuario(String username) {

@@ -69,6 +69,7 @@ public class Main {
         GestorPeliculas.getGestorPeliculas().addPelicula(peli);
         DBGestor.getDBGestor().cargarListas();
         DBGestor.getDBGestor().cargarValoraciones();
+        DBGestor.getDBGestor().cargarPeliculas();
 
 
         SwingUtilities.invokeLater(new Runnable() {

@@ -78,41 +78,43 @@ public class DBGestor {
         }
     }
 
-    public ArrayList<Pelicula> cargarPeliculas() {
-        ArrayList<Pelicula> peliculas = new ArrayList<>();
-        String sql = "SELECT * FROM peliculas";
+    public void cargarPeliculas() {
+        try (Connection conn = DriverManager.getConnection(DB_URL);
+             Statement stmt = conn.createStatement()) {
 
-        try (Connection conn = conectar();
-             Statement st = conn.createStatement();
-             ResultSet rs = st.executeQuery(sql)) {
+            String sql = "SELECT p.id, p.titulo, p.descripcion, p.aceptada, " + "p.username_solicitador, p.username_admin, " +
+                    "u1.nombre AS solicitadaPorNombre, u1.apellido AS solicitadaPorApellido, " + "u2.nombre AS aceptadaPorNombre, u2.apellido AS aceptadaPorApellido " +
+                    "FROM peliculas p " + "LEFT JOIN usuarios u1 ON p.username_solicitador = u1.username " + "LEFT JOIN usuarios u2 ON p.username_admin = u2.username;";
 
+            ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Pelicula pelicula = new Pelicula();
-                pelicula.setID(rs.getInt("ID"));
-                pelicula.setTitulo(rs.getString("titulo"));
-                pelicula.setDescripcion(rs.getString("descripcion"));
-                pelicula.setAceptada(rs.getBoolean("aceptada"));
+                int id = rs.getInt("id");
+                String titulo = rs.getString("titulo");
+                String descripcion = rs.getString("descripcion");
+                boolean aceptada = rs.getBoolean("aceptada");
 
-                String solicitadaPorUsername = rs.getString("username_solicitador");
-                if (solicitadaPorUsername != null) {
-                    Usuario solicitadaPor = GestorUsuarios.getGestorUsuarios().getUsuario(solicitadaPorUsername);
-                    pelicula.setSolicitadaPor(solicitadaPor);
+                Usuario solicitadaPor = null;
+                if (rs.getString("username_solicitador") != null) {
+                    solicitadaPor = new Usuario(rs.getString("username_solicitador"), null, rs.getString("solicitadaPorNombre"),
+                            rs.getString("solicitadaPorApellido"), null, null, null, false);
                 }
 
-                String aceptadaPorUsername = rs.getString("username_admin");
-                if (aceptadaPorUsername != null) {
-                    Usuario aceptadaPor = GestorUsuarios.getGestorUsuarios().getUsuario(aceptadaPorUsername);
-                    if (aceptadaPor != null && aceptadaPor.isEsAdmin()) {
-                        pelicula.setAceptadaPor(aceptadaPor);
-                    }
+                Usuario aceptadaPor = null;
+                if (rs.getString("username_admin") != null) {
+                    aceptadaPor = new Usuario(rs.getString("username_admin"), null, rs.getString("aceptadaPorNombre"),
+                            rs.getString("aceptadaPorApellido"), null, null, null, true);
                 }
-                peliculas.add(pelicula);
+                Pelicula pelicula = new Pelicula(id, titulo, descripcion, solicitadaPor, aceptadaPor);
+                pelicula.setAceptada(aceptada);
+
+                GestorPeliculas.getGestorPeliculas().addPelicula(pelicula);
             }
-        } catch (SQLException e) {
-            System.out.println("Error al cargar peliculas:" + e.getMessage());
+            rs.close();
+        } catch (Exception e) {
         }
-        return peliculas;
     }
+
+
 
     public ArrayList<Usuario> cargarUsuarios() {
         ArrayList<Usuario> usuarios = new ArrayList<>();

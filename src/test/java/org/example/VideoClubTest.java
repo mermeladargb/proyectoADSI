@@ -203,14 +203,14 @@ public class VideoClubTest extends TestCase {
         p1.addValoracion(v2);
 
         //Metodo a probar
-        JSONObject resultado = VideoClub.getUnVideoClub().mostrarReseñas("mlopez", p1.getID());
+        JSONObject resultado = VideoClub.getUnVideoClub().mostrarReseñas("jperez", p1.getID());
 
         //Extraer el JSON
-        JSONArray reseñas = resultado.getJSONArray("reseñas");
+        JSONArray reseñas = resultado.getJSONArray("valoraciones");
         assertNotNull(reseñas);
         assertEquals(2, reseñas.length());
 
-        //Verificar los datos
+        //Verificar los datos, el primer usuario que devuelve es el que hemos metido como parametro a mostrarReseñas()
         JSONObject reseña1 = reseñas.getJSONObject(0);
         assertEquals("jperez", reseña1.getString("username"));
         assertEquals(9.0f, reseña1.getFloat("puntuacion"), 0.001);

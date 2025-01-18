@@ -67,6 +67,8 @@ public class GestorSolicitudesPeliculas {
         for (SolicitudPelicula solicitud : solicitudes) {
             if (solicitud.getTitulo().equals(pTitulo)) { // Usar equals() para comparar strings
                 solicitadaPor = solicitud.solicitadaPor();
+                solicitudes.remove(solicitud);
+
             }
         }
 

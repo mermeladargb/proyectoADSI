@@ -65,21 +65,25 @@ public class VideoClubTest extends TestCase {
 
     public void testMostrarPeliculasSimilares() {
 
+        // Se busca una pelicula en concreto que no tenga peliculas que se le parezcan, si tuviera alguna pelicula que se parezca tambien aparecería 
         String esperado = "{\"peliculas\":[{\"titulo\":\"SuperLopez\",\"id\":124,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("SuperLopez").toString(),esperado);
+        // Se busca por una cadena las pelicualas que contengan esa cadena
         esperado = "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"},{\"titulo\":\"Option\",\"id\":103,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("ption").toString(),esperado);
         esperado=  "{\"peliculas\":[{\"titulo\":\"Inception\",\"id\":101,\"media\":\"NaN\"},{\"titulo\":\"Insertar\",\"id\":102,\"media\":\"NaN\"}]}";
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("in").toString(),esperado);
 
-        //Se muestran todas las peliculas sino se introduce valor
+        //Si se buscará un valor nulo todas las peliculas que están en el sistema aparecerán
+        // Se busca una pelicula que no se parece a ninguna de las almacenadas en el sistema
         assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("patata").getJSONArray("peliculas").length(),0);
 
     }
 
     public void testSeleccionarPelicula() {
 
-        String esperado=  "{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"NaN\"}";
+     // Se selecciona una pelicula dentro del sistema que no tiene valoraciones
+      String esperado=  "{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"NaN\"}";
       assertEquals(esperado,VideoClub.getUnVideoClub().seleccionarPelicula(101).toString());
       Valoracion v1 = new Valoracion((float)5.5,"Ta bien",usuario1);
       Valoracion v2= new Valoracion((float)9.8,"Excelente pelicula",usuario2);
@@ -88,22 +92,27 @@ public class VideoClubTest extends TestCase {
       p1.addValoracion(v2);
       p1.addValoracion(v3);
 
+      // Se selecciona una pelicula dentro del sistema que  tiene valoraciones
       esperado="{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"6,20\"}";
       assertEquals(esperado, VideoClub.getUnVideoClub().seleccionarPelicula(101).toString());
 
+     // Se selecciona una pelicula que no esta en el sistema
       assertNull(VideoClub.getUnVideoClub().seleccionarPelicula(300));
 
     }
 
     public void testAlquilarPeli() {
 
+        //Alquila una pelicula existente en el sistema un Usuario
         VideoClub.getUnVideoClub().alquilarPeli("mlopez",103);
         JSONArray json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
         assertTrue (json1.getJSONObject(0).get("titulo")=="Option" && json1.length()==1) ;
+        //Alquila una pelicula existente en el sistema el mismo Usuario
         VideoClub.getUnVideoClub().alquilarPeli("mlopez",101);
         json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
         assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
 
+        //Alquila una pelicula que no existe por lo que mo se añade la pelicula
         VideoClub.getUnVideoClub().alquilarPeli("mlopez",300);
         json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
         assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
@@ -113,10 +122,12 @@ public class VideoClubTest extends TestCase {
 
     public void testVerAlquileres() {
 
-
+        // Alquileres de un usuario que ha alquilado varias veces
         String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}]}";
         assertEquals(VideoClub.getUnVideoClub().verAlquileres("pancho").toString(),esperado) ;
+        // Alquileres de un usuario que no se encuentra en el sistema
         assertNull(VideoClub.getUnVideoClub().verAlquileres(""));
+        // Alquileres de un usuario que se encuentra en el sistema pero que no ha alquilado con anterioridad
         assertEquals(VideoClub.getUnVideoClub().verAlquileres("mlopez").getJSONArray("alquileres").length(),0);
     }
 

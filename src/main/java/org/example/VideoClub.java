@@ -356,18 +356,8 @@ public class VideoClub {
     public void rechazarSolicitudPelicula(String pTitulo){
         gestorSolicitudesPeliculas.rechazarSolicitudPelicula(pTitulo);
     }
-    
 
-
-    public void ñó() {
-        System.out.println("ñó");
-    }
-    
-    public static void main(String[] args) {
-        System.out.println("a");
-        JSONObject j = new JSONObject();
-        j.append("a", 12);
-        System.out.println(j.get("a"));
-        getUnVideoClub().ñó();
+    public void cargarDatos() {
+        DBGestor.getDBGestor().cargarDatos();
     }
 }

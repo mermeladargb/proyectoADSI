@@ -86,4 +86,8 @@ public class GestorListas {
 	public void reset() {
 		this.listas = new ArrayList<>();
 	}
+
+	public void cargarLista(Lista lista) {
+		listas.add(lista);
+	}
 }

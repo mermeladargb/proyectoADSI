@@ -279,9 +279,4 @@ public class MenuPrincipal extends JFrame {
         panelPrincipal.revalidate();
         panelPrincipal.repaint();
     }
-
-
-    public static void main(String[] args) {
-        new MenuPrincipal();
-    }
 }

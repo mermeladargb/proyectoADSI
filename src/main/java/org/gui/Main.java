@@ -1,15 +1,13 @@
 package org.gui;
 
-import java.util.ArrayList;
-
 import javax.swing.SwingUtilities;
 
-import org.example.*;
+import org.example.VideoClub;
 
 public class Main {
 
     public static void main(String[] args) {
-        DBGestor.getDBGestor().cargarDatos();
+        VideoClub.getUnVideoClub().cargarDatos();
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override

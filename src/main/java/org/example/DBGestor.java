@@ -63,7 +63,7 @@ public class DBGestor {
                 pelicula.guardarValoracion(usuario, descripcion, puntuacion);
             }
 
-            System.out.println("Valoraciones cargadas correctamente.");
+            System.out.println("Valoraciones cargadas correctamente");
         } catch (SQLException e) {
             System.out.println("Error al cargar valoraciones: " + e.getMessage());
         }
@@ -110,6 +110,7 @@ public class DBGestor {
                 GestorPeliculas.getGestorPeliculas().cargarPelicula(pelicula);
             }
             rs.close();
+            System.out.println("Películas cargadas correctamente");
         } catch (Exception e) {
         }
     }
@@ -153,6 +154,7 @@ public class DBGestor {
                     GestorUsuarios.getGestorUsuarios().addSolicitud(usuario);
                 }
             }
+            System.out.println("Usuarios cargados correctamente");
         } catch (SQLException e) {
             System.out.println("Error al cargar usuarios: " + e.getMessage());
         }
@@ -176,10 +178,8 @@ public class DBGestor {
                     System.out.println("No existe el usuario " + username);
                     return;
                 }
-                GestorListas.getGestorListas().crearLista(usuario, nombreLista);
-                Lista lista = GestorListas.getGestorListas().getListaUsuario(username, nombreLista);
-                if (visible)
-                    lista.cambiarVisibilidad();
+                Lista lista = new Lista(usuario, nombreLista, visible);
+                GestorListas.getGestorListas().cargarLista(lista);
 
                 String sqlPeliculas = "SELECT id_pelicula FROM pertenece_a WHERE id_lista = ?";
                 try (PreparedStatement ps = conn.prepareStatement(sqlPeliculas)) {
@@ -196,6 +196,7 @@ public class DBGestor {
                     }
                 }
             }
+            System.out.println("Listas cargadas correctamente");
         } catch (SQLException e) {
             System.out.println("Error al cargar listas:" + e.getMessage());
         }
@@ -218,6 +219,7 @@ public class DBGestor {
                     }
                 }
             }
+            System.out.println("Alquileres cargados correctamente");
         } catch (SQLException e) {
             System.out.println("Error al cargar alquileres:" + e.getMessage());
         }

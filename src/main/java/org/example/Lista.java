@@ -17,7 +17,15 @@ public class Lista {
 		this.listaPeliculas = new ArrayList<>();
 		this.visible = false;
 	}
-	
+
+	public Lista(Usuario usuario, String nombreLista, boolean visible) {
+		this.user = usuario;
+		this.nombre = nombreLista;
+		this.listaPeliculas = new ArrayList<>();
+		this.visible = visible;
+	}
+
+
 	public String getNombre() {
 		return this.nombre;
 	}

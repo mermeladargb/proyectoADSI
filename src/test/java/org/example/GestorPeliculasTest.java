@@ -71,6 +71,7 @@ public class GestorPeliculasTest extends TestCase {
     }
     @Test
     public void testverDetallesPelicula() {
+        // Pelicula en el sistema y sin valoraciones
         String esperado=  "{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"NaN\"}";
         assertEquals(esperado,VideoClub.getUnVideoClub().seleccionarPelicula(101).toString());
         Valoracion v1 = new Valoracion((float)5.5,"Ta bien",usuario1);
@@ -80,31 +81,37 @@ public class GestorPeliculasTest extends TestCase {
         p1.addValoracion(v2);
         p1.addValoracion(v3);
 
+        //Pelicula en el sistema y con valoraciones
         esperado="{\"descrip\":\"Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.\",\"titulo\":\"Inception\",\"ID\":101,\"media\":\"6,20\"}";
         assertEquals(esperado, GestorPeliculas.getGestorPeliculas().verDetallesPelicula(101).toString());
 
+        //Pelicula que no esta en el sistema
         assertNull(GestorPeliculas.getGestorPeliculas().verDetallesPelicula(300));
     }
 
     @Test
     public void testBuscarPeliSeleccionada() {
 
-
+        //Busca una pelicula que se encuentra en el sistema
         assertTrue(GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(101).getID()==101);
 
+        //Busca una pelicula que no se encuentra en el sistema
         assertNull(GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(300));
     }
 
     @Test
     public void testMostrarPeliculas() {
-
+        // Se busca una pelicula en concreto en el sistema, para que no se muestren las demas peliculas que se parezcan se retea la lista de pelis
         GestorPeliculas.getGestorPeliculas().reset();
         GestorPeliculas.getGestorPeliculas().addPelicula(p5);
         String esperado = "{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"}]}";;
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("Frozen").toString(),esperado);
+        //Se muestran las peliculas que contengan la cadena indicada
         GestorPeliculas.getGestorPeliculas().addPelicula(p6);
         esperado = "{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"},{\"titulo\":\"Freeze\",\"id\":112,\"media\":\"NaN\"}]}";
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("fr").toString(),esperado);
+        
+        //Se muestran todas las peliculas que tengan un nombre parecido
         p4= new Pelicula(123,"Frozen Ice","",null,null);
         GestorPeliculas.getGestorPeliculas().addPelicula(p4);
         esperado="{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"},{\"titulo\":\"Freeze\",\"id\":112,\"media\":\"NaN\"},{\"titulo\":\"Frozen Ice\",\"id\":123,\"media\":\"NaN\"}]}";
@@ -112,6 +119,7 @@ public class GestorPeliculasTest extends TestCase {
 
         //Se muestran todas las peliculas sino se introduce valor
         //assertEquals(VideoClub.getUnVideoClub().mostrarPeliculasSimilares("").getJSONArray("peliculas").length(),0);
+        //No existen peliculas  se parezcan a ese nombre
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("Fwererowesfn").getJSONArray("peliculas").length(),0);
 
     }

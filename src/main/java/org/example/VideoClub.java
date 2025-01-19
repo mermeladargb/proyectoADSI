@@ -78,6 +78,7 @@ public class VideoClub {
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         pelicula.guardarValoracion(user, reseña, puntuacion);
 
+        //Construccion de la consulta y llamada al metodo para guardas la puntuacion en la BD.
         String sql = "INSERT OR REPLACE INTO valoraciones (username_usuario, id_pelicula, puntuacion, descripcion) VALUES ('"
                 + username + "', " + idPelicula + ", " + puntuacion + ", '" + reseña + "')";
         DBGestor.getDBGestor().ejecutarConsulta(sql);

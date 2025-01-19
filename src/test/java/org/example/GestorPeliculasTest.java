@@ -20,9 +20,9 @@ public class GestorPeliculasTest extends TestCase {
         p5= new Pelicula(  110, "Frozen", "Un ladrón que roba secretos corporativos a través del uso de tecnología para compartir sueños.", null, null);
         p6= new Pelicula(  112, "Freeze", "pepe", null, null);
         p7= new Pelicula(  114, "Fury", "pepe", null, null);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p5);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p6);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p7);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p5);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p6);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p7);
         usuario1 = new Usuario(
                 "jperez",
                 "password123",
@@ -54,9 +54,9 @@ public class GestorPeliculasTest extends TestCase {
         GestorUsuarios.getGestorUsuarios().addUsuario(usuario1);
         GestorUsuarios.getGestorUsuarios().addUsuario(usuario2);
         GestorUsuarios.getGestorUsuarios().addUsuario(u1);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p1);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p2);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p3);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p1);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p2);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p3);
 
 
     }
@@ -103,17 +103,17 @@ public class GestorPeliculasTest extends TestCase {
     public void testMostrarPeliculas() {
         // Se busca una pelicula en concreto en el sistema, para que no se muestren las demas peliculas que se parezcan se retea la lista de pelis
         GestorPeliculas.getGestorPeliculas().reset();
-        GestorPeliculas.getGestorPeliculas().addPelicula(p5);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p5);
         String esperado = "{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"}]}";;
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("Frozen").toString(),esperado);
         //Se muestran las peliculas que contengan la cadena indicada
-        GestorPeliculas.getGestorPeliculas().addPelicula(p6);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p6);
         esperado = "{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"},{\"titulo\":\"Freeze\",\"id\":112,\"media\":\"NaN\"}]}";
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("fr").toString(),esperado);
         
         //Se muestran todas las peliculas que tengan un nombre parecido
         p4= new Pelicula(123,"Frozen Ice","",null,null);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p4);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p4);
         esperado="{\"peliculas\":[{\"titulo\":\"Frozen\",\"id\":110,\"media\":\"NaN\"},{\"titulo\":\"Freeze\",\"id\":112,\"media\":\"NaN\"},{\"titulo\":\"Frozen Ice\",\"id\":123,\"media\":\"NaN\"}]}";
         assertEquals(GestorPeliculas.getGestorPeliculas().mostrarPeliculas("frozen").toString(),esperado);
 

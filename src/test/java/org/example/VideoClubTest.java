@@ -49,10 +49,10 @@ public class VideoClubTest extends TestCase {
         GestorUsuarios.getGestorUsuarios().addUsuario(usuario1);
         GestorUsuarios.getGestorUsuarios().addUsuario(usuario2);
         GestorUsuarios.getGestorUsuarios().addUsuario(u1);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p1);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p2);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p3);
-        GestorPeliculas.getGestorPeliculas().addPelicula(p4);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p1);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p2);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p3);
+        GestorPeliculas.getGestorPeliculas().cargarPelicula(p4);
 
     }
 

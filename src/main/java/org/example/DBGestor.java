@@ -107,14 +107,12 @@ public class DBGestor {
                 Pelicula pelicula = new Pelicula(id, titulo, descripcion, solicitadaPor, aceptadaPor);
                 pelicula.setAceptada(aceptada);
 
-                GestorPeliculas.getGestorPeliculas().addPelicula(pelicula);
+                GestorPeliculas.getGestorPeliculas().cargarPelicula(pelicula);
             }
             rs.close();
         } catch (Exception e) {
         }
     }
-
-
 
     public ArrayList<Usuario> cargarUsuarios() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
@@ -211,10 +209,10 @@ public class DBGestor {
              ResultSet rs = st.executeQuery(sql)) {
 
             while (rs.next()) {
-                String username = rs.getString("username");
+                String username = rs.getString("username_usuario");
                 Usuario usuario = GestorUsuarios.getGestorUsuarios().getUsuario(username);
                 if (usuario != null) {
-                    Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(rs.getInt("peliculaID"));
+                    Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(rs.getInt("id_pelicula"));
                     if (pelicula != null) {
                         usuario.añadirAlquiler(pelicula);
                     }

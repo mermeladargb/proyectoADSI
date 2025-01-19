@@ -121,15 +121,19 @@ public class Pelicula {
 	}
 
 	public void setID(int id) {
+		this.ID = id;
 	}
 
 	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 
 	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
 	}
 
 	public void setAceptada(boolean aceptada) {
+		this.aceptada = aceptada;
 	}
 
 	public String getTitulo() {

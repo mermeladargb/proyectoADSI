@@ -67,6 +67,10 @@ public class GestorPeliculas {
 		pelis.add(pPelicula);
 	}
 
+	public void cargarPelicula(Pelicula pelicula) {
+		pelis.add(pelicula);
+	}
+
 	//Resetea la lista
 	public void reset (){
 		pelis=new ArrayList<Pelicula>();

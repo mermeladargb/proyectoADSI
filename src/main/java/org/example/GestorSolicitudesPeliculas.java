@@ -55,6 +55,7 @@ public class GestorSolicitudesPeliculas {
     }
 
     public void aceptarSolicitudPelicula(String pTitulo, String pUser) {
+        System.out.println(pUser);
         //Llamada a la api para obtencion de descripcion e id
         JSONObject pelicula = API.getDatosPelicula(pTitulo);
 
@@ -64,13 +65,14 @@ public class GestorSolicitudesPeliculas {
 
         //Obtencion usuario que solicita la pelicula
         Usuario solicitadaPor = null;
+        SolicitudPelicula solicitudAceptada = null;
         for (SolicitudPelicula solicitud : solicitudes) {
             if (solicitud.getTitulo().equals(pTitulo)) { // Usar equals() para comparar strings
                 solicitadaPor = solicitud.solicitadaPor();
-                solicitudes.remove(solicitud);
-
+                solicitudAceptada = solicitud;
             }
         }
+        solicitudes.remove(solicitudAceptada);
 
         //Obtencion administrador que acepta la pelicula
         GestorUsuarios gestorUsuarios = GestorUsuarios.getGestorUsuarios();

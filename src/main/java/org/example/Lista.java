@@ -35,9 +35,15 @@ public class Lista {
 	}
 	
 	public void añadirPelicula(Pelicula pelicula) {
-		List<String> peliculas = getPeliculas();
-		if (peliculas.contains(pelicula.getTitulo()))
-			this.listaPeliculas.add(pelicula);
+		System.out.println("a añadir: " + pelicula.getTitulo() + pelicula.getID());
+		for (Pelicula p : listaPeliculas) {
+			if (p.getID() == pelicula.getID())
+				return;
+		}
+		this.listaPeliculas.add(pelicula);
+		System.out.println("añadida " + pelicula.getID());
+		for (Pelicula l : listaPeliculas)
+			System.out.println("peli " + l.getID());
 	}
 	
 	public List<String> getPeliculas() {

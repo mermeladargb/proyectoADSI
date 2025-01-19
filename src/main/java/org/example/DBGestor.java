@@ -26,7 +26,7 @@ public class DBGestor {
         }
         return conn;
     }
-
+    /**Carga todos los objetos con todos los datos guardados en la DB.*/
     public void cargarDatos() {
         cargarPeliculas();
         cargarUsuarios();
@@ -35,6 +35,7 @@ public class DBGestor {
         cargarListas();
     }
 
+    /**Carga las valoraciones guardadas en la DB en el objeto*/
     public void cargarValoraciones() {
         String sql = "SELECT username_usuario, id_pelicula, puntuacion, descripcion FROM valoraciones";
 
@@ -69,6 +70,7 @@ public class DBGestor {
         }
     }
 
+    /**Ejecuta consultas sobre la base de datos*/
     public void ejecutarConsulta(String sql) {
         try (Connection conn = conectar();
              Statement stmt = conn.createStatement()) {
@@ -77,7 +79,7 @@ public class DBGestor {
         } catch (SQLException e) {
         }
     }
-
+    /**Carga las peliculas guardadas en la DB en el objeto*/
     public void cargarPeliculas() {
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement()) {
@@ -115,6 +117,7 @@ public class DBGestor {
         }
     }
 
+    /**Carga los usuarios guardadas en la DB en el objeto*/
     public ArrayList<Usuario> cargarUsuarios() {
         ArrayList<Usuario> usuarios = new ArrayList<>();
         String sql = "SELECT * FROM usuarios";
@@ -161,6 +164,7 @@ public class DBGestor {
         return usuarios;
     }
 
+    /**Carga las listas guardadas en la DB en el objeto*/
     public void cargarListas() {
         String sql = "SELECT * FROM listas";
 
@@ -202,6 +206,7 @@ public class DBGestor {
         }
     }
 
+    /**Carga los alquileres guardadas en la DB en el objeto*/
     public void cargarAlquileres() {
         String sql = "SELECT * FROM alquileres";
 
@@ -225,7 +230,11 @@ public class DBGestor {
         }
     }
 
-
+    /**Añade un alquiler en la base de datos.
+     @param idPeli ID de la pelicula que se quiere alquilar.
+     @param username Nombre de usuario del que hace el alquiler.
+     @param fecha Fecha del alquiler.
+     */
     public void añadirAlquiler(int idPeli, String username, Date fecha){
         String sql = "INSERT INTO alquileres VALUES(?, ?, ?)";
 
@@ -248,6 +257,11 @@ public class DBGestor {
         }
     }
 
+    /**Obtiene el ID de una lista especifica de la base de datos.
+     @param username Nombre de usuario.
+     @param nombreLista Nombre de la lista.
+     @return ID de la lista o -1 si no se encuentra o hay un error.
+     */
     public int getIdLista(String username, String nombreLista) {
         String consulta = "SELECT id FROM listas WHERE username='" + username + "' AND nombre='" + nombreLista + "'";
         try (Connection conn = conectar()) {

@@ -28,8 +28,10 @@ public class Pelicula {
 
 	}
 
-
-	//Tienen nombre parecido si nombrePeli es una subcadena del titulo o si tiene determinada cantidad igual de caracteres
+	/**Tienen nombre parecido si nombrePeli es una subcadena del titulo o si tiene determinada cantidad igual de caracteres.
+	 @param nombrePeli el nombre de la pelicula que queremos comparar.
+	 @return unJSON JSON con los id,titulo y media de las peliculas que tienen nombres parecidos.
+	 */
 	public JSONObject tieneNombreParecido(String nombrePeli){
 		JSONObject unJSON= new JSONObject();
 
@@ -70,7 +72,10 @@ public class Pelicula {
 		return ID;
 	}
 
-
+	/**Da la valoracion que ha hecho un usuario concreto.
+	 @param pUsuario el nombre de usuario del que queremos la valoracion.
+	 @return valoracion la Valocion que ha hecho el usuario
+	 */
 	public Valoracion getValoracion(Usuario pUsuario)
 	{
 		if (listaValoraciones != null) {
@@ -82,6 +87,12 @@ public class Pelicula {
 		}
 		return null;
 	}
+
+	/**Guarda la valoracion de la pelicula en la lista de valoraciones.
+	 @param user el Usuario que hace la valoracion.
+	 @param reseña la reseña de la pelicula.
+	 @param nota la puntuacion de la pelicula.
+	 */
 	public void guardarValoracion(Usuario user, String reseña, int nota) {
 		if (listaValoraciones == null) {
 			listaValoraciones = new ArrayList<>(); // Inicializar la lista si es null
@@ -100,6 +111,10 @@ public class Pelicula {
 
 	}
 
+	/**Recoge todas las valoraciones que tiene la pelicula.
+	 @param username el nombre de usuario del que hace la valoracion.
+	 @return valoracionesUsuario ArrayList con todas las valoraciones de los usuarios. La primera valoracion de la lista que devuelve sera la del usuario que se mete como parametro.
+	 */
 	public ArrayList<Valoracion>verValoraciones(String username) {
 
 		ArrayList<Valoracion> valoracionesUsuario = new ArrayList<>();
@@ -123,6 +138,7 @@ public class Pelicula {
 	public void setID(int id) {
 		this.ID = id;
 	}
+
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
@@ -155,7 +171,10 @@ public class Pelicula {
 	public Usuario getAceptadaPor() {
 		return aceptadaPor;
 	}
-	//Se obtiene la media de las valoraciones de la Pelicula
+
+	/**Se obtiene la media de las valoraciones de la Pelicula.
+	 @return media de las valoraciones
+	 */
 	public double getMediaValoracion(){
 		return this.listaValoraciones.stream().mapToDouble(Valoracion::getPuntuacion).sum() / this.listaValoraciones.size();
 	}

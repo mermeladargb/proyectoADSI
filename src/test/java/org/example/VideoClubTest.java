@@ -196,7 +196,7 @@ public class VideoClubTest extends TestCase {
     
 
     public void testMostrarValoracionesAntiguas() {
-        Valoracion valoracion = new Valoracion(8.5f, "Gran película", usuario1);
+        Valoracion valoracion = new Valoracion(8.5f, "Buena pelicula", usuario1);
         p1.addValoracion(valoracion);
 
         // Ejecutar el método a probar
@@ -205,7 +205,7 @@ public class VideoClubTest extends TestCase {
         assertNotNull(resultado);
         assertEquals(101, resultado.getInt("idPelicula"));
         assertEquals(8.5f, resultado.getFloat("puntuacion"), 0.001);
-        assertEquals("Gran película", resultado.getString("descripcion"));
+        assertEquals("Buena pelicula", resultado.getString("descripcion"));
 
         resultado = VideoClub.getUnVideoClub().mostrarValoracionesAntiguas("mlopez", 101);
         assertNotNull(resultado);
@@ -215,16 +215,16 @@ public class VideoClubTest extends TestCase {
     }
 
     public void testPuntuarPelicula() {
-        VideoClub.getUnVideoClub().puntuarPelicula("mlopez", 101, "Me gustó mucho", 7);
+        VideoClub.getUnVideoClub().puntuarPelicula("mlopez", 101, "Buena pelicula", 7);
 
         Valoracion valoracion = p1.getValoracion(usuario2);
         assertEquals(7.0, valoracion.getPuntuacion(), 0.001);
-        assertEquals("Me gustó mucho", valoracion.getReseña());
+        assertEquals("Buena pelicula", valoracion.getReseña());
     }
 
     public void testMostrarReseñas() {
-        Valoracion v1 = new Valoracion(9.0f, "Excelente película", usuario1);
-        Valoracion v2 = new Valoracion(6.0f, "Buena, pero esperaba más", usuario2);
+        Valoracion v1 = new Valoracion(9.0f, "Buena pelicula", usuario1);
+        Valoracion v2 = new Valoracion(6.0f, "meh", usuario2);
         p1.addValoracion(v1);
         p1.addValoracion(v2);
 
@@ -240,13 +240,13 @@ public class VideoClubTest extends TestCase {
         JSONObject reseña1 = reseñas.getJSONObject(0);
         assertEquals("jperez", reseña1.getString("username"));
         assertEquals(9.0f, reseña1.getFloat("puntuacion"), 0.001);
-        assertEquals("Excelente película", reseña1.getString("reseña"));
+        assertEquals("Buena pelicula", reseña1.getString("reseña"));
 
         //Verificar los datos
         JSONObject reseña2 = reseñas.getJSONObject(1);
         assertEquals("mlopez", reseña2.getString("username"));
         assertEquals(6.0f, reseña2.getFloat("puntuacion"), 0.001);
-        assertEquals("Buena, pero esperaba más", reseña2.getString("reseña"));
+        assertEquals("meh", reseña2.getString("reseña"));
     }
 
 

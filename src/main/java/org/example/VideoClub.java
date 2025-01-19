@@ -35,13 +35,20 @@ public class VideoClub {
             gestorUsuarios.alquilarPeli(username,unaPelicula);
         }
     }
-
-    // Metodo para ver el historial de alquileres
+    /**Metodo para ver el historial de alquileres.
+     @param username el nombre del usuario que quiere ver los alquileres.
+     @return JSON con los alquileres.
+     */
     public JSONObject verAlquileres(String username) {
         return gestorUsuarios.verAlquileres(username);
 
     }
 
+    /**Metodo que devuelve la valoracion de la pelicula. Importante a la hora de valorar una pelicula ya valorada.
+    @param username el nombre del usuario que va ha valorar la pelicula.
+    @param idPelicula id de la pelicula que queremos valorar.
+    @return peliculaJSON JSONobject con la valoracion de la pelicula. Contiene idPelicula, puntuacion y descripcion
+    */
     public JSONObject mostrarValoracionesAntiguas(String username, int idPelicula) {
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         Usuario user = gestorUsuarios.getUsuario(username);
@@ -49,7 +56,7 @@ public class VideoClub {
 
         JSONObject peliculaJSON = new JSONObject();
         peliculaJSON.put("idPelicula", pelicula.getID());
-
+        //Condicion: si no existe la valoracion devuelve el JSON con estructura pero sin valores.
         if (valoracion != null) {
             peliculaJSON.put("puntuacion", valoracion.getPuntuacion());
             peliculaJSON.put("descripcion", valoracion.getReseña());
@@ -60,6 +67,12 @@ public class VideoClub {
         return peliculaJSON;
     }
 
+    /**Metodo que sirve para poner una puntuacion y reseña a una pelicula. La guarda en la DB y objeto
+     @param username el nombre del usuario que va ha puntuar la pelicula.
+     @param idPelicula id de la pelicula que queremos valorar.
+     @param reseña la reseña.
+     @param puntuacion la puntuacion.
+     */
     public void puntuarPelicula(String username, int idPelicula, String reseña, int puntuacion) {
         Usuario user = gestorUsuarios.getUsuario(username);
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
@@ -70,6 +83,11 @@ public class VideoClub {
         DBGestor.getDBGestor().ejecutarConsulta(sql);
     }
 
+    /**Metodo que sirve para ver las reseñas y puntuaciones de una pelicula concreta de todos los usuarios. El usuario solicitante sera el primero en el JSON.
+     @param username el nombre del usuario que quiere ver las reseñas.
+     @param idPelicula id de la pelicula que queremos ver las reseñas.
+     @return resultadoJSON JSON con username, reseña y puntuacion.
+     */
     public JSONObject mostrarReseñas(String username, int idPelicula) {
         Pelicula pelicula = gestorPeliculas.buscarPeliSeleccionada(idPelicula);
         ArrayList<Valoracion> listaValoraciones = pelicula.verValoraciones(username);

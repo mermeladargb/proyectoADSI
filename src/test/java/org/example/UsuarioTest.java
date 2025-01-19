@@ -114,8 +114,10 @@ public class UsuarioTest extends TestCase {
     }
 
     public void testMostrarAlquileres() {
+        // Un usuario ha alquilado alguna pelicula
         String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}]}";
         assertEquals(u1.mostrarAlquileres().toString(),esperado);
+        //Un usuario que no ha alquilado ninguna pelicula
         assertEquals(usuario1.mostrarAlquileres().getJSONArray("alquileres").length(),0);
     }
 }

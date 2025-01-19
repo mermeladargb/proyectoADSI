@@ -220,7 +220,7 @@ public class DBGestor {
                 if (usuario != null) {
                     Pelicula pelicula = GestorPeliculas.getGestorPeliculas().buscarPeliSeleccionada(rs.getInt("id_pelicula"));
                     if (pelicula != null) {
-                        usuario.añadirAlquiler(pelicula);
+                        usuario.añadirAlquiler_SinDB(pelicula);
                     }
                 }
             }

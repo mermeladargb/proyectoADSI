@@ -47,17 +47,11 @@ public class UsuarioTest extends TestCase {
         super.tearDown();
     }
 
-    public void testGetUsername() {
-    }
 
     public void testAñadirAlquiler() {
     }
 
-    public void testSetAceptadoPor() {
-    }
-
-    public void testGetContraseña() {
-    }
+    
 
     public void testActualizarCuenta() {
         boolean actualizado = u1.actualizarCuenta("liam", "contraseña-123", "liam", "lawson", "liam@gmail.com");
@@ -74,19 +68,10 @@ public class UsuarioTest extends TestCase {
     }
 
     public void testValidarDatos() {
-        Usuario usuarioPrueba = new Usuario(
-            "testuser",
-            "password-123",
-            "Test",
-            "User",
-            "test.user@example.com",
-            null,
-            new ArrayList<Alquiler>(),
-            false
-        );
+        Usuario usuarioPrueba = new Usuario("Niki", "contraseña-123", "Niki", "Lauda","niki@gmail.com", null, new ArrayList<Alquiler>(), false);
     
-        usuarioPrueba.setContraseña("password-123");
-        usuarioPrueba.setCorreo("test.user@example.com");
+        usuarioPrueba.setContraseña("contraseña-123");
+        usuarioPrueba.setCorreo("niki@gmail.com");
         boolean datosValidos = usuarioPrueba.validarDatos();
         assertTrue(datosValidos);
     
@@ -104,14 +89,57 @@ public class UsuarioTest extends TestCase {
         assertTrue(usuario1.getAceptado_Por() != null);
     }
 
+    public void testGetUsername() {
+        // Configura un usuario de prueba
+        Usuario usuarioPrueba = new Usuario("Fittipaldi", "contraseña-123", "Emmerson", "Fittipaldi", "fittipaldi@gmail.com", null, new ArrayList<Alquiler>(), false);
+    
+        // Verificar si getUsername devuelve el nombre de usuario correcto
+        assertEquals("Fittipaldi", usuarioPrueba.getUsername());
+    }
+    
+    public void testSetAceptadoPor() {
+        // Configura dos usuarios de prueba, uno siendo el administrador
+        Usuario admin = new Usuario("admin", "contraseña-123", "Oscar","Piastri", "admin@gmail.com", null, new ArrayList<Alquiler>(), true);
+        Usuario usuarioPrueba = new Usuario("testuser", "contraseña-123", "Yuki", "Tsunoda", "yuki@gmail.com", null, new ArrayList<Alquiler>(), false);
+    
+        // Configuración del usuario usando el administrador
+        usuarioPrueba.setAceptadoPor(admin);
+        // Verificar si getAceptado_Por devuelve el administrador correcto
+        assertEquals(admin, usuarioPrueba.getAceptado_Por());
+    }
+    
+    public void testGetContraseña() {
+        // Configura un usuario de prueba
+        Usuario usuarioPrueba = new Usuario("Nick", "contraseña-123", "Nick", "DeVries", "nick@gmail.com", null, new ArrayList<Alquiler>(),false);
+    
+        // Verificar si getContraseña devuelve la contraseña correcta
+        assertEquals("contraseña-123", usuarioPrueba.getContraseña());
+    }
+    
     public void testGetAceptado_Por() {
+        // Configurar dos usuarios, uno siendo el administrador
+        Usuario admin = new Usuario("admin", "contraseña-123", "Valtery", "Bottas", "valtery@gmail.com", null, new ArrayList<Alquiler>(), true);
+        Usuario usuarioPrueba = new Usuario("testuser", "contraseña-123", "Logan", "Sargeant", "logan@gmail.com", null, new ArrayList<Alquiler>(), false);
+    
+        // Establecer el administrador con setAceptadoPor
+        usuarioPrueba.setAceptadoPor(admin);
+        
+        // Verificar que getAceptado_Por devuelve el administrador correctamente
+        assertEquals(admin, usuarioPrueba.getAceptado_Por());
     }
-
+    
     public void testGetAlquileres() {
-    }
 
-    public void testGetCorreo() {
     }
+    
+    public void testGetCorreo() {
+        // Configurar un usuario de prueba
+        Usuario usuarioPrueba = new Usuario("Nikita", "password-123", "Nikita", "Mazepin", "nikita@gmail.com", null, new ArrayList<Alquiler>(), false);
+    
+        // Verificar que getCorreo devuelve el correo correctamente
+        assertEquals("nikita@gmail.com", usuarioPrueba.getCorreo());
+    }
+    
 
     public void testMostrarAlquileres() {
         // Un usuario ha alquilado alguna pelicula

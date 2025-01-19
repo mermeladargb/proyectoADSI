@@ -63,12 +63,8 @@ public class GestorUsuariosTest extends TestCase {
     }
 
     public void testGetUsuario() {
-
-
-
         assertEquals(GestorUsuarios.getGestorUsuarios().getUsuario("pancho"),u1);
         assertNull(GestorUsuarios.getGestorUsuarios().getUsuario(""));
-
     }
 
  

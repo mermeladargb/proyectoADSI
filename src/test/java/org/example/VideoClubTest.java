@@ -251,16 +251,51 @@ public class VideoClubTest extends TestCase {
 
 
     public void testActualizarDatos() {
+        Usuario usuario = new Usuario("ayrton", "contraseña-123", "Ayrton", "Senna", "ayrton@gmail.com", null, new ArrayList<>(), false);
+        GestorUsuarios.getGestorUsuarios().addUsuario(usuario);
+    
+        // Actualizar los datos del usuario
+        JSONObject resultado = VideoClub.getUnVideoClub().actualizarDatos("Ayrton", "Senna", "ayrton", "contraseña-123", "ayrton.senna@gmail.com");
+        assertEquals("exitoso", resultado.getString("estado"));
+        assertEquals("Datos actualizados correctamente", resultado.getString("mensaje"));
+    
+        // Verificar que los datos se hayan actualizado correctamente
+        Usuario usuarioModificado = GestorUsuarios.getGestorUsuarios().getUsuario("ayrton");
+        assertEquals("Ayrton", usuarioModificado.getNombre());
+        assertEquals("Senna", usuarioModificado.getApellido());
+        assertEquals("ayrton.senna@gmail.com", usuarioModificado.getCorreo());
     }
-
+    
     public void testMostrarSolicitudes() {
+        // Añadir solicitudes de usuarios históricos de F1
+        Usuario solicitud1 = new Usuario("nelson", "contraseña-123", "Nelson", "Piquet", "nelson.piquet@gmail.com", null, new ArrayList<>(), false);
+        Usuario solicitud2 = new Usuario("nigel", "contraseña-123", "Nigel", "Mansell", "nigel.mansell@gmail.com", null, new ArrayList<>(), false);
+        GestorUsuarios.getGestorUsuarios().addSolicitud(solicitud1);
+        GestorUsuarios.getGestorUsuarios().addSolicitud(solicitud2);
+    
+        // Mostrar solicitudes
+        JSONObject resultado = VideoClub.getUnVideoClub().mostrarSolicitudes();
+        JSONArray solicitudes = resultado.getJSONArray("solicitudes");
+        assertEquals(2, solicitudes.length());
+    
+        // Verificar detalles de las solicitudes
+        assertEquals("nelson", solicitudes.getJSONObject(0).getString("username"));
+        assertEquals("nigel", solicitudes.getJSONObject(1).getString("username"));
     }
-
-    public void testModificarCuentaSeleccionada() {
-    }
-
+    
     public void testEliminarCuentaSeleccionada() {
+        // Añadir un usuario histórico de F1 que será eliminado
+        Usuario usuario = new Usuario("alain", "contraseña-123", "Alain", "Prost", "alain.prost@gmail.com", null, new ArrayList<>(), false);
+        GestorUsuarios.getGestorUsuarios().addUsuario(usuario);
+    
+        // Eliminar la cuenta del usuario
+        VideoClub.getUnVideoClub().eliminarCuentaSeleccionada("alain");
+    
+        // Verificar que el usuario ya no exista
+        Usuario usuarioEliminado = GestorUsuarios.getGestorUsuarios().getUsuario("alain");
+        assertNull(usuarioEliminado);
     }
+    
 
     public void testCrearLista() {
     }

@@ -73,9 +73,12 @@ public class GestorUsuariosTest extends TestCase {
 
  
     public void testVerAlquileres() {
+        //Se muestra el alquiler de un usuario que ha alquilado alguna pelicula
         String esperado = "{\"alquileres\":[{\"titulo\":\"Inception\",\"fechaInic\":\"2024-12-26 15:56:23\",\"peliID\":101,\"fechaFin\":\"2024-12-28 15:56:23\"}]}";
         assertEquals(GestorUsuarios.getGestorUsuarios().verAlquileres("pancho").toString(),esperado) ;
+        //Se intenta buscar un usuario que no existe
         assertNull(VideoClub.getUnVideoClub().verAlquileres(""));
+        // Se muestran los alquileres de un usuario que no ha alquilado ninguna pelicula
         assertEquals(GestorUsuarios.getGestorUsuarios().verAlquileres("mlopez").getJSONArray("alquileres").length(),0);
     }
 
@@ -139,13 +142,15 @@ public class GestorUsuariosTest extends TestCase {
     
 
     public void testAlquilarPeli() {
+        // Un Usuario en el sistema alquila una pelicula
         GestorUsuarios.getGestorUsuarios().alquilarPeli("mlopez",p3);
         JSONArray json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
         assertTrue (json1.getJSONObject(0).get("titulo")=="Option" && json1.length()==1) ;
+        //Un Usuario en el sistema alquila otra pelicula
         GestorUsuarios.getGestorUsuarios().alquilarPeli("mlopez",p1);
         json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
         assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
-
+        //Un Usuario intenta alquilar una pelicula que no es posible alquilar---> no se añade
         GestorUsuarios.getGestorUsuarios().alquilarPeli("mlopez",null);
         json1=usuario2.mostrarAlquileres().getJSONArray("alquileres");
         assertTrue (json1.getJSONObject(1).get("titulo")=="Inception" && json1.length()==2) ;
